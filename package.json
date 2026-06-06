@@ -14,9 +14,11 @@
         "vite": "^8.0.0"
     },
     "dependencies": {
+        "@heroicons/vue": "^2.2.0",
         "@inertiajs/vite": "^3.3.1",
         "@inertiajs/vue3": "^3.3.1",
         "@vitejs/plugin-vue": "^6.0.7",
+        "dayjs": "^1.11.21",
         "vue": "^3.5.35",
         "ziggy-js": "^2.6.2"
     }
