@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -5,6 +6,7 @@
     @routes
     @vite(['resources/js/app.js', 'resources/css/app.css'])
     <x-inertia::head />
+    <title>nghCRM</title>
 </head>
 <body>
 <x-inertia::app />
