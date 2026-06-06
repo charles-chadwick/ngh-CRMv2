@@ -87,13 +87,13 @@ defineProps({
                         </Link>
                         <span
                             v-else-if="link.active"
-                            class="relative z-10 inline-flex items-center bg-primary-600 px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-primary-600"
+                            class="relative z-10 inline-flex items-center  px-4 py-2 text-sm font-semibold text-darker-800 ring-1 ring-inset ring-primary-600"
                         >
                             {{ link.label }}
                         </span>
                         <span
                             v-else
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-darker-700 ring-1 ring-inset ring-darker-300"
+                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-darker-500 ring-1 ring-inset ring-darker-300"
                         >
                             {{ link.label }}
                         </span>
