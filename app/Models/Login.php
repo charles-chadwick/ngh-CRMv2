@@ -20,7 +20,7 @@ class Login extends Model
     protected function casts() : array
     {
         return [
-            'created_at' => 'timestamp',
+            'created_at' => 'datetime',
         ];
     }
 }
