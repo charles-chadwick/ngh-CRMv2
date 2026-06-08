@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -15,11 +16,12 @@ use Illuminate\Notifications\Notifiable;
     'first_name',
     'last_name',
     'email',
-    'password'
+    'password',
+    'company_id',
 ])]
 #[Hidden([
     'password',
-    'remember_token'
+    'remember_token',
 ])]
 class User extends Authenticatable
 {
@@ -31,15 +33,20 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
-    public function logins() : User|HasMany
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function logins(): User|HasMany
     {
         return $this->hasMany(Login::class);
     }
@@ -50,7 +57,7 @@ class User extends Authenticatable
             'last_login_at' => Login::select('created_at')
                 ->whereColumn('user_id', 'users.id')
                 ->latest()
-                ->take(1)
+                ->take(1),
         ])->withCasts(['last_login_at' => 'datetime']);
     }
 }

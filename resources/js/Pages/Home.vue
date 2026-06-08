@@ -20,10 +20,10 @@ defineProps({
     <table class="w-full">
       <tbody>
         <tr v-for="user in users.data" :key="user.id">
-          <td>{{ user.first_name }}</td>
-          <td>{{ user.last_name }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.last_login_at }}</td>
+          <td class="p-2">{{ user.first_name }}</td>
+          <td class="p-2">{{ user.last_name }}</td>
+          <td class="p-2">{{ user.email }}</td>
+          <td class="p-2">{{ user.last_login_at }}</td>
         </tr>
       </tbody>
     </table>
