@@ -9,6 +9,7 @@ Route::get('/', function () {
         ->with('company:id,title')
         ->withLastLogin()
         ->paginate(15);
+
     return Inertia::render('Home', [
         'users' => $users
     ]);

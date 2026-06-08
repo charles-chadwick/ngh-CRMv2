@@ -46,18 +46,19 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-    public function logins(): User|HasMany
+    public function lastLogin(): BelongsTo
     {
-        return $this->hasMany(Login::class);
+        return $this->belongsTo(Login::class);
     }
 
     public function scopeWithLastLogin($query)
     {
         return $query->addSelect([
-            'last_login_at' => Login::select('created_at')
+            'last_login_id' => Login::select('id')
                 ->whereColumn('user_id', 'users.id')
                 ->latest()
-                ->take(1),
-        ])->withCasts(['last_login_at' => 'datetime']);
+                ->take(1)
+        ])->with('lastLogin');
     }
+
 }
