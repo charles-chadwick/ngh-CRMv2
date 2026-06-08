@@ -14,7 +14,7 @@ class UserController extends Controller
             ->withLastLogin()
             ->paginate(15);
 
-        return Inertia::render('Home', [
+        return Inertia::render('Users/Index', [
             'users' => $users
         ]);
     }
