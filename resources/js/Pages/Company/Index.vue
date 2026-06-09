@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedReference -->
 <script setup>
 import Avatar from "../../Components/Avatar.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
