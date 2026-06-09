@@ -1,4 +1,5 @@
 <script setup>
+import Avatar from "../../Components/Avatar.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 
 defineProps ( { companies: Object } )
@@ -13,8 +14,11 @@ defineProps ( { companies: Object } )
           :key="company.id"
           class="p-4 rounded rounded-xl border border-stone-200"
       >
-        <div class="flex justify-between  py-2 border-b-2 border-b-green-500">
-          <div class="font-bold">{{ company.title }}</div>
+        <div class="flex items-center justify-between gap-2 py-2 border-b-2 border-b-green-500">
+          <div class="flex items-center gap-2">
+            <Avatar :name="company.title" :src="company.avatar_url" size="sm" />
+            <div class="font-bold">{{ company.title }}</div>
+          </div>
           <div class="text-sm text-stone-500">{{ company.users_count }} users</div>
         </div>
         <p class="text-stone-800 py-2">{{ company.description }}</p>

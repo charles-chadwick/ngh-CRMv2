@@ -11,11 +11,12 @@ class UserController extends Controller
     {
         $users = User::select('id', 'first_name', 'last_name', 'email')
             ->with('company:id,title')
+            ->withAvatar()
             ->withLastLogin()
             ->paginate(15);
 
         return Inertia::render('Users/Index', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 }

@@ -1,5 +1,6 @@
 <script setup>
 import { useDate } from '@/composables/useDate'
+import Avatar from "../../Components/Avatar.vue";
 import Pagination from "../../Components/Pagination.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 
@@ -17,6 +18,7 @@ const props = defineProps ( {
     <table class="w-full">
       <thead>
         <tr class="text-left text-stone-600">
+          <th class="p-2"></th>
           <th class="p-2">First Name</th>
           <th class="p-2">Last Name</th>
           <th class="p-2">Email</th>
@@ -29,14 +31,17 @@ const props = defineProps ( {
           v-for="user in users.data"
           :key="user.id"
       >
+        <td class="p-2">
+          <Avatar :name="`${user.first_name} ${user.last_name}`" :src="user.avatar_url" size="sm" />
+        </td>
         <td class="p-2">{{ user.first_name }}</td>
         <td class="p-2">{{ user.last_name }}</td>
         <td class="p-2">{{ user.email }}</td>
         <td class="p-2">
-            <span :title="user.last_login.created_at">
-            {{ diffForHumans ( user.last_login.created_at ) }}
+            <span :title="user?.last_login?.created_at">
+            {{ diffForHumans ( user?.last_login?.created_at ) }}
           </span></td>
-        <td class="p-2">{{ user.last_login.ip_address }}</td>
+        <td class="p-2">{{ user.last_login?.ip_address }}</td>
       </tr>
       </tbody>
     </table>
