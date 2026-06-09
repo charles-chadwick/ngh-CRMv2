@@ -8,6 +8,6 @@ use Inertia\Inertia;
 
 Route::get('/', function() {
     return Inertia::render('Home');
-});
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/companies', [CompanyController::class, 'index']);
+})->name('home');
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');

@@ -36,7 +36,7 @@ const initials = computed(() => {
 
 <template>
     <span
-        class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-semibold"
+        class="inline-flex shrink-0 items-center justify-center overflow-hidden border-stone-300 border rounded-full font-semibold"
         :class="[size_classes[size], src ? 'bg-stone-100' : 'bg-stone-200 text-stone-600']"
         :title="name"
     >

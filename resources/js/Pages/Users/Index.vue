@@ -31,6 +31,7 @@ const props = defineProps ( {
       <tr
           v-for="user in users.data"
           :key="user.id"
+          class="border-b border-stone-200 odd:bg-stone-100 text-sm text-stone-800"
       >
         <td class="p-2">
           <Avatar
