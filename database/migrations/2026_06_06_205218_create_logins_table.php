@@ -10,9 +10,9 @@ return new class extends Migration {
     {
         Schema::create('logins', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->string('ip_address');
-            $table->timestamp('created_at');
+            $table->foreignIdFor(User::class)->index();
+            $table->string('ip_address')->index();
+            $table->timestamp('created_at')->index();
         });
     }
 

@@ -2,6 +2,7 @@
 <script setup>
 import Avatar from "../../Components/Avatar.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
+import Pagination from "../../Components/Pagination.vue";
 
 defineProps ( { companies: Object } )
 </script>
@@ -13,7 +14,7 @@ defineProps ( { companies: Object } )
       <div
           v-for="company in companies.data"
           :key="company.id"
-          class="p-4 rounded rounded-xl border border-stone-200"
+          class="p-4 rounded-xl border border-stone-200"
       >
         <div class="flex items-center justify-between gap-2 py-2 border-b-2 border-b-green-500">
           <div class="flex items-center gap-2">
@@ -24,6 +25,7 @@ defineProps ( { companies: Object } )
         </div>
         <p class="text-stone-800 py-2">{{ company.description }}</p>
       </div>
+      <Pagination :paginator="companies" />
     </div>
   </AppLayout>
 </template>

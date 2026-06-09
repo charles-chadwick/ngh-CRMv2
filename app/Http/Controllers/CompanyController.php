@@ -12,7 +12,7 @@ class CompanyController extends Controller
         $companies = Company::select('id', 'title', 'description')
             ->withAvatar()
             ->withCount('users')
-            ->paginate(5);
+            ->paginate();
 
         return Inertia::render('Company/Index', ['companies' => $companies]);
     }

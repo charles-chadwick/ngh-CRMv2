@@ -30,7 +30,7 @@ class UserTableSeeder extends Seeder
 
         echo "\nAdding Users\n";
 
-        for ($index = 0; $index < 25; $index++) {
+        for ($index = 0; $index < 500; $index++) {
             $created_at = fake()->dateTimeBetween($admin_user->created_at, '-1 year');
 
             $character = RickAndMortyCharacters::next();

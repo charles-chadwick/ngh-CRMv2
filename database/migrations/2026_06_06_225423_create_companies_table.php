@@ -10,9 +10,10 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('type');
+            $table->string('title')->index();
+            $table->string('type')->index();
             $table->text('description')
+                ->index()
                 ->nullable();
             $table->timestamps();
         });
