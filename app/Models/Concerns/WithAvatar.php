@@ -29,7 +29,10 @@ trait WithAvatar
                 'file_name',
                 'disk',
                 'conversions_disk',
+                'manipulations',
+                'custom_properties',
                 'generated_conversions',
+                'responsive_images',
             ])->where('collection_name', $this->avatarCollection());
         }]);
     }
