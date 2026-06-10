@@ -79,6 +79,17 @@ class User extends Authenticatable implements HasMedia
         ])->with('lastLogin');
     }
 
+    public function scopeWithSearch($query, $search) {
+        $term = preg_replace('/[^a-zA-Z0-9]/', '', $search);
+
+        return $query->when($search, function ($query) use ($term) {
+            $query->where('first_name_normalized', 'like', "{$term}%")
+                ->orWhere('last_name_normalized', 'like', "{$term}%")
+                ->orWhere('email', 'like', "{$term}%")
+                ->orWhere('role', 'like', "{$term}%");
+        });
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')

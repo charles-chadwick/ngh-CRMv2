@@ -10,5 +10,11 @@ export function useDate() {
         return dayjs(date).fromNow();
     }
 
-    return { diffForHumans }
+    const dateTimeString = (date) => {
+        if (!date) return '—'
+
+        return dayjs(date).format('MM/DD/YYYY HH:mm');
+    }
+
+    return { diffForHumans, dateTimeString }
 }

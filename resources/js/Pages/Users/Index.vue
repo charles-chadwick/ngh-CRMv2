@@ -6,7 +6,7 @@ import Pagination from "../../Components/Pagination.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Search from "../../Components/Search.vue";
 
-const { diffForHumans } = useDate ()
+const { diffForHumans, dateTimeString } = useDate ()
 
 const props = defineProps ( {
   users: Object
@@ -22,10 +22,11 @@ const props = defineProps ( {
       <thead>
       <tr class="text-left text-stone-600">
         <th class="p-2"></th>
-        <th class="p-2">Role</th>
         <th class="p-2">First Name</th>
         <th class="p-2">Last Name</th>
         <th class="p-2">Email</th>
+        <th class="p-2">Role</th>
+        <th class="p-2">Created</th>
         <th class="p-2">Last Login</th>
         <th class="p-2">IP Address</th>
       </tr>
@@ -45,10 +46,11 @@ const props = defineProps ( {
           />
           </a>
         </td>
-        <td class="p-2">{{ user.role }}</td>
         <td class="p-2">{{ user.first_name }}</td>
         <td class="p-2">{{ user.last_name }}</td>
         <td class="p-2">{{ user.email }}</td>
+        <td class="p-2">{{ user.role }}</td>
+        <td class="p-2">{{ dateTimeString(user.created_at) }}</td>
         <td class="p-2">
             <span :title="user?.last_login?.created_at">
             {{ diffForHumans ( user?.last_login?.created_at ) }}

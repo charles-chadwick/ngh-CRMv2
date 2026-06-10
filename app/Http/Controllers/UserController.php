@@ -10,18 +10,11 @@ class UserController extends Controller
 {
     public function index()
     {
-        $term = preg_replace('/[^a-zA-Z0-9]/', '', request('search'));
 
-        $users = User::select('id', 'role', 'first_name', 'last_name', 'email')
-            ->isNotCustomer()
+        $users = User::isNotCustomer()
             ->withAvatar()
             ->withLastLogin()
-            ->when($term, function ($query) use ($term) {
-                $query->where('first_name_normalized', 'like', "{$term}%")
-                    ->orWhere('last_name_normalized', 'like', "{$term}%")
-                    ->orWhere('email', 'like', "{$term}%")
-                    ->orWhere('role', 'like', "{$term}%");
-            })
+            ->withSearch(request('search'))
             ->paginate(15);
 
         return Inertia::render('Users/Index', [

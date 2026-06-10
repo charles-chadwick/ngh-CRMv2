@@ -20,8 +20,12 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('first_name_normalized')->virtualAs('regexp_replace(first_name, "[^a-zA-Z0-9]+", "")')->index();
-            $table->string('last_name_normalized')->virtualAs('regexp_replace(last_name, "[^a-zA-Z0-9]+", "")')->index();
+            $table->string('first_name_normalized')
+                ->storedAs('regexp_replace(first_name, \'[^a-zA-Z0-9]+\', \'\', \'g\')')
+                ->index();
+            $table->string('last_name_normalized')
+                ->storedAs('regexp_replace(last_name, \'[^a-zA-Z0-9]+\', \'\', \'g\')')
+                ->index();
             $table->timestamps();
         });
 
