@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,15 +17,17 @@ return new class extends Migration
             $table->string('role')->index();
             $table->string('first_name');
             $table->string('last_name');
+            $table->foreignIdFor(Company::class)->index()->nullable();
+
             $table->string('email')->unique()->index();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->string('first_name_normalized')
-                ->storedAs('regexp_replace(first_name, \'[^a-zA-Z0-9]+\', \'\', \'g\')')
+                ->storedAs('regexp_replace(first_name, \'[^a-zA-Z0-9]+\', \'\')')
                 ->index();
             $table->string('last_name_normalized')
-                ->storedAs('regexp_replace(last_name, \'[^a-zA-Z0-9]+\', \'\', \'g\')')
+                ->storedAs('regexp_replace(last_name, \'[^a-zA-Z0-9]+\', \'\')')
                 ->index();
             $table->timestamps();
         });

@@ -18,8 +18,11 @@ defineProps ( { companies: Object } )
       >
         <div class="flex items-center justify-between gap-2 py-2 border-b-2 border-b-green-500">
           <div class="flex items-center gap-2">
-            <Avatar :name="company.title" :src="company.avatar_url" size="sm" />
+              <Avatar :name="company.title" :src="company.avatar_url" size="sm" />
+            <a :href="route('companies.show', company)" class="hover:text-green-500">
+
             <div class="font-bold">{{ company.title }}</div>
+            </a>
           </div>
           <div class="text-sm text-stone-500">{{ company.users_count }} users</div>
         </div>

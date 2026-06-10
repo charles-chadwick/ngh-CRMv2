@@ -6,7 +6,7 @@ import { Head } from "@inertiajs/vue3";
 <template>
   <Head>nghCRM-v2</Head>
   <nav class="navbar navbar-expand-lg bg-stone-800 py-6 border-b-2 border-b-green-500  mb-4">
-    <div class="flex max-w-2/3 mx-auto ">
+    <div class="flex px-32 mx-auto ">
       <div class="flex flex-row items-center">
         <svg
             class="w-auto h-6 text-green-400 fill-current"
@@ -25,7 +25,7 @@ import { Head } from "@inertiajs/vue3";
       </ul>
     </div>
   </nav>
-  <main class="mx-auto max-w-2/3">
+  <main class="mx-auto px-32">
     <slot />
   </main>
 </template>
