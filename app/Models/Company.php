@@ -30,7 +30,7 @@ class Company extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->fit(Fit::Contain, 200, 200)
+            ->fit(Fit::Contain, 192, 192)
             ->nonQueued();
     }
 

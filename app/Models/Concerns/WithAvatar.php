@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- * Adds an `avatar_url` accessor backed by a Spatie Media Library collection,
- * along with a `withAvatar()` scope that eager loads only the media columns
- * required to generate the conversion URL.
+ * Adds `avatar_url` (thumb conversion) and `avatar_full_url` (original) accessors
+ * backed by a Spatie Media Library collection, along with a `withAvatar()` scope
+ * that eager loads only the media columns required to generate the conversion URLs.
  */
 trait WithAvatar
 {
     public function initializeWithAvatar(): void
     {
-        $this->append('avatar_url');
+        $this->append(['avatar_url', 'avatar_full_url']);
     }
 
     public function scopeWithAvatar(Builder $query): Builder
@@ -40,6 +40,11 @@ trait WithAvatar
     public function getAvatarUrlAttribute(): ?string
     {
         return $this->getFirstMediaUrl($this->avatarCollection(), 'thumb') ?: null;
+    }
+
+    public function getAvatarFullUrlAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl($this->avatarCollection()) ?: null;
     }
 
     protected function avatarCollection(): string
