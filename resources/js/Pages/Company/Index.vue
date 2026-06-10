@@ -21,7 +21,7 @@ defineProps ( { companies: Object } )
             <Avatar :name="company.title" :src="company.avatar_url" size="sm" />
             <div class="font-bold">{{ company.title }}</div>
           </div>
-          <div class="text-sm text-stone-500">{{ company.users_count }} users</div>
+          <div class="text-sm text-stone-500">{{ company.customers_count }} customers</div>
         </div>
         <p class="text-stone-800 py-2">{{ company.description }}</p>
       </div>

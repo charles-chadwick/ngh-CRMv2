@@ -15,9 +15,9 @@ class Company extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, WithAvatar;
 
-    public function users(): Company|HasMany
+    public function customers(): HasMany
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->isCustomer();
     }
 
     public function registerMediaCollections(): void

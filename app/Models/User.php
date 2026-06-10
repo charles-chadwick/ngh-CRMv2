@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use LogicException;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -49,6 +50,9 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
+    /**
+     * @throws LogicException
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
@@ -79,7 +83,8 @@ class User extends Authenticatable implements HasMedia
         ])->with('lastLogin');
     }
 
-    public function scopeWithSearch($query, $search) {
+    public function scopeWithSearch($query, $search)
+    {
         $term = preg_replace('/[^a-zA-Z0-9]/', '', $search);
 
         return $query->when($search, function ($query) use ($term) {
