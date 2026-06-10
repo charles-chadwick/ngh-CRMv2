@@ -14,7 +14,7 @@ defineProps ( { companies: Object } )
       <div
           v-for="company in companies.data"
           :key="company.id"
-          class="p-4 rounded-xl border border-stone-200"
+          class="card"
       >
         <div class="flex items-center justify-between gap-2 py-2 border-b-2 border-b-green-500">
           <div class="flex items-center gap-2">

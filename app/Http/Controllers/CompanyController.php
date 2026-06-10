@@ -19,7 +19,7 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
-        $company->load('users.media');
+        $company->load(['customers.media', 'customers']);
         return Inertia::render('Company/Show', ['company' => $company]);
     }
 }

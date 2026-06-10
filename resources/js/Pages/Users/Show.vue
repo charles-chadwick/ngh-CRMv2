@@ -3,6 +3,7 @@
 import { Head } from '@inertiajs/vue3'
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Avatar from "../../Components/Avatar.vue";
+import CustomerList from "../Customers/Partials/List.vue";
 
 defineProps ( {
   user: Object,
@@ -26,5 +27,6 @@ defineProps ( {
         </div>
       </div>
     </div>
+
   </AppLayout>
 </template>

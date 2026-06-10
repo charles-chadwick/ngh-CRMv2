@@ -2,6 +2,7 @@
   import AppLayout from '../../Layouts/AppLayout.vue'
   import { Head } from '@inertiajs/vue3'
   import Avatar from "../../Components/Avatar.vue";
+  import CustomerList from "../Customers/Partials/List.vue";
 
   defineProps({ company: Object})
 </script>
@@ -22,6 +23,10 @@
           <p class="text-stone-700" v-html="company.description"></p>
         </div>
       </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <CustomerList :customers="company.customers" />
     </div>
   </AppLayout>
 </template>
