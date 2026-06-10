@@ -5,7 +5,7 @@ import { Head } from "@inertiajs/vue3";
 
 <template>
   <Head>nghCRM-v2</Head>
-  <nav class="navbar navbar-expand-lg bg-stone-800 py-6 border-b-2 border-b-green-500">
+  <nav class="navbar navbar-expand-lg bg-stone-800 py-6 border-b-2 border-b-green-500  mb-4">
     <div class="flex max-w-2/3 mx-auto ">
       <div class="flex flex-row items-center">
         <svg

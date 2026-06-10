@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enum\UserType;
+use App\Enum\UserRole;
 use App\Models\Login;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -21,13 +21,12 @@ class UserTableSeeder extends Seeder
     {
         $super_admin_user = User::factory()
             ->create([
+                'role' => UserRole::SuperAdmin->value,
                 'first_name' => 'Admin',
                 'last_name' => 'User',
                 'email' => 'admin@example.com',
                 'created_at' => '2020-01-01 00:00:00',
-            ]);
-
-        $super_admin_user->assignRole(UserType::SuperAdmin->value);
+            ])->assignRole(UserRole::SuperAdmin->value);
 
         echo "\nAdding Users\n";
 
@@ -38,8 +37,15 @@ class UserTableSeeder extends Seeder
             $first_name = $character['first_name'];
             $last_name = $character['last_name'];
 
+            $role = match (true) {
+                $index <= 10  => UserRole::Admin->value,
+                $index <= 50  => UserRole::Staff->value,
+                default      => UserRole::Customer->value,
+            };
+
             $user = User::factory()
                 ->create([
+                    'role' => $role,
                     'first_name' => $first_name,
                     'last_name' => $last_name,
                     'email' => str($first_name.'.'.$last_name.rand(1, 9999).'@example.com')
@@ -47,15 +53,7 @@ class UserTableSeeder extends Seeder
                         ->remove([' ', '\'']),
                     'created_at' => $created_at,
                     'updated_at' => $created_at,
-                ]);
-
-            $role = match (true) {
-                $index <= 10  => UserType::Admin->value,
-                $index <= 50  => UserType::Staff->value,
-                default      => UserType::Customer->value,
-            };
-
-            $user->assignRole($role);
+                ])->assignRole($role);
 
             $user->addMedia(RickAndMortyCharacters::avatarPath($character['id']))
                 ->preservingOriginal()

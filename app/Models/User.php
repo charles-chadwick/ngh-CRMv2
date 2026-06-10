@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enum\UserRole;
 use App\Models\Concerns\WithAvatar;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -18,6 +19,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable([
+    'role',
     'first_name',
     'last_name',
     'email',
@@ -41,6 +43,7 @@ class User extends Authenticatable implements HasMedia
     protected function casts(): array
     {
         return [
+            'role' => UserRole::class,
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
@@ -54,6 +57,16 @@ class User extends Authenticatable implements HasMedia
     public function lastLogin(): BelongsTo
     {
         return $this->belongsTo(Login::class);
+    }
+
+    public function scopeIsCustomer($query)
+    {
+        return $query->where('role', UserRole::Customer);
+    }
+
+    public function scopeIsNotCustomer($query)
+    {
+        return $query->where('role', '<>', UserRole::Customer);
     }
 
     public function scopeWithLastLogin($query)

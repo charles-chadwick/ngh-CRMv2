@@ -10,4 +10,6 @@ Route::get('/', function() {
     return Inertia::render('Home');
 })->name('home');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');

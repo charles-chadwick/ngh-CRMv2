@@ -10,11 +10,12 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->index();
+            $table->string('title');
             $table->string('type')->index();
             $table->text('description')
                 ->index()
                 ->nullable();
+            $table->string('title_normalized')->virtualAs('regexp_replace(title, "[^a-zA-Z0-9]+", "")')->index();
             $table->timestamps();
         });
     }

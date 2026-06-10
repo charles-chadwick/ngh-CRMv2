@@ -18,9 +18,9 @@ const props = defineProps({
 })
 
 const size_classes = {
-    sm: 'h-8 w-8 text-xs',
-    md: 'h-10 w-10 text-sm',
-    lg: 'h-14 w-14 text-lg'
+    sm: 'size-12 text-xs',
+    md: 'size-24 text-sm',
+    lg: 'size-48 text-lg'
 }
 
 const initials = computed(() => {

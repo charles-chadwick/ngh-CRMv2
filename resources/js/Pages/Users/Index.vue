@@ -1,4 +1,4 @@
-<!--suppress JSUnresolvedReference -->
+<!--suppress JSUnresolvedReference, NpmUsedModulesInstalled -->
 <script setup>
 import { useDate } from '@/Composables/useDate'
 import Avatar from "../../Components/Avatar.vue";
@@ -22,6 +22,7 @@ const props = defineProps ( {
       <thead>
       <tr class="text-left text-stone-600">
         <th class="p-2"></th>
+        <th class="p-2">Role</th>
         <th class="p-2">First Name</th>
         <th class="p-2">Last Name</th>
         <th class="p-2">Email</th>
@@ -36,12 +37,15 @@ const props = defineProps ( {
           class="border-b border-stone-200 odd:bg-stone-100 text-sm text-stone-800"
       >
         <td class="p-2">
+          <a :href="route('users.show', user.id)">
           <Avatar
               :name="`${user.first_name} ${user.last_name}`"
               :src="user.avatar_url"
               size="sm"
           />
+          </a>
         </td>
+        <td class="p-2">{{ user.role }}</td>
         <td class="p-2">{{ user.first_name }}</td>
         <td class="p-2">{{ user.last_name }}</td>
         <td class="p-2">{{ user.email }}</td>
