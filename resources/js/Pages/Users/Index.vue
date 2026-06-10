@@ -4,6 +4,7 @@ import { useDate } from '@/Composables/useDate'
 import Avatar from "../../Components/Avatar.vue";
 import Pagination from "../../Components/Pagination.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
+import Search from "../../Components/Search.vue";
 
 const { diffForHumans } = useDate ()
 
@@ -16,6 +17,7 @@ const props = defineProps ( {
 <template>
   <AppLayout>
     <h1 class="text-2xl font-bold my-6">Users</h1>
+    <Search :route="route('users.index')" class="my-6" placeholder="Search users..." />
     <table class="w-full">
       <thead>
       <tr class="text-left text-stone-600">

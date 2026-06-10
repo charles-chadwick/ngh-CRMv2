@@ -2,22 +2,23 @@
 
 namespace Database\Seeders;
 
+use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+
 class RickAndMortyCharacters
 {
-    private static array $pool = [];
+    private static Collection $pool;
 
     private static int $cursor = 0;
 
-    public static function next(): array
+    public static function next(): array|Closure
     {
-        if (empty(self::$pool)) {
+        if (! isset(self::$pool)) {
             self::load();
         }
 
-        $character = self::$pool[self::$cursor % count(self::$pool)];
-        self::$cursor++;
-
-        return $character;
+        return self::$pool->get(self::$cursor++ % self::$pool->count());
     }
 
     public static function avatarPath(int $id): string
@@ -27,15 +28,6 @@ class RickAndMortyCharacters
 
     private static function load(): void
     {
-        $json = file_get_contents(database_path('rickandmorty/characters.json'));
-        $characters = json_decode($json, true);
-
-        mt_srand(42);
-        for ($i = count($characters) - 1; $i > 0; $i--) {
-            $j = mt_rand(0, $i);
-            [$characters[$i], $characters[$j]] = [$characters[$j], $characters[$i]];
-        }
-
-        self::$pool = $characters;
+        self::$pool = collect(File::json(database_path('rickandmorty/characters.json')))->shuffle();
     }
 }

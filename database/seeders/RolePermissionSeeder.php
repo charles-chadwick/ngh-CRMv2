@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enum\UserType;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -31,6 +33,9 @@ class RolePermissionSeeder extends Seeder
         ],
     ];
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function run(): void
     {
         App::make(PermissionRegistrar::class)
@@ -38,20 +43,19 @@ class RolePermissionSeeder extends Seeder
 
         $permissions = $this->createPermissions();
 
-        $admin = Role::firstOrCreate(['name' => 'Super Admin'])
+        $admin = Role::firstOrCreate(['name' => UserType::SuperAdmin->value])
             ->syncPermissions($permissions);
 
-        $admin->syncPermissions($permissions);
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
+        $admin = Role::firstOrCreate(['name' => UserType::Admin->value]);
         $admin->syncPermissions($permissions);
 
-        $manager = Role::firstOrCreate(['name' => 'Manager']);
+        $manager = Role::firstOrCreate(['name' => UserType::Staff->value]);
         $manager->syncPermissions(
             $permissions->reject(fn (Permission $permission) => str_starts_with($permission->name, 'delete '))
         );
 
-        $salesRep = Role::firstOrCreate(['name' => 'Staff']);
-        $salesRep->syncPermissions(
+        $customer = Role::firstOrCreate(['name' => UserType::Customer->value]);
+        $customer->syncPermissions(
             $permissions->filter(fn (Permission $permission) => str_starts_with($permission->name, 'view '))
         );
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\UserType;
 use App\Models\Login;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,7 +19,7 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin_user = User::factory()
+        $super_admin_user = User::factory()
             ->create([
                 'first_name' => 'Admin',
                 'last_name' => 'User',
@@ -26,34 +27,41 @@ class UserTableSeeder extends Seeder
                 'created_at' => '2020-01-01 00:00:00',
             ]);
 
-        $admin_user->assignRole('Super Admin');
+        $super_admin_user->assignRole(UserType::SuperAdmin->value);
 
         echo "\nAdding Users\n";
 
         for ($index = 0; $index < 500; $index++) {
-            $created_at = fake()->dateTimeBetween($admin_user->created_at, '-1 year');
+            $created_at = fake()->dateTimeBetween($super_admin_user->created_at, '-1 year');
 
             $character = RickAndMortyCharacters::next();
             $first_name = $character['first_name'];
             $last_name = $character['last_name'];
 
-            $staff_user = User::factory()
+            $user = User::factory()
                 ->create([
                     'first_name' => $first_name,
                     'last_name' => $last_name,
-                    'email' => str($first_name.'.'.$last_name.rand(100, 999).'@example.com')
+                    'email' => str($first_name.'.'.$last_name.rand(1, 9999).'@example.com')
                         ->lower()
                         ->remove([' ', '\'']),
                     'created_at' => $created_at,
                     'updated_at' => $created_at,
                 ]);
-            $staff_user->assignRole(fake()->randomElement(['Admin',  'Staff', 'Manager']));
 
-            $staff_user->addMedia(RickAndMortyCharacters::avatarPath($character['id']))
+            $role = match (true) {
+                $index <= 10  => UserType::Admin->value,
+                $index <= 50  => UserType::Staff->value,
+                default      => UserType::Customer->value,
+            };
+
+            $user->assignRole($role);
+
+            $user->addMedia(RickAndMortyCharacters::avatarPath($character['id']))
                 ->preservingOriginal()
                 ->toMediaCollection('avatar');
 
-            Login::factory(rand(0, 2000))->create(['user_id' => $staff_user->id]);
+            Login::factory(rand(0, 200))->create(['user_id' => $user->id]);
 
             echo '.';
         }
