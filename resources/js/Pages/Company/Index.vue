@@ -28,7 +28,8 @@ defineProps ( { companies: Object } )
         </div>
         <p class="text-stone-800 py-2">{{ company.description }}</p>
       </div>
-      <Pagination :paginator="companies" />
+
     </div>
+    <Pagination :paginator="companies" />
   </AppLayout>
 </template>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\UserRole;
 use App\Models\Concerns\WithAvatar;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,7 @@ class Company extends Model implements HasMedia
 
     public function customers(): Company|HasMany
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->where('role', UserRole::Customer);
     }
 
     public function registerMediaCollections(): void
