@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enum\UserRole;
 use App\Models\User;
 use Inertia\Inertia;
 
@@ -11,7 +10,7 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = User::isNotCustomer()
+        $users = User::query()
             ->withAvatar()
             ->withLastLogin()
             ->withSearch(request('search'))
@@ -22,13 +21,16 @@ class UserController extends Controller
         ]);
     }
 
-    public function show(User $user) {
+    public function show(User $user)
+    {
 
         return Inertia::render('Users/Show', [
             'user' => $user,
         ]);
     }
-    public function edit(User $user) {
+
+    public function edit(User $user)
+    {
 
         return $user;
     }

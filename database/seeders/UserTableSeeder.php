@@ -30,7 +30,7 @@ class UserTableSeeder extends Seeder
 
         echo "\nAdding Users\n";
 
-        for ($index = 0; $index < 500; $index++) {
+        for ($index = 0; $index < 50; $index++) {
             $created_at = fake()->dateTimeBetween($super_admin_user->created_at, '-1 year');
 
             $character = RickAndMortyCharacters::next();
@@ -38,9 +38,8 @@ class UserTableSeeder extends Seeder
             $last_name = $character['last_name'];
 
             $role = match (true) {
-                $index <= 10  => UserRole::Admin->value,
-                $index <= 50  => UserRole::Staff->value,
-                default      => UserRole::Customer->value,
+                $index <= 10 => UserRole::Admin->value,
+                default => UserRole::Staff->value,
             };
 
             $user = User::factory()

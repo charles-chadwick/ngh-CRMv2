@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Image\Enums\Fit;
@@ -25,7 +24,6 @@ use Spatie\Permission\Traits\HasRoles;
     'last_name',
     'email',
     'password',
-    'company_id',
 ])]
 #[Hidden([
     'password',
@@ -52,24 +50,9 @@ class User extends Authenticatable implements HasMedia
 
     protected $appends = ['full_name', 'initials'];
 
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
     public function lastLogin(): BelongsTo
     {
         return $this->belongsTo(Login::class);
-    }
-
-    public function scopeIsCustomer($query)
-    {
-        return $query->where('role', UserRole::Customer);
-    }
-
-    public function scopeIsNotCustomer($query)
-    {
-        return $query->where('role', '<>', UserRole::Customer);
     }
 
     public function scopeWithLastLogin($query)
@@ -82,7 +65,8 @@ class User extends Authenticatable implements HasMedia
         ])->with('lastLogin');
     }
 
-    public function scopeWithSearch($query, $search) {
+    public function scopeWithSearch($query, $search)
+    {
         $term = preg_replace('/[^a-zA-Z0-9]/', '', $search);
 
         return $query->when($search, function ($query) use ($term) {

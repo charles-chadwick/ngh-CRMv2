@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\UserRole;
 use App\Models\Concerns\WithAvatar;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,15 +15,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 #[Fillable([
     'title',
     'type',
-    'description'
+    'description',
 ])]
 class Company extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, WithAvatar;
 
-    public function customers(): Company|HasMany
+    public function customers(): HasMany
     {
-        return $this->hasMany(User::class)->where('role', UserRole::Customer);
+        return $this->hasMany(Customer::class);
     }
 
     public function registerMediaCollections(): void

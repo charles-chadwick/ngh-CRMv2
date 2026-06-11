@@ -53,11 +53,6 @@ class RolePermissionSeeder extends Seeder
         $manager->syncPermissions(
             $permissions->reject(fn (Permission $permission) => str_starts_with($permission->name, 'delete '))
         );
-
-        $customer = Role::firstOrCreate(['name' => UserRole::Customer->value]);
-        $customer->syncPermissions(
-            $permissions->filter(fn (Permission $permission) => str_starts_with($permission->name, 'view '))
-        );
     }
 
     /**
