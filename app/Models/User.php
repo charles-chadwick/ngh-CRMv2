@@ -55,7 +55,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class)->isCustomer();
     }
 
     public function lastLogin(): BelongsTo

@@ -12,7 +12,7 @@ class CompanySeeder extends Seeder
     {
         $companies = Company::factory()->count(100)->create();
 
-        User::all()->each(function (User $user) use ($companies) {
+        User::isCustomer()->get()->each(function (User $user) use ($companies) {
             $user->company_id = $companies->random()->id;
             $user->save();
         });
