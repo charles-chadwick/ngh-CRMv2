@@ -16,7 +16,7 @@ return new class extends Migration
                 ->index()
                 ->nullable();
             $table->string('title_normalized')
-                ->storedAs('regexp_replace(title, \'[^a-zA-Z0-9]+\', \'\', \'g\')')
+                ->storedAs('regexp_replace(title, \'[^a-zA-Z0-9]+\', \'\')')
                 ->index();
             $table->timestamps();
         });
