@@ -17,6 +17,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Fillable([
+    'role',
     'first_name',
     'last_name',
     'email',

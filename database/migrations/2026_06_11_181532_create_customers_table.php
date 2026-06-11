@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection DuplicatedCode */
 
 use App\Models\Company;
 use Illuminate\Database\Migrations\Migration;
@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class)->index()->nullable();
+            $table->string('role')->index()->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique()->index();
