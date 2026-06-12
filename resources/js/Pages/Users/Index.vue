@@ -20,7 +20,7 @@ const props = defineProps ( {
     <Search :route="route('users.index')" class="my-6" placeholder="Search users..." />
     <table class="w-full">
       <thead>
-      <tr class="text-left text-stone-600">
+      <tr class="text-left text-muted-foreground">
         <th class="p-2"></th>
         <th class="p-2">First Name</th>
         <th class="p-2">Last Name</th>
@@ -35,7 +35,7 @@ const props = defineProps ( {
       <tr
           v-for="user in users.data"
           :key="user.id"
-          class="border-b border-stone-200 odd:bg-stone-100 text-sm text-stone-800"
+          class="border-b border-border odd:bg-muted text-sm text-foreground"
       >
         <td class="p-2">
           <a :href="route('users.show', user.id)">

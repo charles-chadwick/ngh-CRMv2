@@ -56,18 +56,18 @@ function clearSearch() {
 <template>
   <div class="relative">
     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-      <MagnifyingGlassIcon class="h-5 w-5 text-stone-400" />
+      <MagnifyingGlassIcon class="h-5 w-5 text-muted-foreground" />
     </div>
     <input
         v-model="search_query"
         type="text"
         :placeholder="placeholder"
-        class="block w-full rounded-md border-0 py-2 pl-10 pr-10 bg-white text-stone-900 ring-1 ring-inset ring-stone-300 placeholder:text-stone-500 focus:ring-2 focus:ring-inset focus:ring-primary-600"
+        class="block w-full rounded-md border-0 py-2 pl-10 pr-10 bg-background text-foreground ring-1 ring-inset ring-input placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-ring"
     />
     <button
         v-if="search_query"
         type="button"
-        class="absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 hover:text-stone-600"
+        class="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
         @click="clearSearch"
     >
       <span class="sr-only">Clear search</span>

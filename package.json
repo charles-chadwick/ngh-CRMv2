@@ -18,7 +18,7 @@
         "@heroicons/vue": "^2.2.0",
         "@inertiajs/vite": "^3.3.1",
         "@inertiajs/vue3": "^3.3.1",
-        "@lucide/vue": "^1.17.0",
+        "@lucide/vue": "^1.18.0",
         "@vitejs/plugin-vue": "^6.0.7",
         "@vueuse/core": "^14.3.0",
         "class-variance-authority": "^0.7.1",
@@ -26,6 +26,7 @@
         "dayjs": "^1.11.21",
         "lucide-vue-next": "^1.0.0",
         "reka-ui": "^2.9.10",
+        "shadcn-vue": "^2.7.4",
         "tailwind-merge": "^3.6.0",
         "vue": "^3.5.35",
         "ziggy-js": "^2.6.2"

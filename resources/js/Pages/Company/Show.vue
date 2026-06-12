@@ -19,8 +19,8 @@
         />
         <div>
           <h1 class="text-2xl font-bold">{{ company.title }}</h1>
-          <p class="text-stone-700">{{ company.type}}</p>
-          <p class="text-stone-700" v-html="company.description"></p>
+          <p class="text-muted-foreground">{{ company.type}}</p>
+          <p class="text-muted-foreground" v-html="company.description"></p>
         </div>
       </div>
     </div>

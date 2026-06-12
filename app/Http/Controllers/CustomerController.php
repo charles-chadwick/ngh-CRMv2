@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\CustomerRole;
+use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Inertia\Inertia;
 
@@ -18,9 +19,15 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function update(Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer)
     {
-        $customer->update(request()->all());
+        $validated = $request->validated();
+
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        }
+
+        $customer->update($validated);
 
         return redirect()->route('customers.show', $customer);
     }

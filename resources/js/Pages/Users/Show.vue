@@ -22,8 +22,8 @@ defineProps ( {
         />
         <div>
         <h1 class="text-2xl font-bold">{{ user.first_name + ' ' + user.last_name }}</h1>
-          <p class="text-stone-700">{{ user.email}}</p>
-          <p class="text-stone-700">{{ user.role }}</p>
+          <p class="text-muted-foreground">{{ user.email}}</p>
+          <p class="text-muted-foreground">{{ user.role }}</p>
         </div>
       </div>
     </div>

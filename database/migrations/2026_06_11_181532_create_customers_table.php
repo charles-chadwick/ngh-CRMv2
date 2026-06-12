@@ -1,4 +1,6 @@
-<?php /** @noinspection DuplicatedCode */
+<?php
+
+/** @noinspection DuplicatedCode */
 
 use App\Models\Company;
 use Illuminate\Database\Migrations\Migration;
@@ -16,8 +18,11 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Company::class)->index()->nullable();
             $table->string('role')->index()->nullable();
+            $table->string('title')->index()->nullable();
+            $table->string('prefix')->index()->nullable();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('suffix')->index()->nullable();
             $table->string('email')->unique()->index();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

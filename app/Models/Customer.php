@@ -18,8 +18,11 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Fillable([
     'role',
+    'title',
+    'prefix',
     'first_name',
     'last_name',
+    'suffix',
     'email',
     'password',
     'company_id',

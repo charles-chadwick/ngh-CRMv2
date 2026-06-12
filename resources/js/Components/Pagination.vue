@@ -19,13 +19,13 @@ defineProps({
             <Link
                 v-if="paginator.prev_page_url"
                 :href="paginator.prev_page_url"
-                class="relative inline-flex items-center rounded-md border border-darker-300 bg-white px-4 py-2 text-sm font-medium text-darker-700 hover:bg-darker-50"
+                class="relative inline-flex items-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
             >
                 Previous
             </Link>
             <span
                 v-else
-                class="relative inline-flex items-center rounded-md border border-darker-200 bg-darker-100 px-4 py-2 text-sm font-medium text-darker-400"
+                class="relative inline-flex items-center rounded-md border border-border bg-muted px-4 py-2 text-sm font-medium text-muted-foreground"
             >
                 Previous
             </span>
@@ -33,13 +33,13 @@ defineProps({
             <Link
                 v-if="paginator.next_page_url"
                 :href="paginator.next_page_url"
-                class="relative ml-3 inline-flex items-center rounded-md border border-darker-300 bg-white px-4 py-2 text-sm font-medium text-darker-700 hover:bg-darker-50"
+                class="relative ml-3 inline-flex items-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
             >
                 Next
             </Link>
             <span
                 v-else
-                class="relative ml-3 inline-flex items-center rounded-md border border-darker-200 bg-darker-100 px-4 py-2 text-sm font-medium text-darker-400"
+                class="relative ml-3 inline-flex items-center rounded-md border border-border bg-muted px-4 py-2 text-sm font-medium text-muted-foreground"
             >
                 Next
             </span>
@@ -47,7 +47,7 @@ defineProps({
 
         <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div>
-                <p class="text-sm text-darker-700">
+                <p class="text-sm text-foreground">
                     Showing
                     <span class="font-medium">{{ paginator.from }}</span>
                     to
@@ -63,14 +63,14 @@ defineProps({
                         <Link
                             v-if="paginator.prev_page_url"
                             :href="paginator.prev_page_url"
-                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-darker-400 ring-1 ring-inset ring-darker-300 hover:bg-darker-50"
+                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             <span class="sr-only">Previous</span>
                             <ChevronLeftIcon class="h-5 w-5" />
                         </Link>
                         <span
                             v-else
-                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-darker-300 ring-1 ring-inset ring-darker-300"
+                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border"
                         >
                             <span class="sr-only">Previous</span>
                             <ChevronLeftIcon class="h-5 w-5" />
@@ -81,19 +81,19 @@ defineProps({
                         <Link
                             v-if="link.url && !link.active"
                             :href="link.url"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-darker-900 ring-1 ring-inset ring-darker-300 hover:bg-darker-50"
+                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             {{ link.label }}
                         </Link>
                         <span
                             v-else-if="link.active"
-                            class="relative z-10 inline-flex items-center  px-4 py-2 text-sm font-semibold text-darker-800 ring-1 ring-inset ring-primary-600"
+                            class="relative z-10 inline-flex items-center  px-4 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary"
                         >
                             {{ link.label }}
                         </span>
                         <span
                             v-else
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-darker-500 ring-1 ring-inset ring-darker-300"
+                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-muted-foreground ring-1 ring-inset ring-border"
                         >
                             {{ link.label }}
                         </span>
@@ -103,14 +103,14 @@ defineProps({
                         <Link
                             v-if="paginator.next_page_url"
                             :href="paginator.next_page_url"
-                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-darker-400 ring-1 ring-inset ring-darker-300 hover:bg-darker-50"
+                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             <span class="sr-only">Next</span>
                             <ChevronRightIcon class="h-5 w-5" />
                         </Link>
                         <span
                             v-else
-                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-darker-300 ring-1 ring-inset ring-darker-300"
+                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border"
                         >
                             <span class="sr-only">Next</span>
                             <ChevronRightIcon class="h-5 w-5" />

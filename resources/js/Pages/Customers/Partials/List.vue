@@ -10,7 +10,7 @@ defineProps ( { customers: Object } )
     <div
         v-for="customer in customers"
         :key="customer.id"
-        class="text-stone-600"
+        class="text-muted-foreground"
     >
 
       <div class="flex flex-row justify-start items-center">
@@ -27,7 +27,7 @@ defineProps ( { customers: Object } )
           <p class="font-bold">
             <a
                 :href="route('customers.edit', customer.id)"
-                class="hover:text-green-500"
+                class="hover:text-primary"
             >
               {{ customer.first_name }} {{ customer.last_name }}
             </a>
