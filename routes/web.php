@@ -14,3 +14,4 @@ Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
 Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+Route::resource('customers', \App\Http\Controllers\CustomerController::class);
