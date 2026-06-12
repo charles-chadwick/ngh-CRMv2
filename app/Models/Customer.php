@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\CustomerRole;
 use App\Models\Concerns\HasSearch;
 use App\Models\Concerns\WithAvatar;
 use Database\Factories\CustomerFactory;
@@ -46,10 +47,14 @@ class Customer extends Authenticatable implements HasMedia
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => CustomerRole::class,
         ];
     }
 
-    protected $appends = ['full_name', 'initials'];
+    protected $appends = [
+        'full_name',
+        'initials',
+    ];
 
     public function company(): BelongsTo
     {
@@ -71,7 +76,11 @@ class Customer extends Authenticatable implements HasMedia
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+            ->acceptsMimeTypes([
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+            ]);
     }
 
     public function registerMediaConversions(?Media $media = null): void

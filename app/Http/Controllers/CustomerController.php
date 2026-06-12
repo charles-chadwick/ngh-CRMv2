@@ -13,6 +13,8 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
+        $customer->load('company:id,title');
+
         return Inertia::render('Customers/Form', [
             'customer' => $customer,
             'roles' => CustomerRole::cases(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\CustomerRole;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -41,6 +42,7 @@ class CustomerRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
+                Rule::in(CustomerRole::cases()),
             ],
             'prefix' => [
                 'nullable',
