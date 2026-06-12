@@ -33,9 +33,11 @@ class UserTableSeeder extends Seeder
         for ($index = 0; $index < 50; $index++) {
             $created_at = fake()->dateTimeBetween($super_admin_user->created_at, '-1 year');
 
-            $character = RickAndMortyCharacters::next();
-            $first_name = $character['first_name'];
-            $last_name = $character['last_name'];
+            do {
+                $character = RickAndMortyCharacters::next();
+                $first_name = $character['first_name'];
+                $last_name = $character['last_name'];
+            } while (FilterData::hasBadWords($first_name.' '.$last_name));
 
             $role = match (true) {
                 $index <= 10 => UserRole::Admin->value,

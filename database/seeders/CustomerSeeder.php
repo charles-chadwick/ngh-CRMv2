@@ -25,9 +25,11 @@ class CustomerSeeder extends Seeder
         for ($index = 0; $index < 450; $index++) {
             $created_at = fake()->dateTimeBetween('-5 years', '-1 year');
 
-            $character = RickAndMortyCharacters::next();
-            $first_name = $character['first_name'];
-            $last_name = $character['last_name'];
+            do {
+                $character = RickAndMortyCharacters::next();
+                $first_name = $character['first_name'];
+                $last_name = $character['last_name'];
+            } while (FilterData::hasBadWords($first_name.' '.$last_name));
 
             $customer = Customer::factory()
                 ->create([

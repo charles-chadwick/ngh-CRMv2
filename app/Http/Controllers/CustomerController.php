@@ -17,4 +17,18 @@ class CustomerController extends Controller
             'roles' => CustomerRole::cases(),
         ]);
     }
+
+    public function update(Customer $customer)
+    {
+        $customer->update(request()->all());
+
+        return redirect()->route('customers.show', $customer);
+    }
+
+    public function show(Customer $customer)
+    {
+        return Inertia::render('Customers/Show', [
+            'customer' => $customer,
+        ]);
+    }
 }
