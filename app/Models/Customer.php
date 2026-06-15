@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enum\CustomerRole;
-use App\Models\Concerns\HasSearch;
+use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithAvatar;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -35,19 +35,19 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, HasSearch, InteractsWithMedia, Notifiable, WithAvatar;
+    use HasFactory, WithSearch, InteractsWithMedia, Notifiable, WithAvatar;
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts() : array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'role' => CustomerRole::class,
+            'password'          => 'hashed',
+            'role'              => CustomerRole::class,
         ];
     }
 
@@ -56,23 +56,21 @@ class Customer extends Authenticatable implements HasMedia
         'initials',
     ];
 
-    public function company(): BelongsTo
+    public function company() : BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function scopeWithSearch($query, $search)
+    public function scopeWithSearch($query, $search) : void
     {
-        $term = preg_replace('/[^a-zA-Z0-9]/', '', $search);
-
-        return $query->when($search, function ($query) use ($term) {
-            $query->where('first_name_normalized', 'like', "{$term}%")
-                ->orWhere('last_name_normalized', 'like', "{$term}%")
-                ->orWhere('email', 'like', "{$term}%");
-        });
+        $this->search($query, $search, [
+            'first_name_normalized',
+            'last_name_normalized',
+            'email'
+        ]);
     }
 
-    public function registerMediaCollections(): void
+    public function registerMediaCollections() : void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
@@ -83,19 +81,19 @@ class Customer extends Authenticatable implements HasMedia
             ]);
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function registerMediaConversions(?Media $media = null) : void
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 192, 192)
             ->nonQueued();
     }
 
-    public function getFullNameAttribute(): string
+    public function getFullNameAttribute() : string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function getInitialsAttribute(): string
+    public function getInitialsAttribute() : string
     {
         return $this->first_name[0].$this->last_name[0];
     }

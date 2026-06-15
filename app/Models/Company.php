@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\HasSearch;
+use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithAvatar;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,41 +21,46 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 ])]
 class Company extends Model implements HasMedia
 {
-    use HasFactory, HasSearch, InteractsWithMedia, WithAvatar;
+    use HasFactory, WithSearch, InteractsWithMedia, WithAvatar;
 
-    public function customers(): HasMany
+    public function customers() : HasMany
     {
         return $this->hasMany(Customer::class);
     }
 
-    public function scopeWithSearch($query, $search)
-    {
-        return $query->when($search, function ($query) use ($search) {
-            $query->where('title', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%");
-        });
-    }
-
-    public function type(): BelongsTo
+    public function type() : BelongsTo
     {
         return $this->belongsTo(CompanyType::class);
     }
 
-    public function registerMediaCollections(): void
+    public function scopeWithSearch($query, $search) : void
+    {
+        $this->search($query, $search, [
+            'title',
+            'description'
+        ]);
+    }
+
+    public function registerMediaCollections() : void
     {
         $this->addMediaCollection('logo')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']);
+            ->acceptsMimeTypes([
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+                'image/svg+xml'
+            ]);
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function registerMediaConversions(?Media $media = null) : void
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Contain, 192, 192)
             ->nonQueued();
     }
 
-    public function avatarCollection(): string
+    public function avatarCollection() : string
     {
         return 'logo';
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enum\UserRole;
 use App\Models\Concerns\WithAvatar;
+use App\Models\Concerns\WithSearch;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -32,14 +33,14 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, WithAvatar;
+    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, WithAvatar, WithSearch;
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts() : array
     {
         return [
             'role' => UserRole::class,
@@ -48,9 +49,12 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
-    protected $appends = ['full_name', 'initials'];
+    protected $appends = [
+        'full_name',
+        'initials'
+    ];
 
-    public function lastLogin(): BelongsTo
+    public function lastLogin() : BelongsTo
     {
         return $this->belongsTo(Login::class);
     }
@@ -62,41 +66,44 @@ class User extends Authenticatable implements HasMedia
                 ->whereColumn('user_id', 'users.id')
                 ->latest()
                 ->take(1),
-        ])->with('lastLogin');
+        ])
+            ->with('lastLogin');
     }
 
-    public function scopeWithSearch($query, $search)
+    public function scopeWithSearch($query, $search) : void
     {
-        $term = preg_replace('/[^a-zA-Z0-9]/', '', $search);
-
-        return $query->when($search, function ($query) use ($term) {
-            $query->where('first_name_normalized', 'like', "{$term}%")
-                ->orWhere('last_name_normalized', 'like', "{$term}%")
-                ->orWhere('email', 'like', "{$term}%")
-                ->orWhere('role', 'like', "{$term}%");
-        });
+        $this->search($query, $search, [
+            'first_name_normalized',
+            'last_name_normalized',
+            'email',
+            'role'
+        ]);
     }
 
-    public function registerMediaCollections(): void
+    public function registerMediaCollections() : void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+            ->acceptsMimeTypes([
+                'image/jpeg',
+                'image/png',
+                'image/webp'
+            ]);
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function registerMediaConversions(?Media $media = null) : void
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 192, 192)
             ->nonQueued();
     }
 
-    public function getFullNameAttribute(): string
+    public function getFullNameAttribute() : string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function getInitialsAttribute(): string
+    public function getInitialsAttribute() : string
     {
         return $this->first_name[0].$this->last_name[0];
     }
