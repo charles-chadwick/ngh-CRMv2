@@ -3,6 +3,7 @@
   import { Head } from '@inertiajs/vue3'
   import Avatar from "../../Components/Avatar.vue";
   import CustomerList from "../Customers/Partials/List.vue";
+  import { Card } from "@/Components/UI/card/index.js";
 
   defineProps({ company: Object})
 </script>
@@ -25,8 +26,10 @@
       </div>
     </div>
 
+      <Card class="px-6">
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <CustomerList :customers="company.customers" />
     </div>
+      </Card>
   </AppLayout>
 </template>

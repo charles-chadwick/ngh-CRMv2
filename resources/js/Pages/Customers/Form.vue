@@ -6,6 +6,7 @@ import { Label } from "@/Components/UI/label/index.js";
 import Avatar from "@/Components/Avatar.vue";
 import { useForm } from '@inertiajs/vue3'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/UI/select/index.js";
+import { Card } from "@/Components/UI/card/index.js";
 
 const props = defineProps ( {
   customer: Object,
@@ -31,13 +32,12 @@ const submit = () => {
 
 <template>
   <AppLayout>
-    <div class="mx-auto w-full max-w-3/4 px-4 py-8">
+    <Card class="px-6">
       <form
-          class="rounded-xl border bg-card text-card-foreground shadow-sm"
           @submit.prevent="submit"
       >
         <!-- Header -->
-        <div class="flex items-center gap-4 border-b p-6">
+        <div class="flex items-center gap-4 border-b pb-4">
           <Avatar :src="props.customer?.avatar_url" />
           <div>
             <h1 class="text-lg font-semibold leading-none">
@@ -227,7 +227,7 @@ const submit = () => {
           </Button>
         </div>
       </form>
-    </div>
+    </Card>
   </AppLayout>
 </template>
 

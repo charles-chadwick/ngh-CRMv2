@@ -5,6 +5,7 @@ import Avatar from "../../Components/Avatar.vue";
 import Pagination from "../../Components/Pagination.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Search from "../../Components/Search.vue";
+import { Card } from "@/Components/UI/card/index.js";
 
 const { diffForHumans, dateTimeString } = useDate ()
 
@@ -17,8 +18,10 @@ const props = defineProps ( {
 <template>
   <AppLayout>
     <h1 class="text-2xl font-bold my-6">Users</h1>
-    <Search :route="route('users.index')" class="my-6" placeholder="Search users..." />
-    <table class="w-full">
+    <Card class="px-6">
+      <Search :route="route('users.index')" placeholder="Search users..." />
+
+      <table class="w-full">
       <thead>
       <tr class="text-left text-muted-foreground">
         <th class="p-2"></th>
@@ -59,6 +62,7 @@ const props = defineProps ( {
       </tr>
       </tbody>
     </table>
+    </Card>
     <Pagination :paginator="users" />
   </AppLayout>
 </template>

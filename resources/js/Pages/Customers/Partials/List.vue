@@ -23,7 +23,7 @@ defineProps ( { customers: Object } )
               size="sm"
           />
         </a>
-        <div class="ml-6">
+        <div class="ml-6  text-stone-800">
           <p class="font-bold">
             <a
                 :href="route('customers.edit', customer.id)"

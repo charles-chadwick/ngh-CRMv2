@@ -16,8 +16,8 @@ defineProps ( { companies: Object } )
           v-for="company in companies.data"
           :key="company.id"
       >
-        <CardHeader class="border-b border-b-primary [.border-b]:pb-4">
-          <div class="flex items-center justify-between gap-2">
+        <CardHeader class="border-b border-b-primary [.border-b]:mx-4">
+          <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <Avatar :name="company.title" :src="company.avatar_url" size="sm" />
               <a :href="route('companies.show', company)" class="hover:text-primary">

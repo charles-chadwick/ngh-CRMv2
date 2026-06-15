@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3'
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Avatar from "../../Components/Avatar.vue";
 import CustomerList from "../Customers/Partials/List.vue";
+import { Card } from "@/Components/UI/card/index.js";
 
 defineProps ( {
   user: Object,
@@ -13,6 +14,7 @@ defineProps ( {
 <template>
   <AppLayout>
     <Head title="Show" />
+    <Card class="px-6">
     <div class="flex items-center justify-between mb-6">
       <div class="flex flex-row gap-4">
         <Avatar
@@ -27,6 +29,7 @@ defineProps ( {
         </div>
       </div>
     </div>
+    </Card>
 
   </AppLayout>
 </template>

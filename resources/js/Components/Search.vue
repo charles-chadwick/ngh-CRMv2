@@ -62,7 +62,7 @@ function clearSearch() {
         v-model="search_query"
         type="text"
         :placeholder="placeholder"
-        class="block w-full rounded-md border-0 py-2 pl-10 pr-10 bg-background text-foreground ring-1 ring-inset ring-input placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-ring"
+        class="block w-full rounded-md border-0 py-2 pl-10 pr-10 bg-stone-100/90 shadow-sm text-foreground ring-1 ring-inset ring-input placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-ring"
     />
     <button
         v-if="search_query"
