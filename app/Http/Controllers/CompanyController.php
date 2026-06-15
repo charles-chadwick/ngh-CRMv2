@@ -9,7 +9,8 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $companies = Company::select('id', 'title', 'description')
+        $companies = Company::select('id', 'company_type_id', 'title', 'description')
+            ->with('type:id,name')
             ->withAvatar()
             ->withCount('customers')
             ->paginate();
@@ -19,7 +20,8 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
-        $company->load(['customers.media', 'customers']);
+        $company->load(['type', 'customers.media', 'customers']);
+
         return Inertia::render('Company/Show', ['company' => $company]);
     }
 }

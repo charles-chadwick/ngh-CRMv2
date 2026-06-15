@@ -20,7 +20,7 @@
         />
         <div>
           <h1 class="text-2xl font-bold">{{ company.title }}</h1>
-          <p class="text-muted-foreground">{{ company.type}}</p>
+          <p class="text-muted-foreground">{{ company.type?.name }}</p>
           <p class="text-muted-foreground" v-html="company.description"></p>
         </div>
       </div>
