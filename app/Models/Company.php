@@ -46,7 +46,7 @@ class Company extends Model implements HasMedia
             ->nonQueued();
     }
 
-    protected function avatarCollection(): string
+    public function avatarCollection(): string
     {
         return 'logo';
     }

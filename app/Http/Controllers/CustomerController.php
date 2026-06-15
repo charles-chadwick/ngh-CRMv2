@@ -36,6 +36,8 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
+        $customer->load(['company:id,title', 'media']);
+
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
         ]);

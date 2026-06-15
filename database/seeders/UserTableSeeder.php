@@ -47,8 +47,8 @@ class UserTableSeeder extends Seeder
             $user = User::factory()
                 ->create([
                     'role' => $role,
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
+                    'first_name' => ucwords($first_name),
+                    'last_name' => ucwords($last_name),
                     'email' => str($first_name.'.'.$last_name.rand(1, 9999).'@example.com')
                         ->lower()
                         ->remove([' ', '\'']),

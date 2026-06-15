@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
@@ -13,3 +14,6 @@ Route::get('/', function () {
 Route::resource('users', UserController::class);
 Route::resource('companies', CompanyController::class);
 Route::resource('customers', CustomerController::class);
+
+Route::post('avatar', [AvatarController::class, 'store'])->name('avatar.store');
+Route::delete('avatar', [AvatarController::class, 'destroy'])->name('avatar.destroy');

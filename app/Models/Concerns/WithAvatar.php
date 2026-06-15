@@ -47,7 +47,7 @@ trait WithAvatar
         return $this->getFirstMediaUrl($this->avatarCollection()) ?: null;
     }
 
-    protected function avatarCollection(): string
+    public function avatarCollection(): string
     {
         return 'avatar';
     }
