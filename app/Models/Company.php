@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasSearch;
 use App\Models\Concerns\WithAvatar;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,11 +21,19 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 ])]
 class Company extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, WithAvatar;
+    use HasFactory, HasSearch, InteractsWithMedia, WithAvatar;
 
     public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
+    }
+
+    public function scopeWithSearch($query, $search)
+    {
+        return $query->when($search, function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        });
     }
 
     public function type(): BelongsTo
