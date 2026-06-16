@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedReference -->
 <script setup>
   import AppLayout from '@/Layouts/AppLayout.vue'
   import { Head, Link } from '@inertiajs/vue3'
@@ -21,13 +22,7 @@
         />
         <div>
           <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
-          <p class="text-muted-foreground">{{ customer.role }}</p>
-          <p
-              v-if="customer.company"
-              class="text-muted-foreground"
-          >
-            {{ customer.company.title }}
-          </p>
+          <p class="text-muted-foreground">{{ customer.role || '-' }} /  {{ customer.title || '-' }}</p>
         </div>
       </div>
 
@@ -42,16 +37,16 @@
     <Card class="px-6">
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <dt class="text-sm text-muted-foreground">Email</dt>
-          <dd>{{ customer.email }}</dd>
-        </div>
-        <div>
           <dt class="text-sm text-muted-foreground">Role</dt>
           <dd>{{ customer.role || '—' }}</dd>
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Title</dt>
           <dd>{{ customer.title || '—' }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-muted-foreground">Email</dt>
+          <dd>{{ customer.email }}</dd>
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Company</dt>

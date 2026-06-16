@@ -17,7 +17,11 @@ defineProps ( {
 <template>
   <AppLayout>
     <h1 class="text-2xl font-bold my-6">Users</h1>
-    <Search :route="route('users.index')" placeholder="Search users..." class="mb-4" />
+    <Search
+        :route="route('users.index')"
+        placeholder="Search users..."
+        class="mb-4"
+    />
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <Card
           v-for="user in users.data"
@@ -26,20 +30,32 @@ defineProps ( {
         <CardHeader class="border-b border-b-primary [.border-b]:mx-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <Avatar :name="user.full_name" :src="user.avatar_url" size="sm" />
-              <a :href="route('users.show', user.id)" class="hover:text-primary">
+              <Avatar
+                  :name="user.full_name"
+                  :src="user.avatar_url"
+                  size="sm"
+              />
+              <a
+                  :href="route('users.show', user.id)"
+                  class="hover:text-primary"
+              >
                 <div class="font-bold">{{ user.full_name }}</div>
                 <div class="text-sm text-muted-foreground">{{ user.role }}</div>
               </a>
             </div>
-            <div class="text-sm text-muted-foreground" :title="user?.last_login?.created_at">
-              {{ diffForHumans(user?.last_login?.created_at) }}
+            <div
+                class="text-sm text-muted-foreground"
+                :title="user?.last_login?.created_at"
+            >
+              <p class="text-foreground">{{ user.email }}</p>
+              <p class="text-sm text-muted-foreground">Joined {{ dateTimeString ( user.created_at ) }}</p>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <p class="text-foreground">{{ user.email }}</p>
-          <p class="text-sm text-muted-foreground">Joined {{ dateTimeString(user.created_at) }}</p>
+          <p>
+          {{ diffForHumans ( user?.last_login?.created_at ) }}
+          </p>
           <p
               v-if="user.last_login?.ip_address"
               class="text-sm text-muted-foreground"

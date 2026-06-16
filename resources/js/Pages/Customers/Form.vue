@@ -74,6 +74,7 @@ const submit = () => {
                     id="first_name"
                     type="text"
                     placeholder="First Name"
+                    class="focus:ring-primary focus:outline-2 focus:outline-primary"
                     v-model="form.first_name"
                 />
                 <p
