@@ -33,7 +33,7 @@ defineProps ( { customers: Object } )
               {{ customer.first_name }} {{ customer.last_name }}
             </Link>
           </p>
-          <p class="text-sm">{{ customer.role }}</p>
+          <p class="text-sm">{{ customer.role?.name }}</p>
           <p class="text-sm">{{ customer.email }}</p>
         </div>
       </div>

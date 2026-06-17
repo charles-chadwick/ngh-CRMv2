@@ -14,7 +14,7 @@ const props = defineProps ( {
 } );
 
 const form = useForm ( {
-  role: props.customer?.role || '',
+  customer_role_id: props.customer?.customer_role_id || null,
   prefix: props.customer?.prefix || '',
   suffix: props.customer?.suffix || '',
   title: props.customer?.title || '',
@@ -36,10 +36,7 @@ const submit = () => {
       <div>
         <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
         <p class="text-muted-foreground">{{ customer.email }}</p>
-        <p
-            class="text-muted-foreground"
-            v-html="customer.role"
-        ></p>
+        <p class="text-muted-foreground">{{ customer.role?.name }}</p>
       </div>
 
     </div>
@@ -140,7 +137,7 @@ const submit = () => {
                 <!-- Role -->
                 <div class="space-y-2">
                   <Label for="role">Role</Label>
-                  <Select v-model="form.role">
+                  <Select v-model="form.customer_role_id">
                     <SelectTrigger
                         id="role"
                         class="w-full"
@@ -150,18 +147,18 @@ const submit = () => {
                     <SelectContent>
                       <SelectItem
                           v-for="role in props.roles"
-                          :key="role"
-                          :value="role"
+                          :key="role.id"
+                          :value="role.id"
                       >
-                        {{ role }}
+                        {{ role.name }}
                       </SelectItem>
                     </SelectContent>
                   </Select>
                   <p
-                      v-if="form.errors.role"
+                      v-if="form.errors.customer_role_id"
                       class="text-sm text-destructive"
                   >
-                    {{ form.errors.role }}
+                    {{ form.errors.customer_role_id }}
                   </p>
                 </div>
 

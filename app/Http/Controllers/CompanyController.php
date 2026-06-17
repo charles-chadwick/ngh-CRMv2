@@ -21,7 +21,7 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
-        $company->load(['type', 'customers.media', 'customers']);
+        $company->load(['type', 'customers.media', 'customers.role:id,name']);
 
         return Inertia::render('Company/Show', ['company' => $company]);
     }

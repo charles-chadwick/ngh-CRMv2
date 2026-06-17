@@ -38,7 +38,7 @@ defineProps ( {
                   class="hover:text-primary"
               >
                 <div class="font-bold">{{ customer.full_name }}</div>
-                <div class="text-sm text-muted-foreground">{{ customer.role }}</div>
+                <div class="text-sm text-muted-foreground">{{ customer.role?.name }}</div>
               </Link>
             </div>
             <div class="text-sm text-muted-foreground text-right">

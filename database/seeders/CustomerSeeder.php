@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\CustomerRole;
 use Illuminate\Database\Seeder;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -19,6 +20,7 @@ class CustomerSeeder extends Seeder
     public function run(): void
     {
         $companies = Company::all();
+        $roles = CustomerRole::all();
 
         echo "\nAdding Customers\n";
 
@@ -39,6 +41,7 @@ class CustomerSeeder extends Seeder
                         ->lower()
                         ->remove([' ', '\'']),
                     'company_id' => $companies->random()->id,
+                    'customer_role_id' => $roles->random()->id,
                     'created_at' => $created_at,
                     'updated_at' => $created_at,
                 ]);

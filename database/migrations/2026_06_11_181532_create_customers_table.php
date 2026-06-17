@@ -3,6 +3,7 @@
 /** @noinspection DuplicatedCode */
 
 use App\Models\Company;
+use App\Models\CustomerRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class)->index()->nullable();
-            $table->string('role')->index()->nullable();
+            $table->foreignIdFor(CustomerRole::class)->nullable()->index()->constrained()->nullOnDelete();
             $table->string('title')->index()->nullable();
             $table->string('prefix')->index()->nullable();
             $table->string('first_name');

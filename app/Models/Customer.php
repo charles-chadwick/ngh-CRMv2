@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Enum\CustomerRole;
-use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithAvatar;
+use App\Models\Concerns\WithSearch;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -18,7 +17,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Fillable([
-    'role',
+    'customer_role_id',
     'title',
     'prefix',
     'first_name',
@@ -35,19 +34,18 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, WithSearch, InteractsWithMedia, Notifiable, WithAvatar;
+    use HasFactory, InteractsWithMedia, Notifiable, WithAvatar, WithSearch;
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-            'role'              => CustomerRole::class,
+            'password' => 'hashed',
         ];
     }
 
@@ -56,21 +54,26 @@ class Customer extends Authenticatable implements HasMedia
         'initials',
     ];
 
-    public function company() : BelongsTo
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function scopeWithSearch($query, $search) : void
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(CustomerRole::class, 'customer_role_id');
+    }
+
+    public function scopeWithSearch($query, $search): void
     {
         $this->search($query, $search, [
             'first_name_normalized',
             'last_name_normalized',
-            'email'
+            'email',
         ]);
     }
 
-    public function registerMediaCollections() : void
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
@@ -81,19 +84,19 @@ class Customer extends Authenticatable implements HasMedia
             ]);
     }
 
-    public function registerMediaConversions(?Media $media = null) : void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 192, 192)
             ->nonQueued();
     }
 
-    public function getFullNameAttribute() : string
+    public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function getInitialsAttribute() : string
+    public function getInitialsAttribute(): string
     {
         return $this->first_name[0].$this->last_name[0];
     }

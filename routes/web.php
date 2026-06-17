@@ -3,6 +3,7 @@
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerRoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,6 +15,13 @@ Route::get('/', function () {
 Route::resource('users', UserController::class);
 Route::resource('companies', CompanyController::class);
 Route::resource('customers', CustomerController::class);
+
+Route::prefix('settings')->name('settings.')->group(function () {
+    Route::get('/', fn () => Inertia::render('Settings/Index'))->name('index');
+
+    Route::resource('customer-roles', CustomerRoleController::class)
+        ->except(['show']);
+});
 
 Route::post('avatar', [AvatarController::class, 'store'])->name('avatar.store');
 Route::delete('avatar', [AvatarController::class, 'destroy'])->name('avatar.destroy');

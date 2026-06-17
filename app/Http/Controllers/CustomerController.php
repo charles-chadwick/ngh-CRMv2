@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enum\CustomerRole;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
+use App\Models\CustomerRole;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -12,7 +12,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::query()
-            ->with('company:id,title')
+            ->with(['company:id,title', 'role:id,name'])
             ->withAvatar()
             ->withSearch(request('search'))
             ->paginate(15);
@@ -24,11 +24,11 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
-        $customer->load('company:id,title');
+        $customer->load('company:id,title', 'role:id,name');
 
         return Inertia::render('Customers/Form', [
             'customer' => $customer,
-            'roles' => CustomerRole::cases(),
+            'roles' => CustomerRole::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -47,7 +47,7 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-        $customer->load(['company:id,title', 'media']);
+        $customer->load(['company:id,title', 'role:id,name', 'media']);
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,

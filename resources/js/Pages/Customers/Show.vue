@@ -24,7 +24,7 @@
         />
         <div>
           <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
-          <p class="text-muted-foreground">{{ customer.role || '-' }} /  {{ customer.title || '-' }}</p>
+          <p class="text-muted-foreground">{{ customer.role?.name || '-' }} /  {{ customer.title || '-' }}</p>
         </div>
       </div>
 
@@ -40,7 +40,7 @@
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <dt class="text-sm text-muted-foreground">Role</dt>
-          <dd>{{ customer.role || '—' }}</dd>
+          <dd>{{ customer.role?.name || '—' }}</dd>
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Title</dt>

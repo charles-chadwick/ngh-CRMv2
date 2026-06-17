@@ -24,6 +24,7 @@ import { Head } from "@inertiajs/vue3";
 
         <li><a :href="route('companies.index')" class="hover:text-primary">Companies</a></li>
         <li><a :href="route('customers.index')" class="hover:text-primary">Customers</a></li>
+        <li><a :href="route('settings.index')" class="hover:text-primary">Settings</a></li>
       </ul>
     </div>
   </nav>

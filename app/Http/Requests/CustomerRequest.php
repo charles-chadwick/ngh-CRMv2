@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enum\CustomerRole;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -38,11 +37,10 @@ class CustomerRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'role' => [
+            'customer_role_id' => [
                 'nullable',
-                'string',
-                'max:255',
-                Rule::in(CustomerRole::cases()),
+                'integer',
+                'exists:customer_roles,id',
             ],
             'prefix' => [
                 'nullable',
