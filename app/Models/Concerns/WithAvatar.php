@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -19,22 +20,44 @@ trait WithAvatar
 
     public function scopeWithAvatar(Builder $query): Builder
     {
-        return $query->with(['media' => function (MorphMany $query): void {
-            $query->select([
-                'id',
-                'model_type',
-                'model_id',
-                'uuid',
-                'collection_name',
-                'file_name',
-                'disk',
-                'conversions_disk',
-                'manipulations',
-                'custom_properties',
-                'generated_conversions',
-                'responsive_images',
-            ])->where('collection_name', $this->avatarCollection());
-        }]);
+        return $query->with(['media' => $this->avatarMediaConstraint()]);
+    }
+
+    /**
+     * Constraint that trims an avatar media relation to just the columns and
+     * collection needed to build conversion URLs. Reusable by the
+     * `withAvatar()` scope as well as lazy and nested `load()` calls.
+     */
+    public function avatarMediaConstraint(): Closure
+    {
+        return function (MorphMany $query): void {
+            $query->select($this->mediaAvatarColumns())
+                ->where('collection_name', $this->avatarCollection());
+        };
+    }
+
+    /**
+     * Columns required to generate avatar conversion URLs without
+     * loading the full media row.
+     *
+     * @return list<string>
+     */
+    public function mediaAvatarColumns(): array
+    {
+        return [
+            'id',
+            'model_type',
+            'model_id',
+            'uuid',
+            'collection_name',
+            'file_name',
+            'disk',
+            'conversions_disk',
+            'manipulations',
+            'custom_properties',
+            'generated_conversions',
+            'responsive_images',
+        ];
     }
 
     public function getAvatarUrlAttribute(): ?string
