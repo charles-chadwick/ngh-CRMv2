@@ -16,7 +16,9 @@
         <Avatar
             :name="company.title"
             :src="company.avatar_url"
+            :full-src="company.avatar_full_url"
             size="md"
+            clickable
         />
         <div>
           <h1 class="text-2xl font-bold">{{ company.title }}</h1>

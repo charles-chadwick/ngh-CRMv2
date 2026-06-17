@@ -1,5 +1,6 @@
 <script setup>
 import Avatar from "../../../Components/Avatar.vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps ( { customers: Object } )
 </script>
@@ -14,23 +15,23 @@ defineProps ( { customers: Object } )
     >
 
       <div class="flex flex-row justify-start items-center">
-        <a
-            :href="route('customers.edit', customer.id)"
+        <Link
+            :href="route('customers.show', customer.id)"
         >
           <Avatar
               :name="customer.full_name"
               :src="customer.avatar_url"
               size="sm"
           />
-        </a>
+        </Link>
         <div class="ml-6  text-stone-800">
           <p class="font-bold">
-            <a
-                :href="route('customers.edit', customer.id)"
+            <Link
+                :href="route('customers.show', customer.id)"
                 class="hover:text-primary"
             >
               {{ customer.first_name }} {{ customer.last_name }}
-            </a>
+            </Link>
           </p>
           <p class="text-sm">{{ customer.role }}</p>
           <p class="text-sm">{{ customer.email }}</p>

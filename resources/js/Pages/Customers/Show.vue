@@ -18,7 +18,9 @@
         <Avatar
             :name="customer.full_name"
             :src="customer.avatar_url"
+            :full-src="customer.avatar_full_url"
             size="md"
+            clickable
         />
         <div>
           <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
