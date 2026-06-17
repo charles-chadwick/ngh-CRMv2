@@ -21,7 +21,9 @@ import { Head } from "@inertiajs/vue3";
       </div>
       <ul class="flex flex-row items-center gap-4 ml-6 text-primary-foreground font-bold">
         <li><a :href="route('users.index')" class="hover:text-primary">Users</a></li>
+
         <li><a :href="route('companies.index')" class="hover:text-primary">Companies</a></li>
+        <li><a :href="route('customers.index')" class="hover:text-primary">Customers</a></li>
       </ul>
     </div>
   </nav>
