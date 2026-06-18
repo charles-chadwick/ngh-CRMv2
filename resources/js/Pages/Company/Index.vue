@@ -17,18 +17,17 @@ const { view, grid_class } = useViewMode('companies_view')
 <template>
   <AppLayout>
     <h1 class="heading">Companies</h1>
-    <div class="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+    <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
       <Search
           :route="route('companies.index')"
           placeholder="Search companies..."
-          class="w-full sm:max-w-xs"
       />
-      <div class="flex items-center gap-2 sm:ml-auto">
+      <div class="flex items-center gap-2">
         <SortDropdown
             :route="route('companies.index')"
             :options="[
                 { label: 'Name', value: 'title' },
-                { label: 'Customers', value: 'customers_count' },
+                { label: '# of Customers', value: 'customers_count' },
             ]"
         />
         <ViewToggle v-model="view" />

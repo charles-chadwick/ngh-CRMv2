@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Enum\UserRole;
 use App\Models\Concerns\WithAvatar;
 use App\Models\Concerns\WithSearch;
+use App\Models\Concerns\WithSort;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -34,7 +35,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithSearch;
+    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithSearch, WithSort;
 
     /**
      * Get the attributes that should be cast.
@@ -79,6 +80,16 @@ class User extends Authenticatable implements HasMedia
             'email',
             'role',
         ]);
+    }
+
+    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction): void
+    {
+        $this->sort($query, $sort_by, $sort_direction, [
+            'first_name',
+            'last_name',
+            'email',
+            'created_at',
+        ], 'last_name');
     }
 
     public function registerMediaCollections(): void

@@ -16,7 +16,9 @@ class UserController extends Controller
             ->withAvatar()
             ->withLastLogin()
             ->withSearch(request('search'))
-            ->paginate(15);
+            ->withSort(request('sort_by'), request('sort_direction'))
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Users/Index', [
             'users' => $users,

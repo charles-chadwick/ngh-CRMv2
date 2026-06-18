@@ -6,23 +6,44 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import Search from "../../Components/Search.vue";
 import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
+import SortDropdown from "@/Components/SortDropdown.vue";
+import ViewToggle from "@/Components/ViewToggle.vue";
+import { useViewMode } from "@/Composables/useViewMode.js";
 
 const { diffForHumans, dateTimeString } = useDate ()
 
 defineProps ( {
   users: Object
 } )
+
+const { view, grid_class } = useViewMode('users_view')
 </script>
 
 <template>
   <AppLayout>
     <h1 class="text-2xl font-bold my-6">Users</h1>
-    <Search
-        :route="route('users.index')"
-        placeholder="Search users..."
-        class="mb-4"
-    />
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
+      <Search
+          :route="route('users.index')"
+          placeholder="Search users..."
+      />
+      <div class="flex items-center gap-2">
+        <SortDropdown
+            :route="route('users.index')"
+            :options="[
+                { label: 'First Name', value: 'first_name' },
+                { label: 'Last Name', value: 'last_name' },
+                { label: 'Email', value: 'email' },
+                { label: 'Joined', value: 'created_at' },
+            ]"
+        />
+        <ViewToggle v-model="view" />
+      </div>
+    </div>
+    <div
+        class="grid gap-4"
+        :class="grid_class"
+    >
       <Card
           v-for="user in users.data"
           :key="user.id"
