@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\WithAvatar;
 use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
+use App\Models\Concerns\WithSort;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 ])]
 class Company extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes, WithAvatar, WithNotes, WithSearch;
+    use HasFactory, InteractsWithMedia, SoftDeletes, WithAvatar, WithNotes, WithSearch, WithSort;
 
     public function customers(): HasMany
     {
@@ -41,6 +42,14 @@ class Company extends Model implements HasMedia
             'title',
             'description',
         ]);
+    }
+
+    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction): void
+    {
+        $this->sort($query, $sort_by, $sort_direction, [
+            'title',
+            'customers_count',
+        ], 'title');
     }
 
     public function registerMediaCollections(): void

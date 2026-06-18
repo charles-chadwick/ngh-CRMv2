@@ -6,21 +6,41 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import Search from "../../Components/Search.vue";
 import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
+import SortDropdown from "@/Components/SortDropdown.vue";
+import ViewToggle from "@/Components/ViewToggle.vue";
+import { useViewMode } from "@/Composables/useViewMode.js";
 
 defineProps ( {
   customers: Object
 } )
+
+const { view, grid_class } = useViewMode('customers_view')
 </script>
 
 <template>
   <AppLayout>
     <h1 class="text-2xl font-bold my-6">Customers</h1>
-    <Search
-        :route="route('customers.index')"
-        placeholder="Search customers..."
-        class="mb-4"
-    />
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
+      <Search
+          :route="route('customers.index')"
+          placeholder="Search customers..."
+      />
+      <div class="flex items-center gap-2">
+        <SortDropdown
+            :route="route('customers.index')"
+            :options="[
+                { label: 'First Name', value: 'first_name' },
+                { label: 'Last Name', value: 'last_name' },
+                { label: 'Email', value: 'email' },
+            ]"
+        />
+        <ViewToggle v-model="view" />
+      </div>
+    </div>
+    <div
+        class="grid gap-4"
+        :class="grid_class"
+    >
       <Card
           v-for="customer in customers.data"
           :key="customer.id"

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\WithAvatar;
 use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
+use App\Models\Concerns\WithSort;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -36,7 +37,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithNotes, WithSearch;
+    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithNotes, WithSearch, WithSort;
 
     /**
      * Get the attributes that should be cast.
@@ -73,6 +74,15 @@ class Customer extends Authenticatable implements HasMedia
             'last_name_normalized',
             'email',
         ]);
+    }
+
+    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction): void
+    {
+        $this->sort($query, $sort_by, $sort_direction, [
+            'first_name',
+            'last_name',
+            'email',
+        ], 'last_name');
     }
 
     public function registerMediaCollections(): void

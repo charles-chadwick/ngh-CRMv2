@@ -38,7 +38,7 @@ const removeNote = (note) => {
 
 <template>
   <section>
-    <div class="flex items-center justify-between mt-8 mb-2">
+    <div class="flex items-center justify-between">
       <h2 class="heading">Notes</h2>
       <Button
           v-if="!showForm"

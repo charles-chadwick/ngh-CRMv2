@@ -17,7 +17,9 @@ class CompanyController extends Controller
             ->withAvatar()
             ->withCount('customers')
             ->withSearch(request('search'))
-            ->paginate();
+            ->withSort(request('sort_by'), request('sort_direction'))
+            ->paginate()
+            ->withQueryString();
 
         return Inertia::render('Company/Index', ['companies' => $companies]);
     }

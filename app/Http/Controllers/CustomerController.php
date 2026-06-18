@@ -19,8 +19,9 @@ class CustomerController extends Controller
             ])
             ->withAvatar()
             ->withSearch(request('search'))
-            ->orderBy('last_name')
-            ->paginate(15);
+            ->withSort(request('sort_by'), request('sort_direction'))
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Customers/Index', [
             'customers' => $customers,

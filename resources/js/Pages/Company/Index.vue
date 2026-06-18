@@ -5,15 +5,39 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import Search from "../../Components/Search.vue";
 import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
+import SortDropdown from "@/Components/SortDropdown.vue";
+import ViewToggle from "@/Components/ViewToggle.vue";
+import { useViewMode } from "@/Composables/useViewMode.js";
 
 defineProps ( { companies: Object } )
+
+const { view, grid_class } = useViewMode('companies_view')
 </script>
 
 <template>
   <AppLayout>
     <h1 class="heading">Companies</h1>
-    <Search :route="route('companies.index')" placeholder="Search companies..." class="mb-4" />
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <Search
+          :route="route('companies.index')"
+          placeholder="Search companies..."
+          class="w-full sm:max-w-xs"
+      />
+      <div class="flex items-center gap-2 sm:ml-auto">
+        <SortDropdown
+            :route="route('companies.index')"
+            :options="[
+                { label: 'Name', value: 'title' },
+                { label: 'Customers', value: 'customers_count' },
+            ]"
+        />
+        <ViewToggle v-model="view" />
+      </div>
+    </div>
+    <div
+        class="grid gap-4"
+        :class="grid_class"
+    >
       <Card
           v-for="company in companies.data"
           :key="company.id"
