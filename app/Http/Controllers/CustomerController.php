@@ -12,7 +12,10 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::query()
-            ->with(['company:id,title', 'role:id,name'])
+            ->with([
+                'company' => fn ($query) => $query->select('id', 'title')->withAvatar(),
+                'role:id,name',
+            ])
             ->withAvatar()
             ->withSearch(request('search'))
             ->paginate(15);
