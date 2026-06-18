@@ -1,6 +1,5 @@
 <script setup>
 import { computed } from 'vue'
-import { Card, CardContent, CardFooter, CardHeader } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
 
 const props = defineProps({
@@ -22,28 +21,24 @@ const formatted_date = computed(() => {
 </script>
 
 <template>
-  <Card>
-    <CardHeader>
-      <div class="flex items-start justify-between gap-4">
-        <h3 class="font-bold">{{ note.title }}</h3>
-        <span
-            v-if="note.type"
-            class="shrink-0 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
-        >
-          {{ note.type }}
-        </span>
-      </div>
-      <p
-          v-if="formatted_date"
-          class="text-xs text-muted-foreground"
+  <div>
+    <div class="flex items-start justify-between gap-4">
+      <h3 class="font-bold">{{ note.title }}</h3>
+      <span
+          v-if="note.type"
+          class="shrink-0 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
       >
-        {{ formatted_date }}
-      </p>
-    </CardHeader>
-    <CardContent>
-      <p class="text-sm whitespace-pre-line">{{ note.content }}</p>
-    </CardContent>
-    <CardFooter class="justify-end gap-2">
+        {{ note.type }}
+      </span>
+    </div>
+    <p
+        v-if="formatted_date"
+        class="text-xs text-muted-foreground"
+    >
+      {{ formatted_date }}
+    </p>
+    <p class="mt-2 text-sm whitespace-pre-line">{{ note.content }}</p>
+    <div class="mt-2 flex justify-end gap-2">
       <Button
           variant="ghost"
           size="sm"
@@ -59,6 +54,6 @@ const formatted_date = computed(() => {
       >
         Remove
       </Button>
-    </CardFooter>
-  </Card>
+    </div>
+  </div>
 </template>

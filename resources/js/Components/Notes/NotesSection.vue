@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { Button } from "@/Components/UI/button/index.js";
-import Pagination from "@/Components/Pagination.vue";
 import NoteCard from "@/Components/Notes/NoteCard.vue";
 import NoteForm from "@/Components/Notes/NoteForm.vue";
 
@@ -39,7 +38,7 @@ const removeNote = (note) => {
 <template>
   <section>
     <div class="flex items-center justify-between">
-      <h2 class="heading">Notes</h2>
+
       <Button
           v-if="!showForm"
           variant="outline"
@@ -92,6 +91,5 @@ const removeNote = (note) => {
       No notes yet.
     </p>
 
-    <Pagination :paginator="notes" />
   </section>
 </template>

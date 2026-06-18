@@ -28,12 +28,18 @@ class CompanyController extends Controller
     {
         $company->load([
             'type',
-            'customers' => fn ($query) => $query->withAvatar()->with('role:id,name'),
             'creationActivity.causer',
         ]);
 
+        $customers = $company->customers()
+            ->withAvatar()
+            ->with('role:id,name')
+            ->paginate(5, ['*'], 'customers_page')
+            ->withQueryString();
+
         return Inertia::render('Company/Show', [
             'company' => $company,
+            'customers' => $customers,
             'notes' => $company->paginatedNotes(),
             'note_types' => Note::TYPES,
         ]);

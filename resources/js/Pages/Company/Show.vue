@@ -5,10 +5,11 @@ import Avatar from "../../Components/Avatar.vue";
 import CreatedBy from "@/Components/CreatedBy.vue";
 import CustomerList from "../Customers/Partials/List.vue";
 import NotesSection from "@/Components/Notes/NotesSection.vue";
+import Pagination from "@/Components/Pagination.vue";
 import { Card } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
 
-defineProps ( { company: Object, notes: Object, note_types: Array } )
+defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array } )
 </script>
 
 <template>
@@ -44,18 +45,33 @@ defineProps ( { company: Object, notes: Object, note_types: Array } )
         <Link :href="route('companies.edit', company.id)">Edit</Link>
       </Button>
     </div>
-    <h2 class="heading">Customers</h2>
-    <Card class="px-6">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <CustomerList :customers="company.customers" />
-      </div>
-    </Card>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <h2 class="heading">Customers</h2>
+        <Card class="px-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <CustomerList :customers="customers.data" />
+          </div>
+        </Card>
+        <Pagination :paginator="customers" />
 
-    <NotesSection
-        notable_type="company"
-        :notable_id="company.id"
-        :notes="notes"
-        :types="note_types"
-    />
+      </div>
+
+      <div>
+        <h2 class="heading">Notes</h2>
+        <Card class="px-6">
+
+          <NotesSection
+              notable_type="company"
+              :notable_id="company.id"
+              :notes="notes"
+              :types="note_types"
+          />
+        </Card>
+
+        <Pagination :paginator="notes" />
+      </div>
+    </div>
+
   </AppLayout>
 </template>
