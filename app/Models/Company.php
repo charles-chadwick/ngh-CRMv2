@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\WithAvatar;
+use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +23,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 ])]
 class Company extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes, WithAvatar, WithSearch;
+    use HasFactory, InteractsWithMedia, SoftDeletes, WithAvatar, WithNotes, WithSearch;
 
     public function customers(): HasMany
     {

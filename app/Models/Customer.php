@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\WithAvatar;
+use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -35,7 +36,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithSearch;
+    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithNotes, WithSearch;
 
     /**
      * Get the attributes that should be cast.

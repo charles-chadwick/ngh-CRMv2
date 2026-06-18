@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Models\CustomerRole;
+use App\Models\Note;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -18,6 +19,7 @@ class CustomerController extends Controller
             ])
             ->withAvatar()
             ->withSearch(request('search'))
+            ->orderBy('last_name')
             ->paginate(15);
 
         return Inertia::render('Customers/Index', [
@@ -58,6 +60,10 @@ class CustomerController extends Controller
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
+            'notes' => $customer->notes()
+                ->paginate(2, ['id', 'type', 'title', 'content', 'created_at'], 'notes_page')
+                ->withQueryString(),
+            'note_types' => Note::TYPES,
         ]);
     }
 }

@@ -1,11 +1,13 @@
 <script setup>
 import AppLayout from '../../Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import Avatar from "../../Components/Avatar.vue";
 import CustomerList from "../Customers/Partials/List.vue";
+import NotesSection from "@/Components/Notes/NotesSection.vue";
 import { Card } from "@/Components/UI/card/index.js";
+import { Button } from "@/Components/UI/button/index.js";
 
-defineProps ( { company: Object } )
+defineProps ( { company: Object, notes: Object, note_types: Array } )
 </script>
 
 <template>
@@ -29,6 +31,13 @@ defineProps ( { company: Object } )
           ></p>
         </div>
       </div>
+
+      <Button
+          as-child
+          variant="outline"
+      >
+        <Link :href="route('companies.edit', company.id)">Edit</Link>
+      </Button>
     </div>
     <h2 class="heading">Customers</h2>
     <Card class="px-6">
@@ -36,5 +45,12 @@ defineProps ( { company: Object } )
         <CustomerList :customers="company.customers" />
       </div>
     </Card>
+
+    <NotesSection
+        notable_type="company"
+        :notable_id="company.id"
+        :notes="notes"
+        :types="note_types"
+    />
   </AppLayout>
 </template>
