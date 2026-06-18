@@ -28,6 +28,8 @@ class UserTableSeeder extends Seeder
                 'created_at' => '2020-01-01 00:00:00',
             ])->assignRole(UserRole::SuperAdmin->value);
 
+        $this->seedFeaturedSuperAdmins();
+
         echo "\nAdding Users\n";
 
         for ($index = 0; $index < 50; $index++) {
@@ -66,5 +68,40 @@ class UserTableSeeder extends Seeder
         }
 
         echo "\n";
+    }
+
+    /**
+     * Always seed these Rick and Morty characters as Super Admins.
+     *
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    private function seedFeaturedSuperAdmins(): void
+    {
+        $featured_characters = [
+            ['id' => 328, 'first_name' => 'Slow', 'last_name' => 'Rick'],
+            ['id' => 103, 'first_name' => 'Doofus', 'last_name' => 'Rick'],
+            ['id' => 347, 'first_name' => 'President', 'last_name' => 'Curtis'],
+            ['id' => 128, 'first_name' => 'Frankenstien', 'last_name' => 'Monster'],
+            ['id' => 280, 'first_name' => 'Reverse', 'last_name' => 'Giraffe'],
+        ];
+
+        foreach ($featured_characters as $character) {
+            $user = User::factory()
+                ->create([
+                    'role' => UserRole::SuperAdmin->value,
+                    'first_name' => $character['first_name'],
+                    'last_name' => $character['last_name'],
+                    'email' => str($character['first_name'].'.'.$character['last_name'].'@example.com')
+                        ->lower()
+                        ->remove([' ', '\'']),
+                ])->assignRole(UserRole::SuperAdmin->value);
+
+            $user->addMedia(RickAndMortyCharacters::avatarPath($character['id']))
+                ->preservingOriginal()
+                ->toMediaCollection('avatar');
+
+            Login::factory(rand(0, 200))->create(['user_id' => $user->id]);
+        }
     }
 }

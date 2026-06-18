@@ -14,6 +14,44 @@ use function fake;
 class CustomerSeeder extends Seeder
 {
     /**
+     * Job titles randomly assigned to seeded customers.
+     *
+     * @var list<string>
+     */
+    private array $jobTitles = [
+        'Chief Executive Officer',
+        'Chief Operating Officer',
+        'Chief Financial Officer',
+        'Chief Technology Officer',
+        'Chief Marketing Officer',
+        'VP of Sales',
+        'VP of Engineering',
+        'Director of Operations',
+        'Director of Marketing',
+        'Product Manager',
+        'Project Manager',
+        'Account Manager',
+        'Sales Representative',
+        'Marketing Specialist',
+        'Software Engineer',
+        'Senior Software Engineer',
+        'Lead Developer',
+        'Data Analyst',
+        'Business Analyst',
+        'UX Designer',
+        'Customer Success Manager',
+        'Support Specialist',
+        'Operations Coordinator',
+        'Human Resources Manager',
+        'Office Administrator',
+        'Consultant',
+        'Procurement Officer',
+        'Logistics Coordinator',
+        'Quality Assurance Engineer',
+        'Founder',
+    ];
+
+    /**
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
@@ -35,6 +73,7 @@ class CustomerSeeder extends Seeder
 
             $customer = Customer::factory()
                 ->create([
+                    'title' => fake()->randomElement($this->jobTitles),
                     'first_name' => $first_name,
                     'last_name' => $last_name,
                     'email' => str($first_name.'.'.$last_name.rand(1, 9999).'@example.com')

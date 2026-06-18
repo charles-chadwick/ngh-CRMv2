@@ -5,6 +5,11 @@ import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
 
 const sections = [
   {
+    title: 'Users',
+    description: 'Manage the users that can access the application.',
+    route: route('users.index'),
+  },
+  {
     title: 'Customer Roles',
     description: 'Manage the roles that can be assigned to customers.',
     route: route('settings.customer-roles.index'),
