@@ -34,6 +34,8 @@ return new class extends Migration
             $table->string('last_name_normalized')
                 ->storedAs('regexp_replace(last_name, \'[^a-zA-Z0-9]+\', \'\')')
                 ->index();
+            $table->index(['first_name', 'last_name'], 'first_last_name_index');
+            $table->index(['last_name', 'first_name'], 'last_first_name_index');
             $table->timestamps();
             $table->softDeletes();
         });

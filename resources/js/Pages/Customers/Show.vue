@@ -3,10 +3,11 @@
   import AppLayout from '@/Layouts/AppLayout.vue'
   import { Head, Link } from '@inertiajs/vue3'
   import Avatar from "@/Components/Avatar.vue";
+  import NotesSection from "@/Components/Notes/NotesSection.vue";
   import { Button } from "@/Components/UI/button/index.js";
   import { Card } from "@/Components/UI/card/index.js";
 
-  const props = defineProps({ customer: Object })
+  const props = defineProps({ customer: Object, notes: Object, note_types: Array })
 </script>
 
 <template>
@@ -65,5 +66,13 @@
         </div>
       </dl>
     </Card>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <NotesSection
+            notable_type="customer"
+            :notable_id="customer.id"
+            :notes="notes"
+            :types="note_types"
+        />
+    </div>
   </AppLayout>
 </template>
