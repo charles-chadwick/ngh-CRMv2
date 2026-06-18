@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Enum\UserRole;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\CustomerRole;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Activitylog\Support\CauserResolver;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -62,13 +65,18 @@ class CustomerSeeder extends Seeder
 
         echo "\nAdding Customers\n";
 
+        $created_by_users = User::where('role', '!=', UserRole::SuperAdmin->value)->get();
         for ($index = 0; $index < 450; $index++) {
-            $created_at = fake()->dateTimeBetween('-5 years', '-1 year');
+            $created_by_user = $created_by_users->random();
+            $created_at = fake()->dateTimeBetween($created_by_user->created_at, 'yesterday');
+
+            // Attribute this customer's creation activity to a random user.
+            app(CauserResolver::class)->setCauser($created_by_user);
 
             do {
                 $character = RickAndMortyCharacters::next();
-                $first_name = $character['first_name'];
-                $last_name = $character['last_name'];
+                $first_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['first_name']));
+                $last_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['last_name']));
             } while (FilterData::hasBadWords($first_name.' '.$last_name));
 
             $customer = Customer::factory()
@@ -91,6 +99,9 @@ class CustomerSeeder extends Seeder
 
             echo '.';
         }
+
+        // Clear the causer so it doesn't leak into subsequent seeders.
+        app(CauserResolver::class)->setCauser(null);
 
         echo "\n";
     }

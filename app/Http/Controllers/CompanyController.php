@@ -15,9 +15,9 @@ class CompanyController extends Controller
         $companies = Company::select('id', 'company_type_id', 'title', 'description')
             ->with('type:id,name')
             ->withAvatar()
-            ->withCount('customers')
             ->withSearch(request('search'))
             ->withSort(request('sort_by'), request('sort_direction'))
+            ->withCount('customers')
             ->paginate()
             ->withQueryString();
 
@@ -29,6 +29,7 @@ class CompanyController extends Controller
         $company->load([
             'type',
             'customers' => fn ($query) => $query->withAvatar()->with('role:id,name'),
+            'creationActivity.causer',
         ]);
 
         return Inertia::render('Company/Show', [

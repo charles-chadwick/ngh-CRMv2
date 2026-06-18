@@ -6,6 +6,7 @@ use App\Enum\UserRole;
 use App\Models\Login;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Activitylog\Support\CauserResolver;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -19,38 +20,34 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $super_admin_user = User::factory()
-            ->create([
-                'role' => UserRole::SuperAdmin->value,
-                'first_name' => 'Admin',
-                'last_name' => 'User',
-                'email' => 'admin@example.com',
-                'created_at' => '2020-01-01 00:00:00',
-            ])->assignRole(UserRole::SuperAdmin->value);
 
         $this->seedFeaturedSuperAdmins();
 
         echo "\nAdding Users\n";
 
+        $super_admins = User::role(UserRole::SuperAdmin->value)->get();
         for ($index = 0; $index < 50; $index++) {
-            $created_at = fake()->dateTimeBetween($super_admin_user->created_at, '-1 year');
+            $super_admin_user = $super_admins->random();
+            $created_at = fake()->dateTimeBetween($super_admin_user->created_at, 'yesterday');
+
+            // Attribute this user's creation activity to a random Super Admin.
+            app(CauserResolver::class)->setCauser($super_admin_user);
 
             do {
                 $character = RickAndMortyCharacters::next();
-                $first_name = $character['first_name'];
-                $last_name = $character['last_name'];
+                $first_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['first_name']));
+                $last_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['last_name']));
             } while (FilterData::hasBadWords($first_name.' '.$last_name));
 
             $role = match (true) {
                 $index <= 10 => UserRole::Admin->value,
                 default => UserRole::Staff->value,
             };
-
             $user = User::factory()
                 ->create([
                     'role' => $role,
-                    'first_name' => ucwords($first_name),
-                    'last_name' => ucwords($last_name),
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
                     'email' => str($first_name.'.'.$last_name.rand(1, 9999).'@example.com')
                         ->lower()
                         ->remove([' ', '\'']),
@@ -66,6 +63,9 @@ class UserTableSeeder extends Seeder
 
             echo '.';
         }
+
+        // Clear the causer so it doesn't leak into subsequent seeders.
+        app(CauserResolver::class)->setCauser(null);
 
         echo "\n";
     }
@@ -87,6 +87,7 @@ class UserTableSeeder extends Seeder
         ];
 
         foreach ($featured_characters as $character) {
+            $created_at = fake()->dateTimeBetween('-5 year', '-1 year');
             $user = User::factory()
                 ->create([
                     'role' => UserRole::SuperAdmin->value,
@@ -95,6 +96,8 @@ class UserTableSeeder extends Seeder
                     'email' => str($character['first_name'].'.'.$character['last_name'].'@example.com')
                         ->lower()
                         ->remove([' ', '\'']),
+                    'created_at' => $created_at,
+                    'updated_at' => $created_at,
                 ])->assignRole(UserRole::SuperAdmin->value);
 
             $user->addMedia(RickAndMortyCharacters::avatarPath($character['id']))

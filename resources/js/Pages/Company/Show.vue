@@ -2,6 +2,7 @@
 import AppLayout from '../../Layouts/AppLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 import Avatar from "../../Components/Avatar.vue";
+import CreatedBy from "@/Components/CreatedBy.vue";
 import CustomerList from "../Customers/Partials/List.vue";
 import NotesSection from "@/Components/Notes/NotesSection.vue";
 import { Card } from "@/Components/UI/card/index.js";
@@ -29,6 +30,10 @@ defineProps ( { company: Object, notes: Object, note_types: Array } )
               class="text-muted-foreground"
               v-html="company.description"
           ></p>
+          <CreatedBy
+              :user="company.creation_activity?.causer"
+              :date="company.created_at"
+          />
         </div>
       </div>
 

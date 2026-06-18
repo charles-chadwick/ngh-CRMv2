@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +27,10 @@ class UserFactory extends Factory
     {
         $first_name = fake()->firstName();
         $last_name = fake()->lastName();
-        $email = str($first_name . ' ' . $last_name)->lower()->slug('-') . '@example.com';
+        $email = str($first_name.' '.$last_name)->lower()->slug('-').'@example.com';
+
         return [
+            'role' => UserRole::Staff,
             'first_name' => $first_name,
             'last_name' => $last_name,
             'email' => $email,

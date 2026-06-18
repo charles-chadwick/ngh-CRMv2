@@ -3,6 +3,7 @@
   import AppLayout from '@/Layouts/AppLayout.vue'
   import { Head, Link } from '@inertiajs/vue3'
   import Avatar from "@/Components/Avatar.vue";
+  import CreatedBy from "@/Components/CreatedBy.vue";
   import NotesSection from "@/Components/Notes/NotesSection.vue";
   import { Button } from "@/Components/UI/button/index.js";
   import { Card } from "@/Components/UI/card/index.js";
@@ -65,6 +66,10 @@
           </dd>
         </div>
       </dl>
+      <CreatedBy
+          :user="customer.creation_activity?.causer"
+          :date="customer.created_at"
+      />
     </Card>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <NotesSection

@@ -57,6 +57,7 @@ class CustomerController extends Controller
             'company:id,title',
             'role:id,name',
             'media' => $customer->avatarMediaConstraint(),
+            'creationActivity.causer',
         ]);
 
         return Inertia::render('Customers/Show', [

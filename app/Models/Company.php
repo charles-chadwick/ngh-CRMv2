@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\WithActivity;
 use App\Models\Concerns\WithAvatar;
 use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
@@ -24,7 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 ])]
 class Company extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes, WithAvatar, WithNotes, WithSearch, WithSort;
+    use HasFactory, InteractsWithMedia, SoftDeletes, WithActivity, WithAvatar, WithNotes, WithSearch, WithSort;
 
     public function customers(): HasMany
     {

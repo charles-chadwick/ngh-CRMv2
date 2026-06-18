@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enum\UserRole;
+use App\Models\Concerns\WithActivity;
 use App\Models\Concerns\WithAvatar;
 use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithSort;
@@ -35,7 +36,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithSearch, WithSort;
+    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithSearch, WithSort;
 
     /**
      * Get the attributes that should be cast.
