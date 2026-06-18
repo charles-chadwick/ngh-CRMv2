@@ -136,6 +136,10 @@
     }
 }
 
+.heading {
+    @apply text-2xl font-bold my-6;
+}
+
 .link-hover:hover {
     color: var(--color-chart-2);
 }

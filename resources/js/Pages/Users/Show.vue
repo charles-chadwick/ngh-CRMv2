@@ -1,8 +1,9 @@
 <!--suppress JSUnresolvedReference -->
 <script setup>
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Avatar from "../../Components/Avatar.vue";
+import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 
 defineProps ( {
@@ -28,6 +29,13 @@ defineProps ( {
           <p class="text-muted-foreground">{{ user.role }}</p>
         </div>
       </div>
+
+      <Button
+          as-child
+          variant="outline"
+      >
+        <Link :href="route('users.edit', user.id)">Edit</Link>
+      </Button>
     </div>
     <Card class="px-6">
 Hi there

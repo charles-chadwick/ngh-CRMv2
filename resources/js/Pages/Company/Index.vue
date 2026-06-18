@@ -11,7 +11,7 @@ defineProps ( { companies: Object } )
 
 <template>
   <AppLayout>
-    <h1 class="text-2xl font-bold my-6">Companies</h1>
+    <h1 class="heading">Companies</h1>
     <Search :route="route('companies.index')" placeholder="Search companies..." class="mb-4" />
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <Card

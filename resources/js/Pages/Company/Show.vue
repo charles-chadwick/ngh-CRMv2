@@ -1,11 +1,11 @@
 <script setup>
-  import AppLayout from '../../Layouts/AppLayout.vue'
-  import { Head } from '@inertiajs/vue3'
-  import Avatar from "../../Components/Avatar.vue";
-  import CustomerList from "../Customers/Partials/List.vue";
-  import { Card } from "@/Components/UI/card/index.js";
+import AppLayout from '../../Layouts/AppLayout.vue'
+import { Head } from '@inertiajs/vue3'
+import Avatar from "../../Components/Avatar.vue";
+import CustomerList from "../Customers/Partials/List.vue";
+import { Card } from "@/Components/UI/card/index.js";
 
-  defineProps({ company: Object})
+defineProps ( { company: Object } )
 </script>
 
 <template>
@@ -23,15 +23,18 @@
         <div>
           <h1 class="text-2xl font-bold">{{ company.title }}</h1>
           <p class="text-muted-foreground">{{ company.type?.name }}</p>
-          <p class="text-muted-foreground" v-html="company.description"></p>
+          <p
+              class="text-muted-foreground"
+              v-html="company.description"
+          ></p>
         </div>
       </div>
     </div>
-
-      <Card class="px-6">
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <CustomerList :customers="company.customers" />
-    </div>
-      </Card>
+    <h2 class="heading">Customers</h2>
+    <Card class="px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <CustomerList :customers="company.customers" />
+      </div>
+    </Card>
   </AppLayout>
 </template>
