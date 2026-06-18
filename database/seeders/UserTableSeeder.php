@@ -35,8 +35,22 @@ class UserTableSeeder extends Seeder
 
             do {
                 $character = RickAndMortyCharacters::next();
-                $first_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['first_name']));
-                $last_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['last_name']));
+                $first_name = preg_replace('/[^A-Za-z0-9\s]/', '', ucwords($character['first_name']));
+                $last_name = preg_replace('/[^A-Za-z0-9\s]/', '', ucwords($character['last_name']));
+
+                // Drop trailing words while the combined name exceeds 35 characters.
+                $words = preg_split('/\s+/', trim($first_name.' '.$last_name));
+                while (count($words) > 1 && strlen(implode(' ', $words)) > 35) {
+                    array_pop($words);
+                }
+
+                // If a single word still exceeds 35 characters, truncate it.
+                if (count($words) === 1 && strlen($words[0]) > 35) {
+                    $words[0] = substr($words[0], 0, 35);
+                }
+
+                $first_name = array_shift($words);
+                $last_name = implode(' ', $words);
             } while (FilterData::hasBadWords($first_name.' '.$last_name));
 
             $role = match (true) {
@@ -87,6 +101,8 @@ class UserTableSeeder extends Seeder
         ];
 
         foreach ($featured_characters as $character) {
+            RickAndMortyCharacters::markUsed($character['id']);
+
             $created_at = fake()->dateTimeBetween('-5 year', '-1 year');
             $user = User::factory()
                 ->create([

@@ -17,16 +17,16 @@ class NoteSeeder extends Seeder
 
         Customer::all()->each(function (Customer $customer): void {
             $created_by_user = User::inRandomOrder()->first();
-            $created_at = fake()->dateTimeBetween($created_by_user->created_at, '-1 year');
-            CauserResolver::setCauser($created_by_user);
+            $created_at = fake()->dateTimeBetween($created_by_user->created_at);
+            app(CauserResolver::class)->setCauser($created_by_user);
             Note::factory(rand(0, 5))->forNotable($customer)->create(['created_at' => $created_at, 'updated_at' => $created_at]);
             echo '.';
         });
 
         Company::all()->each(function (Company $company): void {
             $created_by_user = User::inRandomOrder()->first();
-            $created_at = fake()->dateTimeBetween($created_by_user->created_at, '-1 year');
-            CauserResolver::setCauser($created_by_user);
+            $created_at = fake()->dateTimeBetween($created_by_user->created_at);
+            app(CauserResolver::class)->setCauser($created_by_user);
             Note::factory(rand(0, 5))->forNotable($company)->create(['created_at' => $created_at, 'updated_at' => $created_at]);
             echo '.';
         });

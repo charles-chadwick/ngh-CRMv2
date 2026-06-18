@@ -13,7 +13,6 @@ class NoteFactory extends Factory
 
     public function definition(): array
     {
-        $created_at = $this->faker->dateTimeBetween('-5 years', 'now');
 
         return [
             'notable_type' => Customer::class,
@@ -21,9 +20,6 @@ class NoteFactory extends Factory
             'type' => $this->faker->randomElement(Note::TYPES),
             'title' => $this->faker->sentence(4),
             'content' => $this->faker->paragraph(),
-            'created_at' => $created_at,
-            'updated_at' => $created_at,
-            'deleted_at' => null,
         ];
     }
 

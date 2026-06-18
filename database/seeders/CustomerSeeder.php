@@ -66,18 +66,35 @@ class CustomerSeeder extends Seeder
         echo "\nAdding Customers\n";
 
         $created_by_users = User::where('role', '!=', UserRole::SuperAdmin->value)->get();
-        for ($index = 0; $index < 450; $index++) {
+
+        // Use every character that wasn't already assigned to a user.
+        foreach (RickAndMortyCharacters::remaining() as $character) {
+            $first_name = preg_replace('/[^A-Za-z0-9\s]/', '', ucwords($character['first_name']));
+            $last_name = preg_replace('/[^A-Za-z0-9\s]/', '', ucwords($character['last_name']));
+
+            // Drop trailing words while the combined name exceeds 35 characters.
+            $words = preg_split('/\s+/', trim($first_name.' '.$last_name));
+            while (count($words) > 1 && strlen(implode(' ', $words)) > 35) {
+                array_pop($words);
+            }
+
+            // If a single word still exceeds 35 characters, truncate it.
+            if (count($words) === 1 && strlen($words[0]) > 35) {
+                $words[0] = substr($words[0], 0, 35);
+            }
+
+            $first_name = array_shift($words);
+            $last_name = implode(' ', $words);
+
+            if (FilterData::hasBadWords($first_name.' '.$last_name)) {
+                continue;
+            }
+
             $created_by_user = $created_by_users->random();
             $created_at = fake()->dateTimeBetween($created_by_user->created_at, 'yesterday');
 
             // Attribute this customer's creation activity to a random user.
             app(CauserResolver::class)->setCauser($created_by_user);
-
-            do {
-                $character = RickAndMortyCharacters::next();
-                $first_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['first_name']));
-                $last_name = preg_replace('/[^A-Za-z0-9]/', '', ucwords($character['last_name']));
-            } while (FilterData::hasBadWords($first_name.' '.$last_name));
 
             $customer = Customer::factory()
                 ->create([
