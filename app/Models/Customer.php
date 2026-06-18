@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Image\Enums\Fit;
@@ -34,7 +35,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, InteractsWithMedia, Notifiable, WithAvatar, WithSearch;
+    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithAvatar, WithSearch;
 
     /**
      * Get the attributes that should be cast.

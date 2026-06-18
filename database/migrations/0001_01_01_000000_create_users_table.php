@@ -27,6 +27,7 @@ return new class extends Migration
                 ->storedAs('regexp_replace(last_name, \'[^a-zA-Z0-9]+\', \'\')')
                 ->index();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

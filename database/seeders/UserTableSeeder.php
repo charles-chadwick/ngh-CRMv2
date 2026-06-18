@@ -82,7 +82,7 @@ class UserTableSeeder extends Seeder
             ['id' => 328, 'first_name' => 'Slow', 'last_name' => 'Rick'],
             ['id' => 103, 'first_name' => 'Doofus', 'last_name' => 'Rick'],
             ['id' => 347, 'first_name' => 'President', 'last_name' => 'Curtis'],
-            ['id' => 128, 'first_name' => 'Frankenstien', 'last_name' => 'Monster'],
+            ['id' => 128, 'first_name' => 'Frankenstien\'s', 'last_name' => 'Monster'],
             ['id' => 280, 'first_name' => 'Reverse', 'last_name' => 'Giraffe'],
         ];
 

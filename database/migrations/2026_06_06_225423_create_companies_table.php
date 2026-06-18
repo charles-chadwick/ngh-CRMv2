@@ -22,6 +22,7 @@ return new class extends Migration
                 ->storedAs('regexp_replace(title, \'[^a-zA-Z0-9]+\', \'\')')
                 ->index();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
