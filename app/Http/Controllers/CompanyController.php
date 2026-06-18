@@ -34,9 +34,7 @@ class CompanyController extends Controller
 
         return Inertia::render('Company/Show', [
             'company' => $company,
-            'notes' => $company->notes()
-                ->paginate(5, ['id', 'type', 'title', 'content', 'created_at'], 'notes_page')
-                ->withQueryString(),
+            'notes' => $company->paginatedNotes(),
             'note_types' => Note::TYPES,
         ]);
     }

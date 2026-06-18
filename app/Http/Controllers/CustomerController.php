@@ -62,9 +62,7 @@ class CustomerController extends Controller
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
-            'notes' => $customer->notes()
-                ->paginate(2, ['id', 'type', 'title', 'content', 'created_at'], 'notes_page')
-                ->withQueryString(),
+            'notes' => $customer->paginatedNotes(),
             'note_types' => Note::TYPES,
         ]);
     }
