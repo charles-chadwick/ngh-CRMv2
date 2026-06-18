@@ -25,7 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 ])]
 class Company extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes, WithActivity, WithAvatar, WithNotes, WithSearch, WithSort;
+    use HasFactory, InteractsWithMedia, SoftDeletes,  WithActivity, WithAvatar, WithNotes, WithSearch, WithSort;
 
     public function customers(): HasMany
     {
