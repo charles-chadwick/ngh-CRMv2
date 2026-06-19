@@ -24,6 +24,7 @@ trait WithNotes
     public function paginatedNotes(int $perPage = 2): LengthAwarePaginator
     {
         return $this->notes()
+            ->with('creationActivity.causer')
             ->paginate($perPage, ['id', 'type', 'title', 'content', 'created_at'], 'notes_page')
             ->withQueryString();
     }

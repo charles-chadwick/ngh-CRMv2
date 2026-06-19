@@ -17,7 +17,7 @@ const props = defineProps({
     size: {
         type: String,
         default: 'md',
-        validator: (value) => ['sm', 'md', 'lg'].includes(value)
+        validator: (value) => ['xs', 'sm', 'md', 'lg'].includes(value)
     },
     clickable: {
         type: Boolean,
@@ -26,6 +26,7 @@ const props = defineProps({
 })
 
 const size_classes = {
+    xs: 'size-6 text-[10px]',
     sm: 'size-12 text-xs',
     md: 'size-24 text-sm',
     lg: 'size-48 text-lg'

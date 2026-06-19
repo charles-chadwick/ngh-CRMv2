@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\WithActivity;
 use Database\Factories\NoteFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Note extends Model
 {
     /** @use HasFactory<NoteFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, WithActivity;
 
     /**
      * The note types that may be assigned.

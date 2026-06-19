@@ -19,7 +19,7 @@ defineProps({
             <Link
                 v-if="paginator.prev_page_url"
                 :href="paginator.prev_page_url"
-                class="relative inline-flex items-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                class="relative inline-flex items-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
             >
                 Previous
             </Link>
@@ -33,7 +33,7 @@ defineProps({
             <Link
                 v-if="paginator.next_page_url"
                 :href="paginator.next_page_url"
-                class="relative ml-3 inline-flex items-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                class="relative ml-3 inline-flex items-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
             >
                 Next
             </Link>
@@ -63,14 +63,14 @@ defineProps({
                         <Link
                             v-if="paginator.prev_page_url"
                             :href="paginator.prev_page_url"
-                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
+                            class="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             <span class="sr-only">Previous</span>
                             <ChevronLeftIcon class="h-5 w-5" />
                         </Link>
                         <span
                             v-else
-                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border"
+                            class="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border"
                         >
                             <span class="sr-only">Previous</span>
                             <ChevronLeftIcon class="h-5 w-5" />
@@ -81,19 +81,19 @@ defineProps({
                         <Link
                             v-if="link.url && !link.active"
                             :href="link.url"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-border hover:bg-accent"
+                            class="relative inline-flex items-center bg-white px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             {{ link.label }}
                         </Link>
                         <span
                             v-else-if="link.active"
-                            class="relative z-10 inline-flex items-center  px-4 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary"
+                            class="relative z-10 inline-flex items-center bg-white px-4 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary"
                         >
                             {{ link.label }}
                         </span>
                         <span
                             v-else
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-muted-foreground ring-1 ring-inset ring-border"
+                            class="relative inline-flex items-center bg-white px-4 py-2 text-sm font-semibold text-muted-foreground ring-1 ring-inset ring-border"
                         >
                             {{ link.label }}
                         </span>
@@ -103,14 +103,14 @@ defineProps({
                         <Link
                             v-if="paginator.next_page_url"
                             :href="paginator.next_page_url"
-                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
+                            class="relative inline-flex items-center rounded-r-md bg-white px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             <span class="sr-only">Next</span>
                             <ChevronRightIcon class="h-5 w-5" />
                         </Link>
                         <span
                             v-else
-                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border"
+                            class="relative inline-flex items-center rounded-r-md bg-white px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border"
                         >
                             <span class="sr-only">Next</span>
                             <ChevronRightIcon class="h-5 w-5" />

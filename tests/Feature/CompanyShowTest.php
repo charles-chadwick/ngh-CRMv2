@@ -14,22 +14,22 @@ beforeEach(function () {
 
 it('paginates the customers on the company show page', function () {
     $company = Company::factory()->create();
-    Customer::factory()->count(11)->create(['company_id' => $company->id]);
+    Customer::factory()->count(7)->create(['company_id' => $company->id]);
 
     $this->get(route('companies.show', $company))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Company/Show', false)
-            ->has('customers.data', 9)
-            ->where('customers.total', 11)
-            ->where('customers.per_page', 9)
+            ->has('customers.data', 5)
+            ->where('customers.total', 7)
+            ->where('customers.per_page', 5)
             ->where('customers.last_page', 2)
         );
 });
 
 it('returns the remaining customers on the second page', function () {
     $company = Company::factory()->create();
-    Customer::factory()->count(11)->create(['company_id' => $company->id]);
+    Customer::factory()->count(7)->create(['company_id' => $company->id]);
 
     $this->get(route('companies.show', [$company, 'customers_page' => 2]))
         ->assertOk()

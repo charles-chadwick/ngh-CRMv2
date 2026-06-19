@@ -1,14 +1,19 @@
 <!--suppress JSUnresolvedReference -->
 <script setup>
-  import AppLayout from '@/Layouts/AppLayout.vue'
-  import { Head, Link } from '@inertiajs/vue3'
-  import Avatar from "@/Components/Avatar.vue";
-  import CreatedBy from "@/Components/CreatedBy.vue";
-  import NotesSection from "@/Components/Notes/NotesSection.vue";
-  import { Button } from "@/Components/UI/button/index.js";
-  import { Card } from "@/Components/UI/card/index.js";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import { Head, Link } from '@inertiajs/vue3'
+import { ref } from 'vue'
+import Avatar from "@/Components/Avatar.vue";
+import CreatedBy from "@/Components/CreatedBy.vue";
+import NotesSection from "@/Components/Notes/NotesSection.vue";
+import AddNoteButton from "@/Components/Notes/AddNoteButton.vue";
+import { Button } from "@/Components/UI/button/index.js";
+import { Card } from "@/Components/UI/card/index.js";
+import Pagination from "@/Components/Pagination.vue";
 
-  const props = defineProps({ customer: Object, notes: Object, note_types: Array })
+defineProps({ customer: Object, notes: Object, note_types: Array })
+
+const showNoteForm = ref(false)
 </script>
 
 <template>
@@ -18,15 +23,20 @@
     <div class="flex items-center justify-between mb-6">
       <div class="flex flex-row gap-4">
         <Avatar
+            :full-src="customer.avatar_full_url"
             :name="customer.full_name"
             :src="customer.avatar_url"
-            :full-src="customer.avatar_full_url"
-            size="md"
             clickable
+            size="md"
         />
         <div>
           <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
-          <p class="text-muted-foreground">{{ customer.role?.name || '-' }} /  {{ customer.title || '-' }}</p>
+          <p class="text-muted-foreground">{{ customer.role?.name || '-' }} / {{ customer.title || '-' }}</p>
+          <CreatedBy
+              :show_avatar="false"
+              :date="customer.created_at"
+              :user="customer.creation_activity?.causer"
+          />
         </div>
       </div>
 
@@ -66,18 +76,28 @@
           </dd>
         </div>
       </dl>
-      <CreatedBy
-          :user="customer.creation_activity?.causer"
-          :date="customer.created_at"
-      />
+
     </Card>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <NotesSection
-            notable_type="customer"
-            :notable_id="customer.id"
-            :notes="notes"
-            :types="note_types"
-        />
+      <div>
+        <div class="flex items-center justify-between">
+          <h2 class="heading">Notes</h2>
+          <AddNoteButton
+              v-if="!showNoteForm"
+              @click="showNoteForm = true"
+          />
+        </div>
+        <Card class="px-6">
+          <NotesSection
+              v-model:show-form="showNoteForm"
+              :notable_id="customer.id"
+              :notes="notes"
+              :types="note_types"
+              notable_type="customer"
+          />
+        </Card>
+        <Pagination :paginator="notes" />
+      </div>
     </div>
   </AppLayout>
 </template>

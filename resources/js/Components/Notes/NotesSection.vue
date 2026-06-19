@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { Button } from "@/Components/UI/button/index.js";
-import NoteCard from "@/Components/Notes/NoteCard.vue";
+import NoteItem from "@/Components/Notes/NoteItem.vue";
 import NoteForm from "@/Components/Notes/NoteForm.vue";
 
 const props = defineProps({
@@ -12,16 +11,11 @@ const props = defineProps({
   types: { type: Array, default: () => [] },
 })
 
-const showForm = ref(false)
+const showForm = defineModel('showForm', { type: Boolean, default: false })
 const editingId = ref(null)
 
 const onSaved = () => {
   showForm.value = false
-  editingId.value = null
-}
-
-const openCreateForm = () => {
-  showForm.value = true
   editingId.value = null
 }
 
@@ -37,18 +31,6 @@ const removeNote = (note) => {
 
 <template>
   <section>
-    <div class="flex items-center justify-between">
-
-      <Button
-          v-if="!showForm"
-          variant="outline"
-          size="sm"
-          @click="openCreateForm"
-      >
-        Add Note
-      </Button>
-    </div>
-
     <NoteForm
         v-if="showForm"
         :notable_type="notable_type"
@@ -76,7 +58,7 @@ const removeNote = (note) => {
             @saved="onSaved"
             @cancel="editingId = null"
         />
-        <NoteCard
+        <NoteItem
             v-else
             :note="note"
             @edit="startEdit"
@@ -90,6 +72,5 @@ const removeNote = (note) => {
     >
       No notes yet.
     </p>
-
   </section>
 </template>
