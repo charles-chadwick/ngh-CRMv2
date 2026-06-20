@@ -34,8 +34,11 @@ defineEmits ( [ 'edit', 'remove' ] )
         </div>
       </div>
 
-    <!-- Note body; preserves author line breaks. -->
-    <p class="mt-2 text-sm whitespace-pre-line">{{ note.content }}</p>
+    <!-- Note body is sanitized HTML from the server; safe to render. -->
+    <div
+        class="note-content mt-2 text-sm"
+        v-html="note.content"
+    />
     <hr class="my-2" />
     <!-- Footer: attribution on the left, edit/remove actions on the right. -->
     <div class="flex flex-col sm:flex-row p-4 justify-between items-start bg-stone-100">

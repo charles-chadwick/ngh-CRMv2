@@ -26,6 +26,7 @@
         "dayjs": "^1.11.21",
         "lucide-vue-next": "^1.0.0",
         "quill": "^2.0.3",
+        "quill-mention": "^6.1.1",
         "reka-ui": "^2.9.10",
         "shadcn-vue": "^2.7.4",
         "tailwind-merge": "^3.6.0",
