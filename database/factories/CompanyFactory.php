@@ -15,7 +15,8 @@ class CompanyFactory extends Factory
 
         return [
             'title' => $this->faker->company(),
-            'company_type_id' => CompanyType::inRandomOrder()->first()->id,
+            'company_type_id' => CompanyType::inRandomOrder()->first()?->id
+                ?? CompanyType::create(['name' => $this->faker->unique()->word()])->id,
             'description' => $this->faker->paragraph(),
         ];
     }

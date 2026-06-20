@@ -60,6 +60,19 @@ const destroy = () => {
     <Card class="px-6">
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
+          <dt class="text-sm text-muted-foreground">Company</dt>
+          <dd>
+            <Link
+                v-if="lead.company"
+                :href="route('companies.show', lead.company.id)"
+                class="hover:text-primary"
+            >
+              {{ lead.company.title }}
+            </Link>
+            <span v-else>—</span>
+          </dd>
+        </div>
+        <div>
           <dt class="text-sm text-muted-foreground">Status</dt>
           <dd>{{ lead.status }}</dd>
         </div>

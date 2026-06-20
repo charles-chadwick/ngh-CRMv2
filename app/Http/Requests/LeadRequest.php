@@ -21,6 +21,11 @@ class LeadRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'company_id' => [
+                'required',
+                'integer',
+                'exists:companies,id',
+            ],
             'title' => [
                 'required',
                 'string',

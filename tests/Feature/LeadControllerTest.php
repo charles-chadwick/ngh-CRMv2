@@ -2,6 +2,7 @@
 
 use App\Enum\LeadStatus;
 use App\Enum\LeadType;
+use App\Models\Company;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -9,14 +10,16 @@ use Inertia\Testing\AssertableInertia;
 
 uses(RefreshDatabase::class);
 
-it('lists leads on the index page', function () {
-    Lead::factory()->count(3)->create();
+it('lists leads on the index page with their company', function () {
+    $company = Company::factory()->create(['title' => 'Acme Roofing']);
+    Lead::factory()->count(3)->create(['company_id' => $company->id]);
 
     $this->get(route('leads.index'))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Leads/Index', false)
             ->has('leads.data', 3)
+            ->where('leads.data.0.company.title', 'Acme Roofing')
         );
 });
 
@@ -28,6 +31,7 @@ it('renders the create form', function () {
             ->has('statuses', 4)
             ->has('types', 5)
             ->has('users')
+            ->has('companies')
         );
 });
 
@@ -35,7 +39,10 @@ it('stores a new lead and redirects to show', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    $company = Company::factory()->create();
+
     $response = $this->post(route('leads.store'), [
+        'company_id' => $company->id,
         'title' => 'New roof lead',
         'type' => LeadType::Web->value,
         'status' => LeadStatus::New->value,
@@ -46,6 +53,7 @@ it('stores a new lead and redirects to show', function () {
     $lead = Lead::firstWhere('title', 'New roof lead');
 
     expect($lead)->not->toBeNull()
+        ->and($lead->company_id)->toBe($company->id)
         ->and($lead->assigned_at)->not->toBeNull();
     $response->assertRedirect(route('leads.show', $lead));
 });
@@ -65,16 +73,26 @@ it('requires a title', function () {
     ])->assertSessionHasErrors('title');
 });
 
+it('requires a company', function () {
+    $this->post(route('leads.store'), [
+        'title' => 'Companyless lead',
+        'type' => LeadType::Web->value,
+        'status' => LeadStatus::New->value,
+    ])->assertSessionHasErrors('company_id');
+});
+
 it('shows a lead with notes and creation attribution', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $lead = Lead::factory()->create();
+    $company = Company::factory()->create(['title' => 'Acme Roofing']);
+    $lead = Lead::factory()->create(['company_id' => $company->id]);
 
     $this->get(route('leads.show', $lead))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Leads/Show', false)
+            ->where('lead.company.title', 'Acme Roofing')
             ->where('lead.creation_activity.causer.full_name', $user->full_name)
             ->has('notes')
             ->has('note_types')
@@ -96,6 +114,7 @@ it('updates a lead and redirects to show', function () {
     $lead = Lead::factory()->create(['title' => 'Old title']);
 
     $this->put(route('leads.update', $lead), [
+        'company_id' => $lead->company_id,
         'title' => 'Updated title',
         'type' => $lead->type->value,
         'status' => LeadStatus::Qualified->value,

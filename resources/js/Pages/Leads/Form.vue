@@ -9,12 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 const props = defineProps({
   lead: { type: Object, default: null },
+  companies: { type: Array, default: () => [] },
   users: { type: Array, default: () => [] },
   statuses: { type: Array, default: () => [] },
   types: { type: Array, default: () => [] },
 })
 
 const form = useForm({
+  company_id: props.lead?.company_id || null,
   title: props.lead?.title || '',
   type: props.lead?.type || '',
   status: props.lead?.status || '',
@@ -50,6 +52,33 @@ const submit = () => {
                 class="text-sm text-destructive"
             >
               {{ form.errors.title }}
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <Label for="company_id">Company</Label>
+            <Select v-model="form.company_id">
+              <SelectTrigger
+                  id="company_id"
+                  class="w-full"
+              >
+                <SelectValue placeholder="Select a company" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem
+                    v-for="company in companies"
+                    :key="company.id"
+                    :value="company.id"
+                >
+                  {{ company.title }}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <p
+                v-if="form.errors.company_id"
+                class="text-sm text-destructive"
+            >
+              {{ form.errors.company_id }}
             </p>
           </div>
 

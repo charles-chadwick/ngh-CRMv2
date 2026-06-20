@@ -2,6 +2,7 @@
 
 use App\Enum\LeadStatus;
 use App\Enum\LeadType;
+use App\Models\Company;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,8 +18,10 @@ it('casts status and type to enums', function () {
 
 it('mass-assigns the fillable lead attributes', function () {
     $user = User::factory()->create();
+    $company = Company::factory()->create();
 
     $lead = Lead::create([
+        'company_id' => $company->id,
         'title' => 'Roof replacement',
         'type' => LeadType::Web,
         'status' => LeadStatus::New,
@@ -27,6 +30,7 @@ it('mass-assigns the fillable lead attributes', function () {
     ]);
 
     expect($lead->title)->toBe('Roof replacement')
+        ->and($lead->company_id)->toBe($company->id)
         ->and($lead->assigned_to)->toBe($user->id);
 });
 

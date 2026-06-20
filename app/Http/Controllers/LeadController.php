@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enum\LeadStatus;
 use App\Enum\LeadType;
 use App\Http\Requests\LeadRequest;
+use App\Models\Company;
 use App\Models\Lead;
 use App\Models\Note;
 use App\Models\User;
@@ -18,7 +19,7 @@ class LeadController extends Controller
     public function index(): Response
     {
         $leads = Lead::query()
-            ->with('assignee:id,first_name,last_name')
+            ->with(['assignee:id,first_name,last_name', 'company:id,title'])
             ->withSearch(request('search'))
             ->withSort(request('sort_by'), request('sort_direction'))
             ->paginate(15)
@@ -45,6 +46,7 @@ class LeadController extends Controller
     {
         $lead->load([
             'assignee:id,first_name,last_name',
+            'company:id,title',
             'creationActivity.causer',
             'updateActivity.causer',
         ]);
@@ -58,7 +60,7 @@ class LeadController extends Controller
 
     public function edit(Lead $lead): Response
     {
-        $lead->load('assignee:id,first_name,last_name');
+        $lead->load('assignee:id,first_name,last_name', 'company:id,title');
 
         return Inertia::render('Leads/Form', [
             'lead' => $lead,
@@ -83,11 +85,12 @@ class LeadController extends Controller
     /**
      * Shared dropdown data for the create/edit form.
      *
-     * @return array{users: Collection<int, User>, statuses: array, types: array}
+     * @return array{companies: Collection<int, Company>, users: Collection<int, User>, statuses: array, types: array}
      */
     protected function formOptions(): array
     {
         return [
+            'companies' => Company::orderBy('title')->get(['id', 'title']),
             'users' => User::orderBy('last_name')->get(['id', 'first_name', 'last_name']),
             'statuses' => LeadStatus::options(),
             'types' => LeadType::options(),

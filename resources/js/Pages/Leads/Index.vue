@@ -17,7 +17,7 @@ defineProps({
     <div class="flex items-center justify-between my-6">
       <h1 class="text-2xl font-bold">Leads</h1>
       <Button as-child>
-        <Link :href="route('leads.create')">New lead</Link>
+        <Link :href="route('leads.create')">New Lead</Link>
       </Button>
     </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
@@ -52,6 +52,13 @@ defineProps({
           </div>
         </CardHeader>
         <CardContent>
+          <Link
+              v-if="lead.company"
+              :href="route('companies.show', lead.company.id)"
+              class="text-sm font-medium hover:text-primary"
+          >
+            {{ lead.company.title }}
+          </Link>
           <p class="text-sm text-muted-foreground">{{ lead.type }}</p>
           <p class="text-sm">{{ lead.assignee?.full_name || 'Unassigned' }}</p>
         </CardContent>
