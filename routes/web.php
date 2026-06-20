@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerRoleController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,6 +16,8 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
+Route::get('users/mentionable', [UserController::class, 'mentionable'])
+    ->name('users.mentionable');
 Route::resource('users', UserController::class);
 Route::resource('companies', CompanyController::class);
 Route::resource('customers', CustomerController::class);
@@ -38,3 +41,8 @@ Route::post('contacts', [ContactController::class, 'store'])->name('contacts.sto
 Route::patch('contacts/{contact}', [ContactController::class, 'update'])->name('contacts.update');
 Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 Route::patch('contacts/{contact}/primary', [ContactController::class, 'setPrimary'])->name('contacts.set-primary');
+
+Route::patch('notifications/read-all', [NotificationController::class, 'markAllRead'])
+    ->name('notifications.readAll');
+Route::patch('notifications/{id}/read', [NotificationController::class, 'markRead'])
+    ->name('notifications.read');

@@ -5,6 +5,7 @@ import { Input } from "@/Components/UI/input/index.js";
 import { Button } from "@/Components/UI/button/index.js";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/UI/select/index.js";
 import { Card, CardContent } from "@/Components/UI/card/index.js";
+import RichTextEditor from '@/Components/RichTextEditor.vue'
 
 const props = defineProps({
   notable_type: { type: String, required: true },
@@ -95,12 +96,9 @@ const submit = () => {
 
         <div class="space-y-2">
           <Label for="note_content">Content</Label>
-          <textarea
+          <RichTextEditor
               id="note_content"
-              rows="3"
-              placeholder="Write a note…"
               v-model="form.content"
-              class="placeholder:text-muted-foreground dark:bg-input/30 border-input w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 md:text-sm"
           />
           <p
               v-if="form.errors.content"

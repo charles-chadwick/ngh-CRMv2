@@ -155,3 +155,14 @@
 .form-label {
     @apply font-bold text-stone-800 my-2 block;
 }
+
+.note-content :where(ul) { list-style: disc; padding-left: 1.25rem; }
+.note-content :where(ol) { list-style: decimal; padding-left: 1.25rem; }
+.note-content :where(a) { color: var(--color-primary); text-decoration: underline; }
+.mention {
+    background-color: color-mix(in oklab, var(--color-primary) 15%, transparent);
+    color: var(--color-primary);
+    border-radius: 0.25rem;
+    padding: 0 0.2rem;
+    font-weight: 600;
+}

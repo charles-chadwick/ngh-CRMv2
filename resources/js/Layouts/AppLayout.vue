@@ -1,6 +1,7 @@
 <script setup>
 
 import { Head } from "@inertiajs/vue3";
+import NotificationBell from "@/Components/Notifications/NotificationBell.vue";
 </script>
 
 <template>
@@ -25,6 +26,9 @@ import { Head } from "@inertiajs/vue3";
         <li><a :href="route('leads.index')" class="hover:text-primary">Leads</a></li>
         <li><a :href="route('settings.index')" class="hover:text-primary">Settings</a></li>
       </ul>
+      <div class="ml-auto">
+        <NotificationBell />
+      </div>
     </div>
   </nav>
   <main class="mx-auto px-32">
