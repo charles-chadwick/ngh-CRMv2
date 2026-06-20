@@ -46,8 +46,8 @@ const { view, grid_class } = useViewMode('customers_view')
           :key="customer.id"
       >
         <CardHeader class="border-b border-b-primary [.border-b]:mx-4">
-          <div class="flex justify-between">
-            <div class="flex gap-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
               <Avatar
                   :name="customer.full_name"
                   :src="customer.avatar_url"
@@ -58,23 +58,22 @@ const { view, grid_class } = useViewMode('customers_view')
                   class="hover:text-primary"
               >
                 <div class="font-bold">{{ customer.full_name }}</div>
-                <div class="text-sm text-muted-foreground">{{ customer.role?.name }}
-                  <Link
-                      v-if="customer.company"
-                      :href="route('companies.show', customer.company.id)"
-                      class="text-sm text-muted-foreground hover:text-primary"
-                  >
-                    {{ customer.company.title }}
-                  </Link>
-                </div>
-
+                <div class="text-sm text-muted-foreground">{{ customer.role?.name }}</div>
               </Link>
             </div>
-
+            <div class="text-sm text-muted-foreground text-right">
+              <Link
+                  v-if="customer.company"
+                  :href="route('companies.show', customer.company.id)"
+                  class="text-sm text-muted-foreground hover:text-primary"
+              >
+                {{ customer.company.title }}
+              </Link>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
-            Sup dog
+          <p>{{ customer.title || '—' }}</p>
         </CardContent>
       </Card>
     </div>
