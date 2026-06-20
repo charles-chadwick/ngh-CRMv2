@@ -96,7 +96,10 @@ const submit = () => {
               {{ form.errors.type }}
             </p>
           </div>
-          <label class="flex items-center gap-2 self-end pb-2 text-sm">
+          <label
+              v-if="!props.contact"
+              class="flex items-center gap-2 self-end pb-2 text-sm"
+          >
             <input
                 type="checkbox"
                 v-model="form.is_primary"

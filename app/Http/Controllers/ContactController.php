@@ -82,7 +82,20 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact): RedirectResponse
     {
-        $contact->delete();
+        DB::transaction(function () use ($contact): void {
+            $was_primary = $contact->is_primary;
+            $parent = $contact->contactable;
+
+            $contact->delete();
+
+            if ($was_primary) {
+                $next = $parent->contacts()->first();
+
+                if ($next !== null) {
+                    $this->makePrimary($next);
+                }
+            }
+        });
 
         return back();
     }

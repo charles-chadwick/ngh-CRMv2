@@ -18,7 +18,6 @@ const primary = computed(
   () => props.contacts.find((contact) => contact.is_primary) || props.contacts[0] || null,
 );
 
-const otherCount = computed(() => Math.max(props.contacts.length - 1, 0));
 </script>
 
 <template>

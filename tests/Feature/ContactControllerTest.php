@@ -84,3 +84,14 @@ it('rejects an invalid type', function () {
         'type' => 'Bogus',
     ])->assertSessionHasErrors('type');
 });
+
+it('promotes a sibling when the primary contact is deleted', function () {
+    $customer = Customer::factory()->create();
+    $primary = Contact::factory()->forContactable($customer)->primary()->create();
+    $other = Contact::factory()->forContactable($customer)->create();
+
+    $this->delete(route('contacts.destroy', $primary))->assertRedirect();
+
+    expect($other->fresh()->is_primary)->toBeTrue()
+        ->and($customer->contacts()->where('is_primary', true)->count())->toBe(1);
+});

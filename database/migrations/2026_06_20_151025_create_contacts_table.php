@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->integer('contactable_id');
-            $table->string('contactable_type');
+            $table->morphs('contactable');
             $table->string('type');
             $table->boolean('is_primary')->default(false);
             $table->string('street_address')
