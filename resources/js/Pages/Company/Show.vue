@@ -11,6 +11,7 @@ import Pagination from "@/Components/Pagination.vue";
 import { Card } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
+import { Pencil } from "lucide-vue-next";
 
 defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array, contacts: Array, contact_types: Array } )
 
@@ -50,8 +51,11 @@ const showNoteForm = ref(false)
       <Button
           as-child
           variant="default"
+          size="icon-sm"
+          aria-label="Edit"
+          title="Edit"
       >
-        <Link :href="route('companies.edit', company.id)">Edit</Link>
+        <Link :href="route('companies.edit', company.id)"><Pencil /></Link>
       </Button>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

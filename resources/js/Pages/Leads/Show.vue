@@ -10,6 +10,7 @@ import { Button } from '@/Components/UI/button/index.js'
 import { Card } from '@/Components/UI/card/index.js'
 import Pagination from '@/Components/Pagination.vue'
 import StatusBadge from '@/Components/StatusBadge.vue'
+import { Pencil, Trash2 } from 'lucide-vue-next'
 
 const props = defineProps({
   lead: Object,
@@ -49,14 +50,21 @@ const destroy = () => {
         <Button
             as-child
             variant="default"
+            size="icon-sm"
+            aria-label="Edit"
+            title="Edit"
         >
-          <Link :href="route('leads.edit', lead.id)">Edit</Link>
+          <Link :href="route('leads.edit', lead.id)"><Pencil /></Link>
         </Button>
         <Button
-            variant="destructive"
+            aria-label="Delete"
+            title="Delete"
+            size="icon-sm"
+            variant="ghost"
+            class="text-destructive hover:text-destructive"
             @click="destroy"
         >
-          Delete
+          <Trash2 />
         </Button>
       </div>
     </div>

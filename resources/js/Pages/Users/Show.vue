@@ -5,6 +5,7 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Avatar from "../../Components/Avatar.vue";
 import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
+import { Pencil } from "lucide-vue-next";
 
 defineProps ( {
   user: Object,
@@ -33,8 +34,11 @@ defineProps ( {
       <Button
           as-child
           variant="default"
+          size="icon-sm"
+          aria-label="Edit"
+          title="Edit"
       >
-        <Link :href="route('users.edit', user.id)">Edit</Link>
+        <Link :href="route('users.edit', user.id)"><Pencil /></Link>
       </Button>
     </div>
     <Card class="px-6">

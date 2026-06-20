@@ -4,6 +4,7 @@ import { Head, Link, router } from '@inertiajs/vue3'
 import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
 
 defineProps({
   customer_roles: Object,
@@ -45,10 +46,19 @@ const destroy = (role) => {
           <p class="text-sm text-muted-foreground">{{ role.customers_count }} customer(s)</p>
         </div>
         <div class="flex items-center gap-2">
-          <Button as-child variant="default" size="sm">
-            <Link :href="route('settings.customer-roles.edit', role.id)">Edit</Link>
+          <Button as-child variant="default" size="icon-sm" aria-label="Edit" title="Edit">
+            <Link :href="route('settings.customer-roles.edit', role.id)"><Pencil /></Link>
           </Button>
-          <Button variant="destructive" size="sm" @click="destroy(role)">Delete</Button>
+          <Button
+              aria-label="Delete"
+              title="Delete"
+              size="icon-sm"
+              variant="ghost"
+              class="text-destructive hover:text-destructive"
+              @click="destroy(role)"
+          >
+            <Trash2 />
+          </Button>
         </div>
       </div>
 
