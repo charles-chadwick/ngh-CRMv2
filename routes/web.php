@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerRoleController;
 use App\Http\Controllers\LeadController;
@@ -32,3 +33,8 @@ Route::delete('avatar', [AvatarController::class, 'destroy'])->name('avatar.dest
 Route::post('notes', [NoteController::class, 'store'])->name('notes.store');
 Route::put('notes/{note}', [NoteController::class, 'update'])->name('notes.update');
 Route::delete('notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
+
+Route::post('contacts', [ContactController::class, 'store'])->name('contacts.store');
+Route::patch('contacts/{contact}', [ContactController::class, 'update'])->name('contacts.update');
+Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+Route::patch('contacts/{contact}/primary', [ContactController::class, 'setPrimary'])->name('contacts.set-primary');
