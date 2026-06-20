@@ -10,8 +10,9 @@ import AddNoteButton from "@/Components/Notes/AddNoteButton.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { Card } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
+import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
 
-defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array } )
+defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array, contacts: Array, contact_types: Array } )
 
 const showNoteForm = ref(false)
 </script>
@@ -88,6 +89,12 @@ const showNoteForm = ref(false)
 
         <Pagination :paginator="notes" />
       </div>
+      <ContactsSection
+          contactable_type="company"
+          :contactable_id="company.id"
+          :contacts="contacts"
+          :types="contact_types"
+      />
     </div>
 
   </AppLayout>
