@@ -74,6 +74,12 @@ class CustomerSeeder extends Seeder
 
             // Drop trailing words while the combined name exceeds 35 characters.
             $words = preg_split('/\s+/', trim($first_name.' '.$last_name));
+
+            // Cap the full name (first + last) at three words.
+            while (count($words) > 2) {
+                array_pop($words);
+            }
+
             while (count($words) > 1 && strlen(implode(' ', $words)) > 35) {
                 array_pop($words);
             }

@@ -62,7 +62,6 @@ const { view, grid_class } = useViewMode('customers_view')
               </Link>
             </div>
             <div class="text-sm text-muted-foreground text-right">
-              <p class="text-foreground">{{ customer.email }}</p>
               <Link
                   v-if="customer.company"
                   :href="route('companies.show', customer.company.id)"

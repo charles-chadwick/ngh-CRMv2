@@ -5,7 +5,7 @@ import Avatar from "../../Components/Avatar.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import Search from "../../Components/Search.vue";
-import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
+import { Card, CardContent, CardHeader } from "@/Components/UI/card/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/Composables/useViewMode.js";
@@ -16,7 +16,7 @@ defineProps ( {
   users: Object
 } )
 
-const { view, grid_class } = useViewMode('users_view')
+const { view, grid_class } = useViewMode ( 'users_view' )
 </script>
 
 <template>
@@ -29,20 +29,20 @@ const { view, grid_class } = useViewMode('users_view')
       />
       <div class="flex items-center gap-2">
         <SortDropdown
-            :route="route('users.index')"
             :options="[
                 { label: 'First Name', value: 'first_name' },
                 { label: 'Last Name', value: 'last_name' },
                 { label: 'Email', value: 'email' },
                 { label: 'Joined', value: 'created_at' },
             ]"
+            :route="route('users.index')"
         />
         <ViewToggle v-model="view" />
       </div>
     </div>
     <div
-        class="grid gap-4"
         :class="grid_class"
+        class="grid gap-4"
     >
       <Card
           v-for="user in users.data"
@@ -64,24 +64,24 @@ const { view, grid_class } = useViewMode('users_view')
                 <div class="text-sm text-muted-foreground">{{ user.role }}</div>
               </a>
             </div>
-            <div
-                class="text-sm text-muted-foreground"
-                :title="user?.last_login?.created_at"
-            >
-              <p class="text-foreground">{{ user.email }}</p>
-              <p class="text-sm text-muted-foreground">Joined {{ dateTimeString ( user.created_at ) }}</p>
-            </div>
+
           </div>
         </CardHeader>
-        <CardContent>
-          <p>
-          {{ diffForHumans ( user?.last_login?.created_at ) }}
+        <CardContent class="text-sm">
+          <div
+              :title="user?.last_login?.created_at"
+              class="text-muted-foreground"
+          >
+            <p class="text-muted-foreground">Created: {{ dateTimeString ( user.created_at ) }}</p>
+          </div>
+          <p class="text-muted-foreground" >Last Login:
+             {{ diffForHumans ( user?.last_login?.created_at ) }}
           </p>
           <p
               v-if="user.last_login?.ip_address"
-              class="text-sm text-muted-foreground"
+              class="text-muted-foreground"
           >
-            {{ user.last_login.ip_address }}
+            IP Address: {{ user.last_login.ip_address }}
           </p>
         </CardContent>
       </Card>
