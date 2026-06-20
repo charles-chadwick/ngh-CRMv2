@@ -1,7 +1,7 @@
 <script setup>
 
 import AppLayout from "../Layouts/AppLayout.vue";
-import { Card } from "../../../.claude/worktrees/notes-mentions/resources/js/Components/UI/card/index.js";
+import { Card } from "@/Components/UI/card/index.js";
 </script>
 
 <template>
