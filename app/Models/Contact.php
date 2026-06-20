@@ -12,10 +12,16 @@ class Contact extends Model
 {
     use HasFactory, SoftDeletes, WithActivity;
 
+    /**
+     * Contact type values shown in the type dropdown.
+     *
+     * @var list<string>
+     */
+    public const TYPES = ['Office', 'Billing', 'Shipping', 'Mailing', 'Other'];
+
     protected $fillable = [
-        'contacable_id',
-        'contacable_type',
         'type',
+        'is_primary',
         'street_address',
         'city',
         'state',
@@ -25,9 +31,19 @@ class Contact extends Model
     ];
 
     /**
-     * Get the parent-contactable model (customer, company, etc.).
+     * @return array<string, string>
      */
-    public function contacable(): MorphTo
+    protected function casts(): array
+    {
+        return [
+            'is_primary' => 'boolean',
+        ];
+    }
+
+    /**
+     * Get the parent contactable model (customer, company, etc.).
+     */
+    public function contactable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->integer('contactable_id');
             $table->string('contactable_type');
             $table->string('type');
+            $table->boolean('is_primary')->default(false);
             $table->string('street_address')
                 ->nullable()
                 ->index();
