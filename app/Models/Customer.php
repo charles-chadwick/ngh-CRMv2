@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\WithActivity;
 use App\Models\Concerns\WithAvatar;
+use App\Models\Concerns\WithContacts;
 use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithSort;
@@ -38,7 +39,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithNotes, WithSearch, WithSort;
+    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithContacts, WithNotes, WithSearch, WithSort;
 
     /**
      * Get the attributes that should be cast.
