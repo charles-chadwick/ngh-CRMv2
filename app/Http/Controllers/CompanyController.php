@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Models\CompanyType;
+use App\Models\Contact;
 use App\Models\Note;
 use Inertia\Inertia;
 
@@ -30,6 +31,7 @@ class CompanyController extends Controller
             'type',
             'creationActivity.causer',
             'updateActivity.causer',
+            'contacts',
         ]);
 
         $customers = $company->customers()
@@ -43,6 +45,8 @@ class CompanyController extends Controller
             'customers' => $customers,
             'notes' => $company->paginatedNotes(),
             'note_types' => Note::TYPES,
+            'contacts' => $company->contacts,
+            'contact_types' => Contact::TYPES,
         ]);
     }
 

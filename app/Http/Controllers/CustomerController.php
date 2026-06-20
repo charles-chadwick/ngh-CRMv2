@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
+use App\Models\Contact;
 use App\Models\Customer;
 use App\Models\CustomerRole;
 use App\Models\Note;
@@ -59,12 +60,15 @@ class CustomerController extends Controller
             'media' => $customer->avatarMediaConstraint(),
             'creationActivity.causer',
             'updateActivity.causer',
+            'contacts',
         ]);
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
             'notes' => $customer->paginatedNotes(),
             'note_types' => Note::TYPES,
+            'contacts' => $customer->contacts,
+            'contact_types' => Contact::TYPES,
         ]);
     }
 }
