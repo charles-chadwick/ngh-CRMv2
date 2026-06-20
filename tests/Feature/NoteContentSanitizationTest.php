@@ -24,3 +24,19 @@ it('sanitizes note content on store', function () {
         ->toContain('<p>ok</p>')
         ->not->toContain('<script');
 });
+
+it('sanitizes note content on update', function () {
+    $note = Note::factory()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->put(route('notes.update', $note), [
+            'type' => 'General',
+            'title' => 'Updated',
+            'content' => '<p>clean</p><script>alert(1)</script>',
+        ])
+        ->assertRedirect();
+
+    expect($note->refresh()->content)
+        ->toContain('<p>clean</p>')
+        ->not->toContain('<script');
+});

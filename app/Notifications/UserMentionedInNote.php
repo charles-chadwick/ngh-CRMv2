@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Lead;
 use App\Models\Note;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -59,6 +60,7 @@ class UserMentionedInNote extends Notification
         return match (true) {
             $notable instanceof Customer => route('customers.show', $notable),
             $notable instanceof Company => route('companies.show', $notable),
+            $notable instanceof Lead => route('leads.show', $notable),
             default => route('home'),
         };
     }
