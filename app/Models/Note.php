@@ -7,6 +7,7 @@ use Database\Factories\NoteFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -33,5 +34,13 @@ class Note extends Model
     public function notable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Users mentioned in this note's content.
+     */
+    public function mentionedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'mentions');
     }
 }
