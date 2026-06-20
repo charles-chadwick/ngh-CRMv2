@@ -5,10 +5,33 @@ namespace App\Http\Controllers;
 use App\Enum\UserRole;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    /**
+     * Search team members that may be @mentioned in a note.
+     */
+    public function mentionable(Request $request): JsonResponse
+    {
+        $users = User::query()
+            ->whereKeyNot($request->user()?->id)
+            ->withSearch($request->string('q')->toString())
+            ->withAvatar()
+            ->limit(10)
+            ->get();
+
+        return response()->json(
+            $users->map(fn (User $user): array => [
+                'id' => $user->id,
+                'full_name' => $user->full_name,
+                'avatar_url' => $user->avatar_url,
+            ])->values()
+        );
+    }
+
     public function index()
     {
 

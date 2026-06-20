@@ -14,6 +14,8 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
+Route::get('users/mentionable', [UserController::class, 'mentionable'])
+    ->name('users.mentionable');
 Route::resource('users', UserController::class);
 Route::resource('companies', CompanyController::class);
 Route::resource('customers', CustomerController::class);
