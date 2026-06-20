@@ -58,3 +58,24 @@ it('only notifies newly added mentions on update', function () {
     Notification::assertSentTo($john, UserMentionedInNote::class);
     Notification::assertNotSentTo($jane, UserMentionedInNote::class);
 });
+
+it('does not throw when a guest posts a note with a mention', function () {
+    Notification::fake();
+
+    $mentioned = User::factory()->create();
+    $customer = Customer::factory()->create();
+
+    $this->post(route('notes.store'), [
+        'model_type' => 'customer',
+        'model_id' => $customer->id,
+        'type' => 'General',
+        'title' => 'Guest note',
+        'content' => "<p><span data-id=\"{$mentioned->id}\">@User</span></p>",
+    ])->assertRedirect();
+
+    $note = Note::firstOrFail();
+
+    Notification::assertNothingSent();
+
+    expect($note->mentionedUsers->contains($mentioned))->toBeTrue();
+});

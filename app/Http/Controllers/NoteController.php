@@ -89,7 +89,9 @@ class NoteController extends Controller
         $newly_mentioned = app(NoteMentionService::class)
             ->syncFromContent($note, $note->content, $author?->id);
 
-        Notification::send($newly_mentioned, new UserMentionedInNote($note, $author));
+        if ($author !== null) {
+            Notification::send($newly_mentioned, new UserMentionedInNote($note, $author));
+        }
     }
 
     /**
