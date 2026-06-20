@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NoteRequest;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Lead;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +21,7 @@ class NoteController extends Controller
     protected array $models = [
         'customer' => Customer::class,
         'company' => Company::class,
+        'lead' => Lead::class,
     ];
 
     /**

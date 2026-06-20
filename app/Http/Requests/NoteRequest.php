@@ -30,7 +30,7 @@ class NoteRequest extends FormRequest
             'model_type' => [
                 Rule::requiredIf(! $is_update),
                 'string',
-                Rule::in(['customer', 'company']),
+                Rule::in(['customer', 'company', 'lead']),
             ],
             'model_id' => [
                 Rule::requiredIf(! $is_update),

@@ -4,6 +4,7 @@ use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerRoleController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ Route::get('/', function () {
 Route::resource('users', UserController::class);
 Route::resource('companies', CompanyController::class);
 Route::resource('customers', CustomerController::class);
+Route::resource('leads', LeadController::class);
 
 Route::prefix('settings')->name('settings.')->group(function () {
     Route::get('/', fn () => Inertia::render('Settings/Index'))->name('index');
