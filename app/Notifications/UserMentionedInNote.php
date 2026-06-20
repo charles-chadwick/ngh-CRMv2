@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Note;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
@@ -24,7 +25,12 @@ class UserMentionedInNote extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
+    }
+
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage($this->toDatabase($notifiable));
     }
 
     /**
