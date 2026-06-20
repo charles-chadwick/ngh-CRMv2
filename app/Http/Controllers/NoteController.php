@@ -7,9 +7,12 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\Note;
+use App\Notifications\UserMentionedInNote;
 use App\Services\NoteContentSanitizer;
+use App\Services\NoteMentionService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Notification;
 
 class NoteController extends Controller
 {
@@ -34,7 +37,9 @@ class NoteController extends Controller
 
         $model = $this->resolveModel($validated['model_type'], $validated['model_id']);
 
-        $model->notes()->create($this->noteAttributes($request));
+        $note = $model->notes()->create($this->noteAttributes($request));
+
+        $this->notifyMentions($note);
 
         return back();
     }
@@ -45,6 +50,8 @@ class NoteController extends Controller
     public function update(NoteRequest $request, Note $note): RedirectResponse
     {
         $note->update($this->noteAttributes($request));
+
+        $this->notifyMentions($note->refresh());
 
         return back();
     }
@@ -70,6 +77,19 @@ class NoteController extends Controller
         $attributes['content'] = app(NoteContentSanitizer::class)->clean($attributes['content']);
 
         return $attributes;
+    }
+
+    /**
+     * Sync mentions for the note and notify any newly mentioned users.
+     */
+    protected function notifyMentions(Note $note): void
+    {
+        $author = auth()->user();
+
+        $newly_mentioned = app(NoteMentionService::class)
+            ->syncFromContent($note, $note->content, $author?->id);
+
+        Notification::send($newly_mentioned, new UserMentionedInNote($note, $author));
     }
 
     /**
