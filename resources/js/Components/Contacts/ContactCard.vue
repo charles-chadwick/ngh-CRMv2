@@ -6,6 +6,7 @@
 -->
 <script setup>
 import { computed } from "vue";
+import StatusBadge from "@/Components/StatusBadge.vue";
 
 const props = defineProps({
   contact: { type: Object, required: true },
@@ -24,12 +25,7 @@ const hasAddress = computed(() =>
 <template>
   <div>
     <div class="flex items-center justify-between gap-2">
-      <div
-          v-if="contact.type"
-          class="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
-      >
-        {{ contact.type }}
-      </div>
+      <StatusBadge :status="contact.type" />
       <span
           v-if="contact.is_primary"
           class="text-xs font-bold text-primary"

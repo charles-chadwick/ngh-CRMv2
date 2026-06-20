@@ -9,6 +9,7 @@ import AddNoteButton from '@/Components/Notes/AddNoteButton.vue'
 import { Button } from '@/Components/UI/button/index.js'
 import { Card } from '@/Components/UI/card/index.js'
 import Pagination from '@/Components/Pagination.vue'
+import StatusBadge from '@/Components/StatusBadge.vue'
 
 const props = defineProps({
   lead: Object,
@@ -32,7 +33,10 @@ const destroy = () => {
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold">{{ lead.title }}</h1>
-        <p class="text-muted-foreground">{{ lead.status }} / {{ lead.type }}</p>
+        <p class="mt-1 flex items-center gap-2">
+          <StatusBadge :status="lead.status" />
+          <StatusBadge :status="lead.type" />
+        </p>
         <CreatedBy
             :show_avatar="false"
             :date="lead.created_at"
@@ -74,11 +78,11 @@ const destroy = () => {
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Status</dt>
-          <dd>{{ lead.status }}</dd>
+          <dd><StatusBadge :status="lead.status" /></dd>
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Type</dt>
-          <dd>{{ lead.type }}</dd>
+          <dd><StatusBadge :status="lead.type" /></dd>
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Assigned to</dt>

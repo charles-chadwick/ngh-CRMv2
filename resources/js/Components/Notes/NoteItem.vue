@@ -11,6 +11,7 @@
 import { Button } from "@/Components/UI/button/index.js";
 import { Pencil, Trash2 } from "lucide-vue-next"
 import CreatedBy from "@/Components/CreatedBy.vue";
+import StatusBadge from "@/Components/StatusBadge.vue";
 
 // `note` carries its serialized activity log (creation_activity / update_activity)
 // so <CreatedBy> can attribute both who made it and who last edited it.
@@ -26,12 +27,7 @@ defineEmits ( [ 'edit', 'remove' ] )
       <!-- Header: note title on the left, optional type badge on the right. -->
       <div class="flex items-center justify-between gap-2">
         <h3 class="font-bold">{{ note.title }}</h3>
-        <div
-            v-if="note.type"
-            class="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
-        >
-          {{ note.type }}
-        </div>
+        <StatusBadge :status="note.type" />
       </div>
 
     <!-- Note body is sanitized HTML from the server; safe to render. -->

@@ -6,6 +6,7 @@ import Search from '@/Components/Search.vue'
 import SortDropdown from '@/Components/SortDropdown.vue'
 import { Button } from '@/Components/UI/button/index.js'
 import { Card, CardHeader, CardContent } from '@/Components/UI/card/index.js'
+import StatusBadge from '@/Components/StatusBadge.vue'
 
 defineProps({
   leads: Object,
@@ -48,7 +49,7 @@ defineProps({
             >
               {{ lead.title }}
             </Link>
-            <span class="text-sm text-muted-foreground">{{ lead.status }}</span>
+            <StatusBadge :status="lead.status" />
           </div>
         </CardHeader>
         <CardContent>
