@@ -77,3 +77,10 @@ onBeforeUnmount(() => {
         <div ref="editor_el" />
     </div>
 </template>
+
+<style scoped>
+/* Give the note editor a comfortable writing area (~4.5x Quill's default). */
+:deep(.ql-editor) {
+    min-height: 12rem;
+}
+</style>
