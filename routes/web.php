@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerRoleController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,3 +35,8 @@ Route::delete('avatar', [AvatarController::class, 'destroy'])->name('avatar.dest
 Route::post('notes', [NoteController::class, 'store'])->name('notes.store');
 Route::put('notes/{note}', [NoteController::class, 'update'])->name('notes.update');
 Route::delete('notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
+
+Route::patch('notifications/read-all', [NotificationController::class, 'markAllRead'])
+    ->name('notifications.readAll');
+Route::patch('notifications/{id}/read', [NotificationController::class, 'markRead'])
+    ->name('notifications.read');
