@@ -41,7 +41,7 @@ const has_update = computed(
 
 <template>
   <!-- Stacks the lines vertically: "Created by" always, "Updated by" optional. -->
-  <span class="flex flex-col gap-0.5 i text-sm text-muted-foreground">
+  <span class="flex flex-col gap-0.5 text-sm text-muted-foreground">
     <!-- Always-present creation attribution. -->
     <UserAttribution
         label="Created by"

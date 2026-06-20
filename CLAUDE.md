@@ -199,4 +199,4 @@ Vue components must have a single root element.
 
 ## Seeders & Factories
 
-- Only reference existing users when seeding or in factory defaults — never create new users to satisfy a relationship (e.g. do not use `User::factory()` as a fallback). Pull one with `User::inRandomOrder()->first()?->id`, leaving the value `null` when no users exist. `UserTableSeeder` is the single source of seeded users.
+- Only reference existing users, companies, and customers when seeding or in factory defaults — never create new users, companies, and customers to satisfy a relationship (e.g. do not use `User::factory()` as a fallback). Pull one with `User::inRandomOrder()->first()?->id`, leaving the value `null` when no users exist. `UserTableSeeder` is the single source of seeded users.
