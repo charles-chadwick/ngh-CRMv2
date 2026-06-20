@@ -10,15 +10,29 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-$table->string('type');
-$table->string('street_address')->nullable();
-$table->string('city')->nullable();
-$table->string('state')->nullable();
-$table->string('zip')->nullable();
-$table->string('work_phone')->nullable();
-$table->string('mobile_phone')->nullable();
-$table->timestamps();
-$table->softDeletes();//
+            $table->integer('contactable_id');
+            $table->string('contactable_type');
+            $table->string('type');
+            $table->string('street_address')
+                ->nullable()
+                ->index();
+            $table->string('city')
+                ->nullable()
+                ->index();
+            $table->string('state')
+                ->nullable()
+                ->index();
+            $table->string('zip')
+                ->nullable()
+                ->index();
+            $table->string('work_phone')
+                ->nullable()
+                ->index();
+            $table->string('mobile_phone')
+                ->nullable()
+                ->index();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

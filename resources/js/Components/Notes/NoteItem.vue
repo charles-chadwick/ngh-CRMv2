@@ -38,7 +38,7 @@ defineEmits ( [ 'edit', 'remove' ] )
     <p class="mt-2 text-sm whitespace-pre-line">{{ note.content }}</p>
     <hr class="my-2" />
     <!-- Footer: attribution on the left, edit/remove actions on the right. -->
-    <div class="flex flex-col sm:flex-row p-4 justify-between items-start bg-stone-100">
+    <div class="flex flex-col sm:flex-row p-4 justify-between items-center bg-stone-100">
       <CreatedBy
           :date="note.created_at"
           :user="note.creation_activity?.causer"
