@@ -36,8 +36,7 @@ onMounted(() => {
                 mentionDenotationChars: ['@'],
                 dataAttributes: ['id', 'value'],
                 source: async (search_term, render_list) => {
-                    const params = new URLSearchParams({ q: search_term ?? '' })
-                    const res = await fetch(`/users/mentionable?${params}`, { headers: { Accept: 'application/json' } })
+                    const res = await fetch(route('users.mentionable', { q: search_term ?? '' }), { headers: { Accept: 'application/json' } })
                     const users = await res.json()
                     render_list(users.map((user) => ({ id: user.id, value: user.full_name })), search_term)
                 },

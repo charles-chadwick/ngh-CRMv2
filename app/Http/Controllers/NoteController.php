@@ -51,7 +51,7 @@ class NoteController extends Controller
     {
         $note->update($this->noteAttributes($request));
 
-        $this->notifyMentions($note->refresh());
+        $this->notifyMentions($note);
 
         return back();
     }

@@ -6,18 +6,19 @@
   local list without a page reload. A self-removing toast is shown on arrival.
 -->
 <script setup>
-import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import { Bell } from 'lucide-vue-next'
 
 const open = ref(false)
 const page = usePage()
 
-// Shared-prop computeds used only as the initial seed.
-const seed_notifications = computed(() => page.props.notifications?.unread ?? [])
-const seed_unread_count = computed(() => page.props.notifications?.unread_count ?? 0)
+// The current user's private channel, resolved once for subscribe/unsubscribe.
+const channel = page.props.auth?.user?.id
+    ? `App.Models.User.${page.props.auth.user.id}`
+    : null
 
-// Local reactive state: seeded on mount, extended by live pushes.
+// Local reactive state: seeded on mount from shared props, extended by live pushes.
 const live = reactive({ items: [], count: 0 })
 
 const toast = (message) => {
@@ -32,15 +33,14 @@ const toast = (message) => {
 }
 
 onMounted(() => {
-    live.items = [...seed_notifications.value]
-    live.count = seed_unread_count.value
+    live.items = [...(page.props.notifications?.unread ?? [])]
+    live.count = page.props.notifications?.unread_count ?? 0
 
-    const user_id = page.props.auth?.user?.id
-    if (!user_id || !window.Echo) {
+    if (!channel || !window.Echo) {
         return
     }
 
-    window.Echo.private(`App.Models.User.${user_id}`)
+    window.Echo.private(channel)
         .notification((payload) => {
             live.items.unshift({ id: payload.id, data: payload })
             live.count += 1
@@ -49,9 +49,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    const user_id = page.props.auth?.user?.id
-    if (user_id && window.Echo) {
-        window.Echo.leave(`App.Models.User.${user_id}`)
+    if (channel && window.Echo) {
+        window.Echo.leave(channel)
     }
 })
 

@@ -26,12 +26,12 @@ class NoteMentionService
 
         $valid_ids = User::query()->whereKey($ids)->pluck('id');
 
-        $existing_ids = $note->mentionedUsers()->pluck('users.id');
-
-        $note->mentionedUsers()->sync($valid_ids);
+        // sync() reports exactly which ids it attached, so the newly mentioned
+        // users are derived from its result rather than a separate pivot query.
+        $changes = $note->mentionedUsers()->sync($valid_ids);
 
         return User::query()
-            ->whereKey($valid_ids->diff($existing_ids))
+            ->whereKey($changes['attached'])
             ->get();
     }
 
