@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\Note;
+use App\Services\NoteContentSanitizer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 
@@ -33,7 +34,7 @@ class NoteController extends Controller
 
         $model = $this->resolveModel($validated['model_type'], $validated['model_id']);
 
-        $model->notes()->create($request->safe()->only(['type', 'title', 'content']));
+        $model->notes()->create($this->noteAttributes($request));
 
         return back();
     }
@@ -43,7 +44,7 @@ class NoteController extends Controller
      */
     public function update(NoteRequest $request, Note $note): RedirectResponse
     {
-        $note->update($request->safe()->only(['type', 'title', 'content']));
+        $note->update($this->noteAttributes($request));
 
         return back();
     }
@@ -56,6 +57,19 @@ class NoteController extends Controller
         $note->delete();
 
         return back();
+    }
+
+    /**
+     * Pull the writable note attributes from the request with sanitized HTML content.
+     *
+     * @return array<string, mixed>
+     */
+    protected function noteAttributes(NoteRequest $request): array
+    {
+        $attributes = $request->safe()->only(['type', 'title', 'content']);
+        $attributes['content'] = app(NoteContentSanitizer::class)->clean($attributes['content']);
+
+        return $attributes;
     }
 
     /**
