@@ -54,25 +54,31 @@ it('authorizes the channel owner but rejects others', function () {
 
     // Re-register the channel on the new reverb broadcaster instance.
     Broadcast::channel('App.Models.User.{id}', function (User $user, int $id): bool {
-        return $user->id === $id;
+        return (int) $user->id === $id;
     });
 
     $user = User::factory()->create();
     $other = User::factory()->create();
 
-    // The owner may authorize their own private channel.
-    $this->actingAs($user)
-        ->post('/broadcasting/auth', [
-            'channel_name' => "private-App.Models.User.{$user->id}",
-            'socket_id' => '1234.5678',
-        ])
-        ->assertOk();
+    try {
+        // The owner may authorize their own private channel.
+        $this->actingAs($user)
+            ->post('/broadcasting/auth', [
+                'channel_name' => "private-App.Models.User.{$user->id}",
+                'socket_id' => '1234.5678',
+            ])
+            ->assertOk();
 
-    // A different user may not authorize someone else's channel.
-    $this->actingAs($other)
-        ->post('/broadcasting/auth', [
-            'channel_name' => "private-App.Models.User.{$user->id}",
-            'socket_id' => '1234.5678',
-        ])
-        ->assertForbidden();
+        // A different user may not authorize someone else's channel.
+        $this->actingAs($other)
+            ->post('/broadcasting/auth', [
+                'channel_name' => "private-App.Models.User.{$user->id}",
+                'socket_id' => '1234.5678',
+            ])
+            ->assertForbidden();
+    } finally {
+        // Restore the default broadcaster so subsequent tests are not affected.
+        $manager->purge('reverb');
+        $manager->setDefaultDriver('null');
+    }
 });
