@@ -1,8 +1,19 @@
+<!--
+  NoteItem
+  --------
+  Renders a single note card: title, type badge, body, and a footer with the
+  created/updated attribution and edit/remove actions.
+
+  Pure presentational component — it emits `edit` and `remove` (with the note)
+  and lets the parent list handle the actual mutations.
+-->
 <script setup>
 import { Button } from "@/Components/UI/button/index.js";
 import { Pencil, Trash2 } from "lucide-vue-next"
 import CreatedBy from "@/Components/CreatedBy.vue";
 
+// `note` carries its serialized activity log (creation_activity / update_activity)
+// so <CreatedBy> can attribute both who made it and who last edited it.
 defineProps ( {
   note: { type: Object, required: true },
 } )
@@ -12,45 +23,51 @@ defineEmits ( [ 'edit', 'remove' ] )
 
 <template>
   <div>
-    <div class="flex items-start justify-between gap-4">
+      <!-- Header: note title on the left, optional type badge on the right. -->
       <div class="flex items-center justify-between gap-2">
-        <div>
-          <h3 class="font-bold">{{ note.title }}</h3>
-          <span
-              v-if="note.type"
-              class="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
-          >
+        <h3 class="font-bold">{{ note.title }}</h3>
+        <div
+            v-if="note.type"
+            class="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
+        >
           {{ note.type }}
-        </span>
-        </div>
-        <div>
-          <Button
-              aria-label="Edit"
-              size="icon-sm"
-              title="Edit"
-              variant="ghost"
-              @click="$emit('edit', note)"
-          >
-            <Pencil />
-          </Button>
-          <Button
-              aria-label="Remove"
-              class="text-destructive hover:text-destructive"
-              size="icon-sm"
-              title="Remove"
-              variant="ghost"
-              @click="$emit('remove', note)"
-          >
-            <Trash2 />
-          </Button>
         </div>
       </div>
-    </div>
+
+    <!-- Note body; preserves author line breaks. -->
     <p class="mt-2 text-sm whitespace-pre-line">{{ note.content }}</p>
     <hr class="my-2" />
-    <CreatedBy
-        :date="note.created_at"
-        :user="note.creation_activity?.causer"
-    />
+    <!-- Footer: attribution on the left, edit/remove actions on the right. -->
+    <div class="flex flex-col sm:flex-row p-4 justify-between items-start bg-stone-100">
+      <CreatedBy
+          :date="note.created_at"
+          :user="note.creation_activity?.causer"
+          :updated_date="note.updated_at"
+          :updater="note.update_activity?.causer"
+      />
+      <!-- Action buttons: bubble intent up to the parent via emits. -->
+      <div>
+        <Button
+            aria-label="Edit"
+            size="icon-sm"
+            title="Edit"
+            variant="ghost"
+            @click="$emit('edit', note)"
+        >
+          <Pencil />
+        </Button>
+        <Button
+            aria-label="Remove"
+            class="text-destructive hover:text-destructive"
+            size="icon-sm"
+            title="Remove"
+            variant="ghost"
+            @click="$emit('remove', note)"
+        >
+          <Trash2 />
+        </Button>
+      </div>
+    </div>
+
   </div>
 </template>

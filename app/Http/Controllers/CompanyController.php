@@ -29,6 +29,7 @@ class CompanyController extends Controller
         $company->load([
             'type',
             'creationActivity.causer',
+            'updateActivity.causer',
         ]);
 
         $customers = $company->customers()

@@ -39,3 +39,40 @@ it('exposes the creation activity and causer on the customer show page', functio
             ->where('customer.creation_activity.causer.full_name', $user->full_name)
         );
 });
+
+it('has no update activity until the record is edited', function () {
+    $customer = Customer::factory()->create();
+
+    expect($customer->updateActivity)->toBeNull();
+});
+
+it('exposes the most recent updater as the update activity causer', function () {
+    $creator = User::factory()->create();
+    $editor = User::factory()->create();
+
+    $customer = Customer::factory()->create();
+
+    $this->actingAs($creator);
+    $customer->update(['title' => 'First edit']);
+
+    $this->actingAs($editor);
+    $customer->update(['title' => 'Latest edit']);
+
+    expect($customer->updateActivity->event)->toBe('updated')
+        ->and($customer->updateActivity->causer->is($editor))->toBeTrue();
+});
+
+it('exposes the update activity and causer on the customer show page', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $customer = Customer::factory()->create();
+    $customer->update(['title' => 'Edited title']);
+
+    $this->get(route('customers.show', $customer))
+        ->assertOk()
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Customers/Show', false)
+            ->where('customer.update_activity.causer.full_name', $user->full_name)
+        );
+});

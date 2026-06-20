@@ -32,10 +32,13 @@ const showNoteForm = ref(false)
         <div>
           <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
           <p class="text-muted-foreground">{{ customer.role?.name || '-' }} / {{ customer.title || '-' }}</p>
+          <!-- Created/updated attribution for this customer (causers from the activity log). -->
           <CreatedBy
               :show_avatar="false"
               :date="customer.created_at"
               :user="customer.creation_activity?.causer"
+              :updated_date="customer.updated_at"
+              :updater="customer.update_activity?.causer"
           />
         </div>
       </div>

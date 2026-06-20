@@ -35,10 +35,13 @@ const showNoteForm = ref(false)
               class="text-muted-foreground"
               v-html="company.description"
           ></p>
+          <!-- Created/updated attribution for this company (causers from the activity log). -->
           <CreatedBy
               :show_avatar="false"
               :user="company.creation_activity?.causer"
               :date="company.created_at"
+              :updater="company.update_activity?.causer"
+              :updated_date="company.updated_at"
           />
         </div>
       </div>

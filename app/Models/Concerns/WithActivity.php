@@ -34,4 +34,16 @@ trait WithActivity
             ->with('causer')
             ->oldestOfMany();
     }
+
+    /**
+     * The most recent update activity recorded for the record, along with its
+     * causer. Null when the record has never been updated.
+     */
+    public function updateActivity(): MorphOne
+    {
+        return $this->morphOne(Activity::class, 'subject')
+            ->where('event', 'updated')
+            ->with('causer')
+            ->latestOfMany();
+    }
 }
