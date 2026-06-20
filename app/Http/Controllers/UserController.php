@@ -16,9 +16,13 @@ class UserController extends Controller
      */
     public function mentionable(Request $request): JsonResponse
     {
+        $search = $request->string('q')->toString();
+
         $users = User::query()
             ->whereKeyNot($request->user()?->id)
-            ->withSearch($request->string('q')->toString())
+            ->when($search !== '', fn ($query) => $query->where(
+                fn ($grouped) => $grouped->withSearch($search)
+            ))
             ->withAvatar()
             ->limit(10)
             ->get();
