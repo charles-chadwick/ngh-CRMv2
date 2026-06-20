@@ -22,6 +22,7 @@ import { Head } from "@inertiajs/vue3";
       <ul class="flex flex-row items-center gap-4 ml-6 text-primary-foreground font-bold">
         <li><a :href="route('companies.index')" class="hover:text-primary">Companies</a></li>
         <li><a :href="route('customers.index')" class="hover:text-primary">Customers</a></li>
+        <li><a :href="route('leads.index')" class="hover:text-primary">Leads</a></li>
         <li><a :href="route('settings.index')" class="hover:text-primary">Settings</a></li>
       </ul>
     </div>
