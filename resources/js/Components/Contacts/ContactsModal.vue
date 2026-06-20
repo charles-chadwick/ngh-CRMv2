@@ -57,7 +57,7 @@ const setPrimary = (contact) => {
       <div class="flex justify-end">
         <Button
             v-if="!showForm"
-            variant="outline"
+            variant="default"
             size="sm"
             @click="showForm = true; editingId = null"
         >

@@ -46,7 +46,7 @@ const showNoteForm = ref(false)
 
       <Button
           as-child
-          variant="outline"
+          variant="default"
       >
         <Link :href="route('customers.edit', customer.id)">Edit</Link>
       </Button>

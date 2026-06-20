@@ -54,7 +54,7 @@ defineEmits ( [ 'edit', 'remove' ] )
             aria-label="Edit"
             size="icon-sm"
             title="Edit"
-            variant="ghost"
+            variant="default"
             @click="$emit('edit', note)"
         >
           <Pencil />

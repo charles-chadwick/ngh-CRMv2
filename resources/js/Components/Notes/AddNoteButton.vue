@@ -7,8 +7,7 @@ defineEmits(['click'])
 
 <template>
   <Button
-      variant="outline"
-      class="bg-primary text-primary-foreground"
+      variant="default"
       size="icon-sm"
       aria-label="Add Note"
       title="Add Note"

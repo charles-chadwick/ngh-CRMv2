@@ -44,7 +44,7 @@ const destroy = () => {
       <div class="flex items-center gap-3">
         <Button
             as-child
-            variant="outline"
+            variant="default"
         >
           <Link :href="route('leads.edit', lead.id)">Edit</Link>
         </Button>

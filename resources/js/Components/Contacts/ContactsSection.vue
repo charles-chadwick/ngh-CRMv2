@@ -42,7 +42,7 @@ const primary = computed(
         <p class="text-sm text-muted-foreground">No contacts yet.</p>
         <div class="mt-4 flex justify-end">
           <Button
-              variant="outline"
+              variant="default"
               size="sm"
               @click="modalOpen = true"
           >

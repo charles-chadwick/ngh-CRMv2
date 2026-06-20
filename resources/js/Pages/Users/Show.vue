@@ -32,7 +32,7 @@ defineProps ( {
 
       <Button
           as-child
-          variant="outline"
+          variant="default"
       >
         <Link :href="route('users.edit', user.id)">Edit</Link>
       </Button>

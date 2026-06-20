@@ -45,7 +45,7 @@ const destroy = (role) => {
           <p class="text-sm text-muted-foreground">{{ role.customers_count }} customer(s)</p>
         </div>
         <div class="flex items-center gap-2">
-          <Button as-child variant="outline" size="sm">
+          <Button as-child variant="default" size="sm">
             <Link :href="route('settings.customer-roles.edit', role.id)">Edit</Link>
           </Button>
           <Button variant="destructive" size="sm" @click="destroy(role)">Delete</Button>
