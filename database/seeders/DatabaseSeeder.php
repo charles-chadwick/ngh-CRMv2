@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CustomerRoleSeeder::class,
             CustomerSeeder::class,
             LeadSeeder::class,
+            ContactSeeder::class,
             NoteSeeder::class,
         ]);
     }
