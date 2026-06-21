@@ -1,63 +1,85 @@
 <script setup>
-import { computed, ref } from "vue";
-import { Card } from "@/Components/UI/card/index.js";
-import { Button } from "@/Components/UI/button/index.js";
-import ContactCard from "@/Components/Contacts/ContactCard.vue";
-import ContactsModal from "@/Components/Contacts/ContactsModal.vue";
+import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
+import ContactItem from "@/Components/Contacts/ContactItem.vue";
+import ContactForm from "@/Components/Contacts/ContactForm.vue";
 
 const props = defineProps({
   contactable_type: { type: String, required: true },
   contactable_id: { type: [Number, String], required: true },
-  contacts: { type: Array, default: () => [] },
+  contacts: { type: Object, required: true },
   types: { type: Array, default: () => [] },
 });
 
-const modalOpen = ref(false);
+const showForm = defineModel("show-form", { type: Boolean, default: false });
+const editingId = ref(null);
 
-const primary = computed(
-  () => props.contacts.find((contact) => contact.is_primary) || props.contacts[0] || null,
-);
+const onSaved = () => {
+  showForm.value = false;
+  editingId.value = null;
+};
 
+const startEdit = (contact) => {
+  showForm.value = false;
+  editingId.value = contact.id;
+};
+
+const removeContact = (contact) => {
+  router.delete(route("contacts.destroy", contact.id), { preserveScroll: true });
+};
+
+const setPrimary = (contact) => {
+  router.patch(
+    route("contacts.set-primary", contact.id),
+    {},
+    { preserveScroll: true },
+  );
+};
 </script>
 
 <template>
-  <div>
-    <div class="flex items-center justify-between">
-      <h2 class="heading">Contacts</h2>
-    </div>
-    <Card class="px-6">
-      <template v-if="primary">
-        <ContactCard :contact="primary" />
-        <div class="mt-4 flex justify-end">
-          <Button
-              variant="outline"
-              size="sm"
-              @click="modalOpen = true"
-          >
-            View all contacts ({{ contacts.length }})
-          </Button>
-        </div>
-      </template>
-      <template v-else>
-        <p class="text-sm text-muted-foreground">No contacts yet.</p>
-        <div class="mt-4 flex justify-end">
-          <Button
-              variant="default"
-              size="sm"
-              @click="modalOpen = true"
-          >
-            Add contact
-          </Button>
-        </div>
-      </template>
-    </Card>
-
-    <ContactsModal
-        v-model:open="modalOpen"
+  <section>
+    <ContactForm
+        v-if="showForm"
         :contactable_type="contactable_type"
         :contactable_id="contactable_id"
-        :contacts="contacts"
         :types="types"
+        class="mb-4"
+        @saved="onSaved"
+        @cancel="showForm = false"
     />
-  </div>
+
+    <div
+        v-if="contacts.data.length"
+        class="space-y-3"
+    >
+      <template
+          v-for="contact in contacts.data"
+          :key="contact.id"
+      >
+        <ContactForm
+            v-if="editingId === contact.id"
+            :contactable_type="contactable_type"
+            :contactable_id="contactable_id"
+            :contact="contact"
+            :types="types"
+            @saved="onSaved"
+            @cancel="editingId = null"
+        />
+        <ContactItem
+            v-else
+            :contact="contact"
+            @edit="startEdit"
+            @remove="removeContact"
+            @set-primary="setPrimary"
+        />
+      </template>
+    </div>
+    <p
+        v-else
+        class="text-sm text-muted-foreground"
+    >
+      No contacts yet.
+    </p>
+  </section>
 </template>
