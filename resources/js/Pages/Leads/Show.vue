@@ -11,6 +11,7 @@ import { Card } from '@/Components/UI/card/index.js'
 import Pagination from '@/Components/Pagination.vue'
 import StatusBadge from '@/Components/StatusBadge.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
+import { useConfirm } from '@/composables/useConfirm.js'
 
 const props = defineProps({
   lead: Object,
@@ -20,8 +21,15 @@ const props = defineProps({
 
 const showNoteForm = ref(false)
 
-const destroy = () => {
-  if (confirm('Delete this lead?')) {
+const confirm = useConfirm()
+
+const destroy = async () => {
+  if (await confirm({
+    title: 'Delete this lead?',
+    message: 'This action cannot be undone.',
+    confirmLabel: 'Delete',
+    variant: 'destructive',
+  })) {
     router.delete(route('leads.destroy', props.lead.id))
   }
 }

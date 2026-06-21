@@ -5,13 +5,21 @@ import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { useConfirm } from '@/composables/useConfirm.js'
 
 defineProps({
   customer_roles: Object,
 })
 
-const destroy = (role) => {
-  if (confirm(`Delete the "${role.name}" role?`)) {
+const confirm = useConfirm()
+
+const destroy = async (role) => {
+  if (await confirm({
+    title: `Delete the "${role.name}" role?`,
+    message: 'This action cannot be undone.',
+    confirmLabel: 'Delete',
+    variant: 'destructive',
+  })) {
     router.delete(route('settings.customer-roles.destroy', role.id), {
       preserveScroll: true,
     })
