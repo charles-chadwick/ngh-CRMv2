@@ -89,7 +89,7 @@ const showContactForm = ref(false)
 
     </Card>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
+      <div class="flex flex-col">
         <div class="flex items-center justify-between">
           <h2 class="heading">Notes</h2>
           <AddNoteButton
@@ -97,7 +97,7 @@ const showContactForm = ref(false)
               @click="showNoteForm = true"
           />
         </div>
-        <Card class="px-6">
+        <Card class="px-6 flex-1 flex flex-col">
           <NotesSection
               v-model:show-form="showNoteForm"
               :notable_id="customer.id"
@@ -105,10 +105,10 @@ const showContactForm = ref(false)
               :types="note_types"
               notable_type="customer"
           />
+          <Pagination :paginator="notes" class="mt-auto" />
         </Card>
-        <Pagination :paginator="notes" />
       </div>
-      <div>
+      <div class="flex flex-col">
         <div class="flex items-center justify-between">
           <h2 class="heading">Contacts</h2>
           <AddContactButton
@@ -116,7 +116,7 @@ const showContactForm = ref(false)
               @click="showContactForm = true"
           />
         </div>
-        <Card class="px-6">
+        <Card class="px-6 flex-1 flex flex-col">
           <ContactsSection
               v-model:show-form="showContactForm"
               :contactable_id="customer.id"
@@ -124,8 +124,8 @@ const showContactForm = ref(false)
               :types="contact_types"
               contactable_type="customer"
           />
+          <Pagination :paginator="contacts" class="mt-auto" />
         </Card>
-        <Pagination :paginator="contacts" />
       </div>
     </div>
   </AppLayout>
