@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import {
   Dialog,
@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/Components/UI/dialog/index.js";
 import { Button } from "@/Components/UI/button/index.js";
-import { Plus } from "lucide-vue-next";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-vue-next";
 import ContactItem from "@/Components/Contacts/ContactItem.vue";
 import ContactForm from "@/Components/Contacts/ContactForm.vue";
 
@@ -23,6 +23,25 @@ const open = defineModel("open", { type: Boolean, default: false });
 
 const showForm = ref(false);
 const editingId = ref(null);
+
+const perPage = 3;
+const currentPage = ref(1);
+
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(props.contacts.length / perPage)),
+);
+
+const paginatedContacts = computed(() => {
+  const start = (currentPage.value - 1) * perPage;
+  return props.contacts.slice(start, start + perPage);
+});
+
+// Keep the current page in range when contacts change (e.g. after delete).
+watch(totalPages, (pages) => {
+  if (currentPage.value > pages) {
+    currentPage.value = pages;
+  }
+});
 
 const onSaved = () => {
   showForm.value = false;
@@ -80,7 +99,7 @@ const setPrimary = (contact) => {
           class="space-y-3"
       >
         <template
-            v-for="contact in contacts"
+            v-for="contact in paginatedContacts"
             :key="contact.id"
         >
           <ContactForm
@@ -100,6 +119,31 @@ const setPrimary = (contact) => {
               @set-primary="setPrimary"
           />
         </template>
+
+        <div
+            v-if="totalPages > 1"
+            class="flex items-center justify-end gap-2 pt-1"
+        >
+          <Button
+              variant="outline"
+              size="sm"
+              :disabled="currentPage === 1"
+              @click="currentPage--"
+          >
+            <ChevronLeft class="size-4" />
+          </Button>
+          <span class="text-sm text-muted-foreground">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+          <Button
+              variant="outline"
+              size="sm"
+              :disabled="currentPage === totalPages"
+              @click="currentPage++"
+          >
+            <ChevronRight class="size-4" />
+          </Button>
+        </div>
       </div>
       <p
           v-else-if="!showForm"
