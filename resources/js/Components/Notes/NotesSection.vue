@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import NoteItem from "@/Components/Notes/NoteItem.vue";
 import NoteForm from "@/Components/Notes/NoteForm.vue";
+import { useConfirm } from '@/composables/useConfirm.js'
 
 const props = defineProps({
   notable_type: { type: String, required: true },
@@ -24,8 +25,17 @@ const startEdit = (note) => {
   editingId.value = note.id
 }
 
-const removeNote = (note) => {
-  router.delete(route('notes.destroy', note.id), { preserveScroll: true })
+const confirm = useConfirm()
+
+const removeNote = async (note) => {
+  if (await confirm({
+    title: 'Delete this note?',
+    message: 'This action cannot be undone.',
+    confirmLabel: 'Delete',
+    variant: 'destructive',
+  })) {
+    router.delete(route('notes.destroy', note.id), { preserveScroll: true })
+  }
 }
 </script>
 

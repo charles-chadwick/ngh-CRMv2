@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import ContactItem from "@/Components/Contacts/ContactItem.vue";
 import ContactForm from "@/Components/Contacts/ContactForm.vue";
+import { useConfirm } from "@/composables/useConfirm.js";
 
 const props = defineProps({
   contactable_type: { type: String, required: true },
@@ -24,8 +25,17 @@ const startEdit = (contact) => {
   editingId.value = contact.id;
 };
 
-const removeContact = (contact) => {
-  router.delete(route("contacts.destroy", contact.id), { preserveScroll: true });
+const confirm = useConfirm();
+
+const removeContact = async (contact) => {
+  if (await confirm({
+    title: "Delete this contact?",
+    message: "This action cannot be undone.",
+    confirmLabel: "Delete",
+    variant: "destructive",
+  })) {
+    router.delete(route("contacts.destroy", contact.id), { preserveScroll: true });
+  }
 };
 
 const setPrimary = (contact) => {
