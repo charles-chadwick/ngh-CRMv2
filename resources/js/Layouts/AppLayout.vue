@@ -3,6 +3,7 @@
 import { Head } from "@inertiajs/vue3";
 import NotificationBell from "@/Components/Notifications/NotificationBell.vue";
 import ActAsSwitcher from "@/Components/ActAsSwitcher.vue";
+import ConfirmDialog from "@/Components/UI/ConfirmDialog.vue";
 </script>
 
 <template>
@@ -37,6 +38,7 @@ import ActAsSwitcher from "@/Components/ActAsSwitcher.vue";
   <main class="mx-auto px-32 mb-6">
     <slot />
   </main>
+  <ConfirmDialog />
 </template>
 
 <style scoped>
