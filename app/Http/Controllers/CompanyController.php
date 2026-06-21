@@ -31,7 +31,6 @@ class CompanyController extends Controller
             'type',
             'creationActivity.causer',
             'updateActivity.causer',
-            'contacts',
         ]);
 
         $customers = $company->customers()
@@ -45,7 +44,7 @@ class CompanyController extends Controller
             'customers' => $customers,
             'notes' => $company->paginatedNotes(),
             'note_types' => Note::TYPES,
-            'contacts' => $company->contacts,
+            'contacts' => $company->paginatedContacts(),
             'contact_types' => Contact::TYPES,
         ]);
     }

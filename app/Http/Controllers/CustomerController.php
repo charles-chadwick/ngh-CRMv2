@@ -60,14 +60,13 @@ class CustomerController extends Controller
             'media' => $customer->avatarMediaConstraint(),
             'creationActivity.causer',
             'updateActivity.causer',
-            'contacts',
         ]);
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
             'notes' => $customer->paginatedNotes(),
             'note_types' => Note::TYPES,
-            'contacts' => $customer->contacts,
+            'contacts' => $customer->paginatedContacts(),
             'contact_types' => Contact::TYPES,
         ]);
     }

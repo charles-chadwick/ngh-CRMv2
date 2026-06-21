@@ -1,7 +1,7 @@
 <!--
   ContactItem
   -----------
-  One row in the contacts modal: the ContactCard display plus actions
+  One row in the contacts list: the ContactCard display plus actions
   (set primary, edit, remove). Bubbles intent to the parent via emits.
 -->
 <script setup>

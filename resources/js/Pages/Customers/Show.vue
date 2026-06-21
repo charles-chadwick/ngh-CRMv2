@@ -11,11 +11,12 @@ import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
-import { Pencil } from "lucide-vue-next";
+import { Pencil, Plus } from "lucide-vue-next";
 
-defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Array, contact_types: Array })
+defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array })
 
 const showNoteForm = ref(false)
+const showContactForm = ref(false)
 </script>
 
 <template>
@@ -106,12 +107,31 @@ const showNoteForm = ref(false)
         </Card>
         <Pagination :paginator="notes" />
       </div>
-      <ContactsSection
-          contactable_type="customer"
-          :contactable_id="customer.id"
-          :contacts="contacts"
-          :types="contact_types"
-      />
+      <div>
+        <div class="flex items-center justify-between">
+          <h2 class="heading">Contacts</h2>
+          <Button
+              v-if="!showContactForm"
+              variant="default"
+              size="icon-sm"
+              aria-label="Add Contact"
+              title="Add Contact"
+              @click="showContactForm = true"
+          >
+            <Plus />
+          </Button>
+        </div>
+        <Card class="px-6">
+          <ContactsSection
+              v-model:show-form="showContactForm"
+              :contactable_id="customer.id"
+              :contacts="contacts"
+              :types="contact_types"
+              contactable_type="customer"
+          />
+        </Card>
+        <Pagination :paginator="contacts" />
+      </div>
     </div>
   </AppLayout>
 </template>

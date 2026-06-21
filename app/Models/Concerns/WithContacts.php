@@ -3,6 +3,7 @@
 namespace App\Models\Concerns;
 
 use App\Models\Contact;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
@@ -16,6 +17,18 @@ trait WithContacts
         return $this->morphMany(Contact::class, 'contactable')
             ->orderByDesc('is_primary')
             ->latest();
+    }
+
+    /**
+     * Paginate this record's contacts (primary first) for the show page.
+     *
+     * @return LengthAwarePaginator<int, Contact>
+     */
+    public function paginatedContacts(int $perPage = 2): LengthAwarePaginator
+    {
+        return $this->contacts()
+            ->paginate($perPage, ['*'], 'contacts_page')
+            ->withQueryString();
     }
 
     public function primaryContact(): MorphOne
