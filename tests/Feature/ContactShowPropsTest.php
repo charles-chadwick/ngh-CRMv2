@@ -17,8 +17,9 @@ it('passes contacts and contact types to the customer show page', function () {
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Customers/Show', false)
-            ->has('contacts', 1)
-            ->where('contacts.0.is_primary', true)
+            ->has('contacts.data', 1)
+            ->where('contacts.data.0.is_primary', true)
+            ->has('contacts.last_page')
             ->has('contact_types')
         );
 });
@@ -32,7 +33,8 @@ it('passes contacts and contact types to the company show page', function () {
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Company/Show', false)
-            ->has('contacts', 1)
+            ->has('contacts.data', 1)
+            ->has('contacts.last_page')
             ->has('contact_types')
         );
 });
