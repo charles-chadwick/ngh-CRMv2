@@ -11,7 +11,8 @@ import Pagination from "@/Components/Pagination.vue";
 import { Card } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
-import { Pencil, Plus } from "lucide-vue-next";
+import AddContactButton from "@/Components/Contacts/AddContactButton.vue";
+import { Pencil } from "lucide-vue-next";
 
 defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array } )
 
@@ -97,16 +98,10 @@ const showContactForm = ref(false)
       <div>
         <div class="flex items-center justify-between">
           <h2 class="heading">Contacts</h2>
-          <Button
+          <AddContactButton
               v-if="!showContactForm"
-              variant="default"
-              size="icon-sm"
-              aria-label="Add Contact"
-              title="Add Contact"
               @click="showContactForm = true"
-          >
-            <Plus />
-          </Button>
+          />
         </div>
         <Card class="px-6">
           <ContactsSection

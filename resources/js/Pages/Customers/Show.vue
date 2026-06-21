@@ -7,11 +7,12 @@ import Avatar from "@/Components/Avatar.vue";
 import CreatedBy from "@/Components/CreatedBy.vue";
 import NotesSection from "@/Components/Notes/NotesSection.vue";
 import AddNoteButton from "@/Components/Notes/AddNoteButton.vue";
+import AddContactButton from "@/Components/Contacts/AddContactButton.vue";
 import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
-import { Pencil, Plus } from "lucide-vue-next";
+import { Pencil } from "lucide-vue-next";
 
 defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array })
 
@@ -110,16 +111,10 @@ const showContactForm = ref(false)
       <div>
         <div class="flex items-center justify-between">
           <h2 class="heading">Contacts</h2>
-          <Button
+          <AddContactButton
               v-if="!showContactForm"
-              variant="default"
-              size="icon-sm"
-              aria-label="Add Contact"
-              title="Add Contact"
               @click="showContactForm = true"
-          >
-            <Plus />
-          </Button>
+          />
         </div>
         <Card class="px-6">
           <ContactsSection
