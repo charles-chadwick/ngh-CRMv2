@@ -27,6 +27,7 @@ trait WithContacts
     public function paginatedContacts(int $perPage = 2): LengthAwarePaginator
     {
         return $this->contacts()
+            ->with('creationActivity.causer', 'updateActivity.causer')
             ->paginate($perPage, ['*'], 'contacts_page')
             ->withQueryString();
     }
