@@ -31,7 +31,7 @@ import NotificationBell from "@/Components/Notifications/NotificationBell.vue";
       </div>
     </div>
   </nav>
-  <main class="mx-auto px-32">
+  <main class="mx-auto px-32 mb-6">
     <slot />
   </main>
 </template>
