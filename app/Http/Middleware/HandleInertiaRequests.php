@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,7 +39,12 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user()?->only('id', 'full_name', 'avatar_url'),
+                'user' => $request->user()
+                    ? [
+                        ...$request->user()->only('id', 'full_name', 'avatar_url'),
+                        'type' => $request->user() instanceof Customer ? 'customer' : 'user',
+                    ]
+                    : null,
             ],
             'notifications' => [
                 'unread' => fn (): array => $request->user()

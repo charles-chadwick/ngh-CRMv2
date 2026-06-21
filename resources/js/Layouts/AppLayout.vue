@@ -2,6 +2,7 @@
 
 import { Head } from "@inertiajs/vue3";
 import NotificationBell from "@/Components/Notifications/NotificationBell.vue";
+import ActAsSwitcher from "@/Components/ActAsSwitcher.vue";
 </script>
 
 <template>
@@ -24,10 +25,12 @@ import NotificationBell from "@/Components/Notifications/NotificationBell.vue";
         <li><a :href="route('companies.index')" class="hover:text-primary">Companies</a></li>
         <li><a :href="route('customers.index')" class="hover:text-primary">Customers</a></li>
         <li><a :href="route('leads.index')" class="hover:text-primary">Leads</a></li>
+        <li><a :href="route('topics.index')" class="hover:text-primary">Messages</a></li>
         <li><a :href="route('settings.index')" class="hover:text-primary">Settings</a></li>
       </ul>
-      <div class="ml-auto">
+      <div class="ml-auto flex items-center gap-4">
         <NotificationBell />
+        <ActAsSwitcher />
       </div>
     </div>
   </nav>

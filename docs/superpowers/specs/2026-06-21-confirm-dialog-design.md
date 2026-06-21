@@ -90,7 +90,7 @@ Replace each delete path with `await confirm(...)`, `variant: 'destructive'`:
 | `Components/Contacts/ContactsSection.vue` | **no confirmation** | add confirm before delete |
 | `Form.vue` pages (`Customers`, `Users`, `Topics`, `Company`, `Leads`, `Settings/CustomerRoles`) | audit | wire any delete buttons found |
 
-`make destroy` handlers become `async`; the rest of each handler is unchanged.
+The `destroy` handlers become `async`; the rest of each handler is unchanged.
 
 ## Out of scope / non-goals
 

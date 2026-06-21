@@ -8,11 +8,14 @@ use App\Models\Concerns\WithContacts;
 use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithSort;
+use App\Models\Concerns\WithTopics;
 use Database\Factories\CustomerFactory;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -39,7 +42,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Customer extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithContacts, WithNotes, WithSearch, WithSort;
+    use HasFactory, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithContacts, WithNotes, WithSearch, WithSort, WithTopics;
 
     /**
      * Get the attributes that should be cast.
@@ -62,6 +65,30 @@ class Customer extends Authenticatable implements HasMedia
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * The customer's dedicated conversation thread, created lazily when the
+     * first message is posted from their page.
+     */
+    public function conversation(): HasOne
+    {
+        return $this->hasOne(Topic::class);
+    }
+
+    /**
+     * Paginate the messages in this customer's conversation, newest first.
+     *
+     * @return LengthAwarePaginator<int, Message>
+     */
+    public function paginatedMessages(int $perPage = 3): LengthAwarePaginator
+    {
+        return Message::query()
+            ->whereHas('topic', fn ($query) => $query->where('customer_id', $this->id))
+            ->with('author')
+            ->latest()
+            ->paginate($perPage, ['*'], 'messages_page')
+            ->withQueryString();
     }
 
     public function role(): BelongsTo

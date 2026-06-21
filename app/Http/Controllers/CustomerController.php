@@ -68,6 +68,7 @@ class CustomerController extends Controller
             'note_types' => Note::TYPES,
             'contacts' => $customer->paginatedContacts(),
             'contact_types' => Contact::TYPES,
+            'messages' => $customer->paginatedMessages(),
         ]);
     }
 }

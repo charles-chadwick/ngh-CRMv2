@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\ActAs;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,12 +17,12 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
+     *
+     * Dev impersonation now lives in the {@see ActAs}
+     * middleware so the navbar switcher can change the acting user or customer.
      */
     public function boot(): void
     {
-        if (! app()->runningInConsole()) {
-            Auth::loginUsingId(5);
-        }
-
+        //
     }
 }
