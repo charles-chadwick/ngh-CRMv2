@@ -13,7 +13,6 @@ import { Button } from "@/Components/UI/button/index.js";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
 import ContactCard from "@/Components/Contacts/ContactCard.vue";
 import CreatedBy from "@/Components/CreatedBy.vue";
-import StatusBadge from "@/Components/StatusBadge.vue";
 
 // `contact` carries its serialized activity log (creation_activity / update_activity)
 // so <CreatedBy> can attribute both who made it and who last edited it.
@@ -26,12 +25,15 @@ defineEmits(["edit", "remove", "setPrimary"]);
 
 <template>
   <div>
-      <!-- Header: primary marker on the left, type badge on the right. -->
+      <!-- Header: contact type as the title on the left, primary marker on the right. -->
       <div class="flex items-center justify-between gap-2">
-        <h3 class="font-bold text-primary">
-          <span v-if="contact.is_primary">Primary</span>
-        </h3>
-        <StatusBadge :status="contact.type" />
+        <h3 class="font-bold">{{ contact.type }}</h3>
+        <span
+            v-if="contact.is_primary"
+            class="text-sm font-bold text-primary"
+        >
+          Primary
+        </span>
       </div>
 
     <ContactCard :contact="contact" />
