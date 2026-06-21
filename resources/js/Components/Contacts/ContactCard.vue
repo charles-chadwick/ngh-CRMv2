@@ -28,7 +28,7 @@ const hasAddress = computed(() =>
       <StatusBadge :status="contact.type" />
       <span
           v-if="contact.is_primary"
-          class="text-xs font-bold text-primary"
+          class="text-sm font-bold text-primary"
       >
         Primary
       </span>
