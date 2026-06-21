@@ -11,7 +11,7 @@ const props = defineProps({
   types: { type: Array, default: () => [] },
 });
 
-const showForm = defineModel("show-form", { type: Boolean, default: false });
+const showForm = defineModel("showForm", { type: Boolean, default: false });
 const editingId = ref(null);
 
 const onSaved = () => {
