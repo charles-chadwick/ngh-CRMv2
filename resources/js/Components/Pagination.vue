@@ -19,6 +19,7 @@ defineProps({
             <Link
                 v-if="paginator.prev_page_url"
                 :href="paginator.prev_page_url"
+                preserve-scroll
                 class="relative inline-flex items-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
             >
                 Previous
@@ -33,6 +34,7 @@ defineProps({
             <Link
                 v-if="paginator.next_page_url"
                 :href="paginator.next_page_url"
+                preserve-scroll
                 class="relative ml-3 inline-flex items-center rounded-md border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
             >
                 Next
@@ -63,6 +65,7 @@ defineProps({
                         <Link
                             v-if="paginator.prev_page_url"
                             :href="paginator.prev_page_url"
+                            preserve-scroll
                             class="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             <span class="sr-only">Previous</span>
@@ -81,6 +84,7 @@ defineProps({
                         <Link
                             v-if="link.url && !link.active"
                             :href="link.url"
+                            preserve-scroll
                             class="relative inline-flex items-center bg-white px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             {{ link.label }}
@@ -103,6 +107,7 @@ defineProps({
                         <Link
                             v-if="paginator.next_page_url"
                             :href="paginator.next_page_url"
+                            preserve-scroll
                             class="relative inline-flex items-center rounded-r-md bg-white px-2 py-2 text-muted-foreground ring-1 ring-inset ring-border hover:bg-accent"
                         >
                             <span class="sr-only">Next</span>
