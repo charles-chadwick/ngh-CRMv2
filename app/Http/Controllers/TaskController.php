@@ -56,6 +56,39 @@ class TaskController extends Controller
         return back();
     }
 
+    public function update(TaskRequest $request, Task $task): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $attributes = $request->safe()->only([
+            'type', 'title', 'description', 'due_at', 'all_day', 'remind_at',
+        ]);
+        $attributes['all_day'] = (bool) ($attributes['all_day'] ?? false);
+
+        $task->fill($attributes);
+
+        if (array_key_exists('subject_type', $validated)) {
+            $subject = $this->resolveSubject($validated['subject_type'], $validated['subject_id'] ?? null);
+            $task->subject()->associate($subject);
+        }
+
+        if (array_key_exists('assignee_type', $validated)) {
+            $assignee = $this->resolveAssignee($validated['assignee_type'], $validated['assignee_id'] ?? null);
+            $task->assignee()->associate($assignee);
+        }
+
+        $task->save();
+
+        return back();
+    }
+
+    public function destroy(Task $task): RedirectResponse
+    {
+        $task->delete();
+
+        return back();
+    }
+
     /**
      * Pull the writable task attributes, defaulting the reminder to the due date.
      *
