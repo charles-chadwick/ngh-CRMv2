@@ -33,6 +33,8 @@ Route::resource('leads', LeadController::class);
 Route::get('topics/participants', [TopicController::class, 'participants'])
     ->name('topics.participants');
 Route::resource('topics', TopicController::class)->only(['index', 'create', 'show', 'store']);
+Route::post('customers/{customer}/messages', [CustomerMessageController::class, 'store'])
+    ->name('customers.messages.store');
 Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
 Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
 Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');

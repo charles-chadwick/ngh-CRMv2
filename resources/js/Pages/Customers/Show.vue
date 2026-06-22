@@ -12,12 +12,15 @@ import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
+import MessagesSection from "@/Components/Topics/MessagesSection.vue";
+import AddMessageButton from "@/Components/Topics/AddMessageButton.vue";
 import { Pencil } from "lucide-vue-next";
 
-defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array })
+defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array, messages: Object })
 
 const showNoteForm = ref(false)
 const showContactForm = ref(false)
+const showMessageForm = ref(false)
 </script>
 
 <template>
@@ -125,6 +128,23 @@ const showContactForm = ref(false)
               contactable_type="customer"
           />
           <Pagination :paginator="contacts" class="mt-auto" />
+        </Card>
+      </div>
+      <div class="flex flex-col sm:col-start-2">
+        <div class="flex items-center justify-between">
+          <h2 class="heading">Messages</h2>
+          <AddMessageButton
+              v-if="!showMessageForm"
+              @click="showMessageForm = true"
+          />
+        </div>
+        <Card class="px-6 flex-1 flex flex-col">
+          <MessagesSection
+              v-model:show-form="showMessageForm"
+              :customer_id="customer.id"
+              :messages="messages"
+          />
+          <Pagination :paginator="messages" class="mt-auto" />
         </Card>
       </div>
     </div>
