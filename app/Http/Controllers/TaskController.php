@@ -12,7 +12,9 @@ use App\Models\Task;
 use App\Models\User;
 use App\Services\NoteContentSanitizer;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class TaskController extends Controller
@@ -112,6 +114,59 @@ class TaskController extends Controller
         }
 
         return back();
+    }
+
+    public function assignees(Request $request): JsonResponse
+    {
+        $search = $request->string('q')->toString();
+
+        $users = User::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->withAvatar()
+            ->limit(8)
+            ->get()
+            ->map(fn (User $user): array => [
+                'type' => 'user',
+                'id' => $user->getKey(),
+                'full_name' => $user->full_name,
+                'avatar_url' => $user->avatar_url,
+            ]);
+
+        $customers = Customer::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->withAvatar()
+            ->limit(8)
+            ->get()
+            ->map(fn (Customer $customer): array => [
+                'type' => 'customer',
+                'id' => $customer->getKey(),
+                'full_name' => $customer->full_name,
+                'avatar_url' => $customer->avatar_url,
+            ]);
+
+        return response()->json($users->concat($customers)->values());
+    }
+
+    public function subjects(Request $request): JsonResponse
+    {
+        $search = $request->string('q')->toString();
+
+        $companies = Company::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->limit(8)->get()
+            ->map(fn (Company $company): array => ['type' => 'company', 'id' => $company->getKey(), 'label' => $company->title]);
+
+        $customers = Customer::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->limit(8)->get()
+            ->map(fn (Customer $customer): array => ['type' => 'customer', 'id' => $customer->getKey(), 'label' => $customer->full_name]);
+
+        $leads = Lead::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->limit(8)->get()
+            ->map(fn (Lead $lead): array => ['type' => 'lead', 'id' => $lead->getKey(), 'label' => $lead->title]);
+
+        return response()->json($companies->concat($customers)->concat($leads)->values());
     }
 
     /**
