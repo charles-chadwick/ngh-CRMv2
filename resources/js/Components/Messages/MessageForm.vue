@@ -2,8 +2,8 @@
   MessageForm
   -----------
   Inline composer matching the note form: a rich-text body and Save/Cancel.
-  Creating posts to the customer's conversation (customers.messages.store);
-  editing puts to messages.update. No subject/type — a message is just content.
+  Creating posts to messages.store with the polymorphic owner; editing puts to
+  messages.update. No subject/type — a message is just content.
 -->
 <script setup>
 import { useForm } from '@inertiajs/vue3'
@@ -12,13 +12,16 @@ import { Card, CardContent } from "@/Components/UI/card/index.js";
 import RichTextEditor from '@/Components/RichTextEditor.vue'
 
 const props = defineProps({
-  customer_id: { type: [Number, String], required: true },
+  messageable_type: { type: String, required: true },
+  messageable_id: { type: [Number, String], required: true },
   message: { type: Object, default: null },
 })
 
 const emits = defineEmits(['saved', 'cancel'])
 
 const form = useForm({
+  model_type: props.messageable_type,
+  model_id: props.messageable_id,
   content: props.message?.content || '',
 })
 
@@ -36,7 +39,7 @@ const submit = () => {
   if (props.message) {
     form.put(route('messages.update', props.message.id), options)
   } else {
-    form.post(route('customers.messages.store', props.customer_id), options)
+    form.post(route('messages.store'), options)
   }
 }
 </script>

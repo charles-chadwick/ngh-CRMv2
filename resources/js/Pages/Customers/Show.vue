@@ -12,8 +12,8 @@ import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
-import MessagesSection from "@/Components/Topics/MessagesSection.vue";
-import AddMessageButton from "@/Components/Topics/AddMessageButton.vue";
+import MessagesSection from "@/Components/Messages/MessagesSection.vue";
+import AddMessageButton from "@/Components/Messages/AddMessageButton.vue";
 import { Pencil } from "lucide-vue-next";
 
 defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array, messages: Object })
@@ -141,7 +141,8 @@ const showMessageForm = ref(false)
         <Card class="px-6 flex-1 flex flex-col">
           <MessagesSection
               v-model:show-form="showMessageForm"
-              :customer_id="customer.id"
+              messageable_type="customer"
+              :messageable_id="customer.id"
               :messages="messages"
           />
           <Pagination :paginator="messages" class="mt-auto" />
