@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Topic;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,10 +26,14 @@ class MessageRequest extends FormRequest
         $is_update = $this->route('message') !== null;
 
         return [
-            'topic_id' => [
+            'model_type' => [
+                Rule::requiredIf(! $is_update),
+                'string',
+                Rule::in(['customer']),
+            ],
+            'model_id' => [
                 Rule::requiredIf(! $is_update),
                 'integer',
-                Rule::exists(Topic::class, 'id'),
             ],
             'content' => [
                 'required',

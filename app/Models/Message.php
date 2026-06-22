@@ -7,7 +7,6 @@ use Database\Factories\MessageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,11 +19,11 @@ class Message extends Model
     use HasFactory, SoftDeletes, WithActivity;
 
     /**
-     * The topic this message belongs to.
+     * The parent model this message belongs to (customer, etc.).
      */
-    public function topic(): BelongsTo
+    public function messageable(): MorphTo
     {
-        return $this->belongsTo(Topic::class);
+        return $this->morphTo();
     }
 
     /**

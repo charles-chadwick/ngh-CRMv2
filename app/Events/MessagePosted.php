@@ -24,7 +24,7 @@ class MessagePosted implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('topics.'.$this->message->topic_id),
+            new PrivateChannel('customers.'.$this->message->messageable_id),
         ];
     }
 
@@ -47,7 +47,7 @@ class MessagePosted implements ShouldBroadcastNow
 
         return [
             'id' => $this->message->id,
-            'topic_id' => $this->message->topic_id,
+            'messageable_id' => $this->message->messageable_id,
             'content' => $this->message->content,
             'created_at' => $this->message->created_at?->toIso8601String(),
             'author' => [

@@ -3,38 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageRequest;
+use App\Models\Customer;
 use App\Models\Message;
-use App\Models\Topic;
 use App\Services\MessageService;
 use App\Services\NoteContentSanitizer;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class MessageController extends Controller
 {
     /**
-     * Post a message to an existing topic.
+     * Whitelist of models that may receive messages, keyed by the
+     * `model_type` value accepted from the client.
+     *
+     * @var array<string, class-string<Model>>
      */
-    public function store(MessageRequest $request, MessageService $messages): RedirectResponse
+    protected array $models = [
+        'customer' => Customer::class,
+    ];
+
+    /**
+     * Store a message against the given messageable model.
+     */
+    public function store(MessageRequest $request, MessageService $service): RedirectResponse
     {
         $validated = $request->validated();
-        $author = $request->user();
 
-        $topic = Topic::findOrFail($validated['topic_id']);
+        $messageable = $this->resolveModel($validated['model_type'], $validated['model_id']);
 
-        abort_unless($topic->hasParticipant($author), HttpResponse::HTTP_FORBIDDEN);
-
-        $messages->post($topic, $author, $validated['content']);
+        $service->post($messageable, auth()->user(), $validated['content']);
 
         return back();
     }
 
     /**
-     * Edit an existing message the author owns.
+     * Update an existing message authored by the current actor.
      */
     public function update(MessageRequest $request, Message $message): RedirectResponse
     {
-        $this->authorizeAuthor($message, $request->user());
+        $this->authorizeAuthor($message);
 
         $message->update([
             'content' => app(NoteContentSanitizer::class)->clean($request->validated()['content']),
@@ -44,11 +51,11 @@ class MessageController extends Controller
     }
 
     /**
-     * Soft-delete a message the author owns.
+     * Remove a message authored by the current actor.
      */
     public function destroy(Message $message): RedirectResponse
     {
-        $this->authorizeAuthor($message, auth()->user());
+        $this->authorizeAuthor($message);
 
         $message->delete();
 
@@ -56,13 +63,25 @@ class MessageController extends Controller
     }
 
     /**
-     * Ensure the acting participant authored the message.
+     * Abort unless the current actor is the message's author.
      */
-    protected function authorizeAuthor(Message $message, object $participant): void
+    protected function authorizeAuthor(Message $message): void
     {
-        $is_author = $message->author_type === $participant->getMorphClass()
-            && (int) $message->author_id === (int) $participant->getKey();
+        $actor = auth()->user();
 
-        abort_unless($is_author, HttpResponse::HTTP_FORBIDDEN);
+        abort_unless(
+            $actor !== null
+                && $message->author_type === $actor->getMorphClass()
+                && (int) $message->author_id === (int) $actor->getKey(),
+            403
+        );
+    }
+
+    /**
+     * Resolve the target messageable model from the whitelist.
+     */
+    protected function resolveModel(string $type, int|string $id): Model
+    {
+        return $this->models[$type]::findOrFail($id);
     }
 }

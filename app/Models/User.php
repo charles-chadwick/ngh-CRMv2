@@ -8,7 +8,6 @@ use App\Models\Concerns\WithActivity;
 use App\Models\Concerns\WithAvatar;
 use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithSort;
-use App\Models\Concerns\WithTopics;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -37,7 +36,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithSearch, WithSort, WithTopics;
+    use HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes, WithActivity, WithAvatar, WithSearch, WithSort;
 
     /**
      * Get the attributes that should be cast.

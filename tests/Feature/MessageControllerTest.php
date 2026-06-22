@@ -3,7 +3,6 @@
 use App\Events\MessagePosted;
 use App\Models\Customer;
 use App\Models\Message;
-use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,40 +12,30 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->author = User::factory()->create();
-    $this->topic = Topic::factory()->create();
-    $this->topic->users()->attach($this->author);
+    $this->customer = Customer::factory()->create();
     $this->actingAs($this->author);
 });
 
-it('posts a message to a topic the participant belongs to', function () {
+it('stores a message against a customer and attributes the author', function () {
     $this->post(route('messages.store'), [
-        'topic_id' => $this->topic->id,
+        'model_type' => 'customer',
+        'model_id' => $this->customer->id,
         'content' => '<p>Hello there.</p>',
     ])->assertRedirect();
 
     $message = Message::firstOrFail();
 
-    expect($message->topic->is($this->topic))->toBeTrue()
+    expect($message->messageable->is($this->customer))->toBeTrue()
         ->and($message->author->is($this->author))->toBeTrue()
         ->and($message->content)->toContain('Hello there.');
 });
 
-it('forbids a non-participant from posting', function () {
-    $outsider = User::factory()->create();
-
-    $this->actingAs($outsider)->post(route('messages.store'), [
-        'topic_id' => $this->topic->id,
-        'content' => '<p>Let me in.</p>',
-    ])->assertForbidden();
-
-    expect(Message::count())->toBe(0);
-});
-
-it('broadcasts MessagePosted on the topic channel', function () {
+it('broadcasts MessagePosted on the customer channel', function () {
     Event::fake([MessagePosted::class]);
 
     $this->post(route('messages.store'), [
-        'topic_id' => $this->topic->id,
+        'model_type' => 'customer',
+        'model_id' => $this->customer->id,
         'content' => '<p>Ping.</p>',
     ])->assertRedirect();
 
@@ -54,20 +43,71 @@ it('broadcasts MessagePosted on the topic channel', function () {
         $channels = $event->broadcastOn();
 
         return $channels[0] instanceof PrivateChannel
-            && $channels[0]->name === 'private-topics.'.$this->topic->id;
+            && $channels[0]->name === 'private-customers.'.$this->customer->id;
     });
 });
 
-it('counts unread messages for a participant excluding their own', function () {
-    $customer = Customer::factory()->create();
-    $this->topic->customers()->attach($customer);
+it('lets a customer author a message (two-sided)', function () {
+    $this->actingAs($this->customer, 'customer')->post(route('messages.store'), [
+        'model_type' => 'customer',
+        'model_id' => $this->customer->id,
+        'content' => '<p>Reply from the customer.</p>',
+    ])->assertRedirect();
 
-    Message::factory()->forTopic($this->topic)->byAuthor($customer)->create();
-    Message::factory()->forTopic($this->topic)->byAuthor($this->author)->create();
+    expect(Message::firstOrFail()->author)->toBeInstanceOf(Customer::class);
+});
 
-    expect($this->topic->unreadCountFor($this->author))->toBe(1);
+it('rejects an unknown model type', function () {
+    $this->post(route('messages.store'), [
+        'model_type' => 'lead',
+        'model_id' => $this->customer->id,
+        'content' => '<p>Nope.</p>',
+    ])->assertSessionHasErrors('model_type');
 
-    $this->topic->markReadFor($this->author);
+    expect(Message::count())->toBe(0);
+});
 
-    expect($this->topic->fresh()->unreadCountFor($this->author))->toBe(0);
+it('updates the actor\'s own message', function () {
+    $message = Message::factory()->forMessageable($this->customer)->byAuthor($this->author)->create();
+
+    $this->put(route('messages.update', $message->id), [
+        'content' => '<p>Edited.</p>',
+    ])->assertRedirect();
+
+    expect($message->fresh()->content)->toContain('Edited.');
+});
+
+it('forbids editing another actor\'s message', function () {
+    $other = User::factory()->create();
+    $message = Message::factory()->forMessageable($this->customer)->byAuthor($other)->create();
+
+    $this->put(route('messages.update', $message->id), [
+        'content' => '<p>Hijack.</p>',
+    ])->assertForbidden();
+});
+
+it('deletes the actor\'s own message', function () {
+    $message = Message::factory()->forMessageable($this->customer)->byAuthor($this->author)->create();
+
+    $this->delete(route('messages.destroy', $message->id))->assertRedirect();
+
+    expect($message->fresh()->trashed())->toBeTrue();
+});
+
+it('forbids deleting another actor\'s message', function () {
+    $other = User::factory()->create();
+    $message = Message::factory()->forMessageable($this->customer)->byAuthor($other)->create();
+
+    $this->delete(route('messages.destroy', $message->id))->assertForbidden();
+
+    expect($message->fresh()->trashed())->toBeFalse();
+});
+
+it('includes the customer messages on the show page', function () {
+    Message::factory()->forMessageable($this->customer)->byAuthor($this->author)->create();
+
+    $this->get(route('customers.show', $this->customer->id))
+        ->assertInertia(fn ($page) => $page
+            ->component('Customers/Show')
+            ->has('messages.data', 1));
 });

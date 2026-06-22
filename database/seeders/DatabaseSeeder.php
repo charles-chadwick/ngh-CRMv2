@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             LeadSeeder::class,
             ContactSeeder::class,
             NoteSeeder::class,
-            TopicSeeder::class,
+            MessageSeeder::class,
         ]);
     }
 }

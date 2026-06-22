@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
 use App\Models\Message;
-use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,20 +23,22 @@ class MessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'topic_id' => Topic::factory(),
-            'author_type' => User::class,
+            'messageable_type' => (new Customer)->getMorphClass(),
+            'messageable_id' => Customer::factory(),
+            'author_type' => (new User)->getMorphClass(),
             'author_id' => User::factory(),
             'content' => '<p>'.$this->faker->paragraph().'</p>',
         ];
     }
 
     /**
-     * Attach the message to the given topic.
+     * Attach the message to the given messageable model (customer, etc.).
      */
-    public function forTopic(Topic $topic): static
+    public function forMessageable(Model $messageable): static
     {
-        return $this->state(fn (array $attributes) => [
-            'topic_id' => $topic->getKey(),
+        return $this->state(fn (array $attributes): array => [
+            'messageable_type' => $messageable->getMorphClass(),
+            'messageable_id' => $messageable->getKey(),
         ]);
     }
 
@@ -45,7 +47,7 @@ class MessageFactory extends Factory
      */
     public function byAuthor(Model $author): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'author_type' => $author->getMorphClass(),
             'author_id' => $author->getKey(),
         ]);

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('topic_id')->constrained()->cascadeOnDelete();
+            $table->morphs('messageable');
             $table->morphs('author');
             $table->text('content');
             $table->timestamps();
