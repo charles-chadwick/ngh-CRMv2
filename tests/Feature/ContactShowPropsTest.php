@@ -4,10 +4,15 @@ use App\Models\Company;
 use App\Models\CompanyType;
 use App\Models\Contact;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('passes contacts and contact types to the customer show page', function () {
     $customer = Customer::factory()->create();

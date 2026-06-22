@@ -26,7 +26,7 @@ it('does not promote a second contact unless requested', function () {
 
     $second = CreateContact::run($customer, ['type' => 'Billing']);
 
-    expect($second->is_primary)->toBeFalse();
+    expect($second->fresh()->is_primary)->toBeFalse();
 });
 
 it('promotes a new contact to primary when requested', function () {
