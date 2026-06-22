@@ -1,8 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import { Button } from '@/Components/UI/button/index.js'
-import { Plus } from 'lucide-vue-next'
 import Pagination from '@/Components/Pagination.vue'
 import TaskItem from '@/Components/Tasks/TaskItem.vue'
 import TaskForm from '@/Components/Tasks/TaskForm.vue'
@@ -16,7 +14,7 @@ const props = defineProps({
   statuses: { type: Array, default: () => [] },
 })
 
-const showForm = ref(false)
+const showForm = defineModel('showForm', { type: Boolean, default: false })
 const editing = ref(null)
 const confirm = useConfirm()
 
@@ -32,11 +30,6 @@ const remove = async (task) => {
 
 <template>
   <section class="space-y-3">
-    <div class="flex items-center justify-between">
-      <h2 class="text-lg font-bold">Tasks</h2>
-      <Button size="icon-sm" aria-label="Add Task" title="Add Task" @click="showForm = !showForm; editing = null"><Plus /></Button>
-    </div>
-
     <TaskForm
         v-if="showForm"
         :subject_type="subject_type"

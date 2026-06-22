@@ -7,6 +7,7 @@ import CreatedBy from '@/Components/CreatedBy.vue'
 import NotesSection from '@/Components/Notes/NotesSection.vue'
 import TasksSection from '@/Components/Tasks/TasksSection.vue'
 import AddNoteButton from '@/Components/Notes/AddNoteButton.vue'
+import AddTaskButton from '@/Components/Tasks/AddTaskButton.vue'
 import { Button } from '@/Components/UI/button/index.js'
 import { Card } from '@/Components/UI/card/index.js'
 import Pagination from '@/Components/Pagination.vue'
@@ -24,6 +25,7 @@ const props = defineProps({
 })
 
 const showNoteForm = ref(false)
+const showTaskForm = ref(false)
 
 const confirm = useConfirm()
 
@@ -135,9 +137,17 @@ const destroy = async () => {
         </Card>
         <Pagination :paginator="notes" />
       </div>
-      <div class="mt-4">
+      <div>
+        <div class="flex items-center justify-between">
+          <h2 class="heading">Tasks</h2>
+          <AddTaskButton
+              v-if="!showTaskForm"
+              @click="showTaskForm = true"
+          />
+        </div>
         <Card class="px-6">
           <TasksSection
+              v-model:show-form="showTaskForm"
               subject_type="lead"
               :subject_id="lead.id"
               :tasks="tasks"

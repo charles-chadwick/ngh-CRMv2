@@ -15,7 +15,7 @@ import { usePage } from '@inertiajs/vue3'
 import Avatar from "@/Components/Avatar.vue";
 import { Button } from "@/Components/UI/button/index.js";
 import { Pencil, Trash2 } from "lucide-vue-next"
-import { useDate } from "@/Composables/useDate.js";
+import { useDate } from "@/composables/useDate.js";
 
 const props = defineProps({
   message: { type: Object, required: true },

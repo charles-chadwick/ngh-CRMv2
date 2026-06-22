@@ -1,6 +1,6 @@
 <!--suppress JSUnresolvedReference, NpmUsedModulesInstalled -->
 <script setup>
-import { useDate } from '@/Composables/useDate'
+import { useDate } from '@/composables/useDate'
 import Avatar from "../../Components/Avatar.vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
@@ -8,7 +8,7 @@ import Search from "../../Components/Search.vue";
 import { Card, CardContent, CardHeader } from "@/Components/UI/card/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
-import { useViewMode } from "@/Composables/useViewMode.js";
+import { useViewMode } from "@/composables/useViewMode.js";
 
 const { diffForHumans, dateTimeString } = useDate ()
 

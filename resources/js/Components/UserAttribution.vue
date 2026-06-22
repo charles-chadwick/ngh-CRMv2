@@ -15,7 +15,7 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 import Avatar from '@/Components/Avatar.vue'
 import { Button } from '@/Components/UI/button/index.js'
-import { useDate } from '@/Composables/useDate.js'
+import { useDate } from '@/composables/useDate.js'
 
 const props = defineProps({
   // Leading text for the attribution, e.g. "Created by" or "Updated by".

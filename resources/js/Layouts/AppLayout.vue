@@ -2,7 +2,7 @@
 
 import { Head } from "@inertiajs/vue3";
 import NotificationBell from "@/Components/Notifications/NotificationBell.vue";
-import ActAsSwitcher from "@/Components/ActAsSwitcher.vue";
+import UserMenu from "@/Components/UserMenu.vue";
 import ConfirmDialog from "@/Components/UI/ConfirmDialog.vue";
 </script>
 
@@ -31,7 +31,7 @@ import ConfirmDialog from "@/Components/UI/ConfirmDialog.vue";
       </ul>
       <div class="ml-auto flex items-center gap-4">
         <NotificationBell />
-        <ActAsSwitcher />
+        <UserMenu />
       </div>
     </div>
   </nav>

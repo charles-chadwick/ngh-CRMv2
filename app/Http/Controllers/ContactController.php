@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Contacts\CreateContact;
+use App\Actions\Contacts\DeleteContact;
+use App\Actions\Contacts\SetPrimaryContact;
+use App\Actions\Contacts\UpdateContact;
 use App\Http\Requests\ContactRequest;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
@@ -24,39 +27,20 @@ class ContactController extends Controller
     ];
 
     /**
-     * Fields copied straight from the request onto a contact.
-     *
-     * @var list<string>
-     */
-    protected array $fields = [
-        'type',
-        'street_address',
-        'city',
-        'state',
-        'zip',
-        'work_phone',
-        'mobile_phone',
-    ];
-
-    /**
      * Store a contact against the given contactable model.
      */
     public function store(ContactRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
+        $contactable = $this->resolveModel(
+            $request->validated('model_type'),
+            $request->validated('model_id'),
+        );
 
-        $model = $this->resolveModel($validated['model_type'], $validated['model_id']);
-
-        DB::transaction(function () use ($request, $model): void {
-            $contact = $model->contacts()->create($request->safe()->only($this->fields));
-
-            $should_be_primary = $request->boolean('is_primary')
-                || $model->contacts()->count() === 1;
-
-            if ($should_be_primary) {
-                $this->makePrimary($contact);
-            }
-        });
+        CreateContact::run(
+            $contactable,
+            $request->safe()->except(['model_type', 'model_id', 'is_primary']),
+            $request->boolean('is_primary'),
+        );
 
         return back();
     }
@@ -66,13 +50,11 @@ class ContactController extends Controller
      */
     public function update(ContactRequest $request, Contact $contact): RedirectResponse
     {
-        DB::transaction(function () use ($request, $contact): void {
-            $contact->update($request->safe()->only($this->fields));
-
-            if ($request->boolean('is_primary')) {
-                $this->makePrimary($contact);
-            }
-        });
+        UpdateContact::run(
+            $contact,
+            $request->safe()->except(['model_type', 'model_id', 'is_primary']),
+            $request->boolean('is_primary'),
+        );
 
         return back();
     }
@@ -82,20 +64,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact): RedirectResponse
     {
-        DB::transaction(function () use ($contact): void {
-            $was_primary = $contact->is_primary;
-            $parent = $contact->contactable;
-
-            $contact->delete();
-
-            if ($was_primary) {
-                $next = $parent->contacts()->first();
-
-                if ($next !== null) {
-                    $this->makePrimary($next);
-                }
-            }
-        });
+        DeleteContact::run($contact);
 
         return back();
     }
@@ -105,25 +74,13 @@ class ContactController extends Controller
      */
     public function setPrimary(Contact $contact): RedirectResponse
     {
-        DB::transaction(fn () => $this->makePrimary($contact));
+        SetPrimaryContact::run($contact);
 
         return back();
     }
 
     /**
-     * Make the contact primary and demote its siblings.
-     */
-    protected function makePrimary(Contact $contact): void
-    {
-        $contact->contactable->contacts()
-            ->whereKeyNot($contact->getKey())
-            ->update(['is_primary' => false]);
-
-        $contact->update(['is_primary' => true]);
-    }
-
-    /**
-     * Resolve the target contactable model from the whitelist.
+     * Resolve the target-contactable model from the whitelist.
      */
     protected function resolveModel(string $type, int|string $id): Model
     {

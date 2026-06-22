@@ -23,6 +23,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - phpunit/phpunit (PHPUNIT) - v12
 - @inertiajs/vue3 (INERTIA_VUE) - v3
 - vue (VUE) - v3
+- laravel-echo (ECHO) - v2
 - tailwindcss (TAILWINDCSS) - v4
 
 ## Skills Activation

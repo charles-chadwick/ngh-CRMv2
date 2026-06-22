@@ -8,6 +8,7 @@ import CustomerList from "../Customers/Partials/List.vue";
 import NotesSection from "@/Components/Notes/NotesSection.vue";
 import TasksSection from "@/Components/Tasks/TasksSection.vue";
 import AddNoteButton from "@/Components/Notes/AddNoteButton.vue";
+import AddTaskButton from "@/Components/Tasks/AddTaskButton.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { Card } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
@@ -19,6 +20,7 @@ defineProps ( { company: Object, customers: Object, notes: Object, note_types: A
 
 const showNoteForm = ref(false)
 const showContactForm = ref(false)
+const showTaskForm = ref(false)
 </script>
 
 <template>
@@ -115,9 +117,17 @@ const showContactForm = ref(false)
         </Card>
       </div>
     </div>
-    <div class="mb-6">
+    <div class="mb-6 flex flex-col">
+      <div class="flex items-center justify-between">
+        <h2 class="heading">Tasks</h2>
+        <AddTaskButton
+            v-if="!showTaskForm"
+            @click="showTaskForm = true"
+        />
+      </div>
       <Card class="px-6">
         <TasksSection
+            v-model:show-form="showTaskForm"
             subject_type="company"
             :subject_id="company.id"
             :tasks="tasks"

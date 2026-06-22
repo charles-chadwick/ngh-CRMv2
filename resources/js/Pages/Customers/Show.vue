@@ -15,6 +15,7 @@ import Pagination from "@/Components/Pagination.vue";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
 import MessagesSection from "@/Components/Messages/MessagesSection.vue";
 import AddMessageButton from "@/Components/Messages/AddMessageButton.vue";
+import AddTaskButton from "@/Components/Tasks/AddTaskButton.vue";
 import { Pencil } from "lucide-vue-next";
 
 defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array, messages: Object, tasks: Object, task_types: Array, task_statuses: Array })
@@ -22,6 +23,7 @@ defineProps({ customer: Object, notes: Object, note_types: Array, contacts: Obje
 const showNoteForm = ref(false)
 const showContactForm = ref(false)
 const showMessageForm = ref(false)
+const showTaskForm = ref(false)
 </script>
 
 <template>
@@ -131,7 +133,26 @@ const showMessageForm = ref(false)
           <Pagination :paginator="contacts" class="mt-auto" />
         </Card>
       </div>
-      <div class="flex flex-col sm:col-start-2">
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between">
+          <h2 class="heading">Tasks</h2>
+          <AddTaskButton
+              v-if="!showTaskForm"
+              @click="showTaskForm = true"
+          />
+        </div>
+        <Card class="px-6 flex-1 flex flex-col">
+          <TasksSection
+              v-model:show-form="showTaskForm"
+              subject_type="customer"
+              :subject_id="customer.id"
+              :tasks="tasks"
+              :types="task_types"
+              :statuses="task_statuses"
+          />
+        </Card>
+      </div>
+      <div class="flex flex-col">
         <div class="flex items-center justify-between">
           <h2 class="heading">Messages</h2>
           <AddMessageButton
@@ -149,17 +170,6 @@ const showMessageForm = ref(false)
           <Pagination :paginator="messages" class="mt-auto" />
         </Card>
       </div>
-    </div>
-    <div class="mb-6">
-      <Card class="px-6">
-        <TasksSection
-            subject_type="customer"
-            :subject_id="customer.id"
-            :tasks="tasks"
-            :types="task_types"
-            :statuses="task_statuses"
-        />
-      </Card>
     </div>
   </AppLayout>
 </template>

@@ -8,7 +8,7 @@ import Search from "../../Components/Search.vue";
 import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
-import { useViewMode } from "@/Composables/useViewMode.js";
+import { useViewMode } from "@/composables/useViewMode.js";
 
 defineProps ( {
   customers: Object
