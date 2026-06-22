@@ -29,15 +29,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/', function () {
         return Inertia::render('Home', [
-            'my_tasks' => auth()->check()
-                ? Task::query()
-                    ->with('subject')
-                    ->forAssignee(auth()->user())
-                    ->overdue()
-                    ->orderBy('due_at')
-                    ->limit(5)
-                    ->get()
-                : [],
+            'my_tasks' => Task::query()
+                ->with('subject')
+                ->forAssignee(auth()->user())
+                ->overdue()
+                ->orderBy('due_at')
+                ->limit(5)
+                ->get(),
         ]);
     })->name('home');
 

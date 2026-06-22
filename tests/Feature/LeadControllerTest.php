@@ -10,6 +10,10 @@ use Inertia\Testing\AssertableInertia;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
+
 it('lists leads on the index page with their company', function () {
     $company = Company::factory()->create(['title' => 'Acme Roofing']);
     Lead::factory()->count(3)->create(['company_id' => $company->id]);

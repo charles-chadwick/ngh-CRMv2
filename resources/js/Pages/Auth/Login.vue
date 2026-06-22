@@ -83,7 +83,3 @@ const submit = () => {
     </Card>
   </div>
 </template>
-
-<style scoped>
-
-</style>

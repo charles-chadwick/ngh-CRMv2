@@ -27,6 +27,14 @@ class ContactController extends Controller
     ];
 
     /**
+     * Request keys that control behaviour rather than describe the contact,
+     * stripped before the validated attributes reach the contact actions.
+     *
+     * @var list<string>
+     */
+    private const CONTROL_FIELDS = ['model_type', 'model_id', 'is_primary'];
+
+    /**
      * Store a contact against the given contactable model.
      */
     public function store(ContactRequest $request): RedirectResponse
@@ -38,7 +46,7 @@ class ContactController extends Controller
 
         CreateContact::run(
             $contactable,
-            $request->safe()->except(['model_type', 'model_id', 'is_primary']),
+            $request->safe()->except(self::CONTROL_FIELDS),
             $request->boolean('is_primary'),
         );
 
@@ -52,7 +60,7 @@ class ContactController extends Controller
     {
         UpdateContact::run(
             $contact,
-            $request->safe()->except(['model_type', 'model_id', 'is_primary']),
+            $request->safe()->except(self::CONTROL_FIELDS),
             $request->boolean('is_primary'),
         );
 

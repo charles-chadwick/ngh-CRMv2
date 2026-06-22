@@ -76,7 +76,7 @@ it('does not throw or notify when a customer authors a note with a mention', fun
     expect($note->mentionedUsers->contains($mentioned))->toBeTrue();
 });
 
-it('does not throw when a guest posts a note with a mention', function () {
+it('redirects a guest to login and stores nothing when posting a note', function () {
     Notification::fake();
 
     $mentioned = User::factory()->create();
@@ -88,11 +88,9 @@ it('does not throw when a guest posts a note with a mention', function () {
         'type' => 'General',
         'title' => 'Guest note',
         'content' => "<p><span data-id=\"{$mentioned->id}\">@User</span></p>",
-    ])->assertRedirect();
+    ])->assertRedirect(route('login'));
 
-    $note = Note::firstOrFail();
+    expect(Note::count())->toBe(0);
 
     Notification::assertNothingSent();
-
-    expect($note->mentionedUsers->contains($mentioned))->toBeTrue();
 });
