@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ContactSeeder::class,
             NoteSeeder::class,
             MessageSeeder::class,
+            TaskSeeder::class,
         ]);
     }
 }

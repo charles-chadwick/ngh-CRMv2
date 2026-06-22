@@ -17,6 +17,11 @@
         "vite": "^8.0.0"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.21",
+        "@fullcalendar/daygrid": "^6.1.21",
+        "@fullcalendar/interaction": "^6.1.21",
+        "@fullcalendar/timegrid": "^6.1.21",
+        "@fullcalendar/vue3": "^6.1.21",
         "@heroicons/vue": "^2.2.0",
         "@inertiajs/vite": "^3.3.1",
         "@inertiajs/vue3": "^3.3.1",

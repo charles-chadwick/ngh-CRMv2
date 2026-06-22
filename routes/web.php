@@ -10,12 +10,23 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('Home', [
+        'my_tasks' => auth()->check()
+            ? \App\Models\Task::query()
+                ->with('subject')
+                ->forAssignee(auth()->user())
+                ->overdue()
+                ->orderBy('due_at')
+                ->limit(5)
+                ->get()
+            : [],
+    ]);
 })->name('home');
 
 Route::get('act-as/options', [ActAsController::class, 'options'])->name('act-as.options');
@@ -31,6 +42,15 @@ Route::resource('leads', LeadController::class);
 Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
 Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
 Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+
+// Static task paths must precede the `tasks/{task}` wildcards below.
+Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+Route::get('tasks/assignees', [TaskController::class, 'assignees'])->name('tasks.assignees');
+Route::get('tasks/subjects', [TaskController::class, 'subjects'])->name('tasks.subjects');
+Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
+Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+Route::patch('tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
 
 Route::prefix('settings')->name('settings.')->group(function () {
     Route::get('/', fn () => Inertia::render('Settings/Index'))->name('index');

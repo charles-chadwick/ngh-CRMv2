@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enum\LeadStatus;
 use App\Enum\LeadType;
+use App\Enum\TaskStatus;
+use App\Enum\TaskType;
 use App\Http\Requests\LeadRequest;
 use App\Models\Company;
 use App\Models\Lead;
@@ -55,6 +57,9 @@ class LeadController extends Controller
             'lead' => $lead,
             'notes' => $lead->paginatedNotes(),
             'note_types' => Note::TYPES,
+            'tasks' => $lead->paginatedTasks(),
+            'task_types' => TaskType::options(),
+            'task_statuses' => TaskStatus::options(),
         ]);
     }
 

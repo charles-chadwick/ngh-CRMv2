@@ -1,0 +1,247 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Enum\TaskStatus;
+use App\Enum\TaskType;
+use App\Http\Requests\TaskRequest;
+use App\Http\Requests\TaskStatusRequest;
+use App\Models\Company;
+use App\Models\Customer;
+use App\Models\Lead;
+use App\Models\Task;
+use App\Models\User;
+use App\Services\NoteContentSanitizer;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class TaskController extends Controller
+{
+    /**
+     * Models a task may be about, keyed by the client `subject_type` value.
+     *
+     * @var array<string, class-string<Model>>
+     */
+    protected array $subjects = [
+        'customer' => Customer::class,
+        'company' => Company::class,
+        'lead' => Lead::class,
+    ];
+
+    /**
+     * Models a task may be assigned to, keyed by the client `assignee_type` value.
+     *
+     * @var array<string, class-string<Model>>
+     */
+    protected array $assignees = [
+        'user' => User::class,
+        'customer' => Customer::class,
+    ];
+
+    public function index(Request $request): Response
+    {
+        $user = auth()->user();
+        $scope = $request->string('scope', 'mine')->toString();
+
+        $base = fn () => Task::query()
+            ->with(['subject', 'assignee'])
+            ->when($scope !== 'all' && $user !== null, fn ($query) => $query->forAssignee($user));
+
+        $start = $request->filled('start')
+            ? Carbon::parse($request->string('start')->toString())->startOfDay()
+            : now()->startOfMonth();
+        $end = $request->filled('end')
+            ? Carbon::parse($request->string('end')->toString())->endOfDay()
+            : now()->endOfMonth();
+
+        return Inertia::render('Tasks/Index', [
+            'overdue' => $base()->open()->whereNotNull('due_at')->where('due_at', '<', now()->startOfDay())->orderBy('due_at')->get(),
+            'due_today' => $base()->open()->dueOn(now())->orderBy('due_at')->get(),
+            'upcoming' => $base()->open()->where('due_at', '>', now()->endOfDay())->orderBy('due_at')->limit(50)->get(),
+            'calendar' => $base()->between($start, $end)->get()->map(fn (Task $task): array => [
+                'id' => $task->id,
+                'title' => $task->title,
+                'start' => $task->due_at?->toIso8601String(),
+                'allDay' => $task->all_day,
+                'status' => $task->status->value,
+                'type' => $task->type->value,
+            ]),
+            'filters' => ['scope' => $scope],
+            'types' => TaskType::options(),
+            'statuses' => TaskStatus::options(),
+        ]);
+    }
+
+    public function store(TaskRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $task = new Task($this->taskAttributes($request));
+
+        $subject = $this->resolveSubject($validated['subject_type'] ?? null, $validated['subject_id'] ?? null);
+        if ($subject !== null) {
+            $task->subject()->associate($subject);
+        }
+
+        $assignee = $this->resolveAssignee($validated['assignee_type'] ?? null, $validated['assignee_id'] ?? null);
+        if ($assignee !== null) {
+            $task->assignee()->associate($assignee);
+        }
+
+        $task->save();
+
+        return back();
+    }
+
+    public function update(TaskRequest $request, Task $task): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $attributes = $request->safe()->only([
+            'type', 'title', 'description', 'due_at', 'all_day', 'remind_at',
+        ]);
+        $attributes['all_day'] = (bool) ($attributes['all_day'] ?? false);
+
+        $task->fill($attributes);
+
+        if (array_key_exists('subject_type', $validated)) {
+            $subject = $this->resolveSubject($validated['subject_type'], $validated['subject_id'] ?? null);
+            $task->subject()->associate($subject);
+        }
+
+        if (array_key_exists('assignee_type', $validated)) {
+            $assignee = $this->resolveAssignee($validated['assignee_type'], $validated['assignee_id'] ?? null);
+            $task->assignee()->associate($assignee);
+        }
+
+        $task->save();
+
+        return back();
+    }
+
+    public function destroy(Task $task): RedirectResponse
+    {
+        $task->delete();
+
+        return back();
+    }
+
+    public function updateStatus(TaskStatusRequest $request, Task $task): RedirectResponse
+    {
+        $status = TaskStatus::from($request->validated('status'));
+
+        match ($status) {
+            TaskStatus::Completed => $task->markCompleted(),
+            TaskStatus::Canceled => $task->markCanceled(),
+            TaskStatus::Open => $task->reopen(),
+        };
+
+        $log_note = $request->validated('log_note');
+        if ($status === TaskStatus::Completed && filled($log_note) && $task->subject !== null) {
+            $task->subject->notes()->create([
+                'type' => 'Follow Up',
+                'title' => 'Task completed: '.$task->title,
+                'content' => app(NoteContentSanitizer::class)->clean($log_note),
+            ]);
+        }
+
+        return back();
+    }
+
+    public function assignees(Request $request): JsonResponse
+    {
+        $search = $request->string('q')->toString();
+
+        $users = User::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->withAvatar()
+            ->limit(8)
+            ->get()
+            ->map(fn (User $user): array => [
+                'type' => 'user',
+                'id' => $user->getKey(),
+                'full_name' => $user->full_name,
+                'avatar_url' => $user->avatar_url,
+            ]);
+
+        $customers = Customer::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->withAvatar()
+            ->limit(8)
+            ->get()
+            ->map(fn (Customer $customer): array => [
+                'type' => 'customer',
+                'id' => $customer->getKey(),
+                'full_name' => $customer->full_name,
+                'avatar_url' => $customer->avatar_url,
+            ]);
+
+        return response()->json($users->concat($customers)->values());
+    }
+
+    public function subjects(Request $request): JsonResponse
+    {
+        $search = $request->string('q')->toString();
+
+        $companies = Company::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->limit(8)->get()
+            ->map(fn (Company $company): array => ['type' => 'company', 'id' => $company->getKey(), 'label' => $company->title]);
+
+        $customers = Customer::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->limit(8)->get()
+            ->map(fn (Customer $customer): array => ['type' => 'customer', 'id' => $customer->getKey(), 'label' => $customer->full_name]);
+
+        $leads = Lead::query()
+            ->when($search !== '', fn ($query) => $query->where(fn ($grouped) => $grouped->withSearch($search)))
+            ->limit(8)->get()
+            ->map(fn (Lead $lead): array => ['type' => 'lead', 'id' => $lead->getKey(), 'label' => $lead->title]);
+
+        return response()->json($companies->concat($customers)->concat($leads)->values());
+    }
+
+    /**
+     * Pull the writable task attributes, defaulting the reminder to the due date.
+     *
+     * @return array<string, mixed>
+     */
+    protected function taskAttributes(TaskRequest $request): array
+    {
+        $attributes = $request->safe()->only([
+            'type', 'title', 'description', 'due_at', 'all_day', 'remind_at',
+        ]);
+
+        $attributes['all_day'] = (bool) ($attributes['all_day'] ?? false);
+
+        if (empty($attributes['remind_at']) && ! empty($attributes['due_at'])) {
+            $due = Carbon::parse($attributes['due_at']);
+            $attributes['remind_at'] = $attributes['all_day'] ? $due->copy()->setTime(9, 0) : $due;
+        }
+
+        return $attributes;
+    }
+
+    protected function resolveSubject(?string $type, ?int $id): ?Model
+    {
+        if ($type === null || $id === null) {
+            return null;
+        }
+
+        return $this->subjects[$type]::findOrFail($id);
+    }
+
+    protected function resolveAssignee(?string $type, ?int $id): ?Model
+    {
+        if ($type === null || $id === null) {
+            return null;
+        }
+
+        return $this->assignees[$type]::findOrFail($id);
+    }
+}

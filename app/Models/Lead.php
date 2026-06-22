@@ -8,6 +8,7 @@ use App\Models\Concerns\WithActivity;
 use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithSort;
+use App\Models\Concerns\WithTasks;
 use Database\Factories\LeadFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Lead extends Model
 {
     /** @use HasFactory<LeadFactory> */
-    use HasFactory, SoftDeletes, WithActivity, WithNotes, WithSearch, WithSort;
+    use HasFactory, SoftDeletes, WithActivity, WithNotes, WithSearch, WithSort, WithTasks;
 
     /**
      * Keep `assigned_at` in step with `assigned_to`: stamp it when a lead is
