@@ -34,6 +34,7 @@ Route::put('messages/{message}', [MessageController::class, 'update'])->name('me
 Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 
 // Static task paths must precede the `tasks/{task}` wildcards below.
+Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
 Route::get('tasks/assignees', [TaskController::class, 'assignees'])->name('tasks.assignees');
 Route::get('tasks/subjects', [TaskController::class, 'subjects'])->name('tasks.subjects');
 Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');

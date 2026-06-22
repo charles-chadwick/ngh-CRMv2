@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\TaskStatus;
+use App\Enum\TaskType;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\TaskStatusRequest;
 use App\Models\Company;
@@ -16,6 +17,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TaskController extends Controller
 {
@@ -39,6 +42,40 @@ class TaskController extends Controller
         'user' => User::class,
         'customer' => Customer::class,
     ];
+
+    public function index(Request $request): Response
+    {
+        $user = auth()->user();
+        $scope = $request->string('scope', 'mine')->toString();
+
+        $base = fn () => Task::query()
+            ->with(['subject', 'assignee'])
+            ->when($scope !== 'all' && $user !== null, fn ($query) => $query->forAssignee($user));
+
+        $start = $request->filled('start')
+            ? Carbon::parse($request->string('start')->toString())->startOfDay()
+            : now()->startOfMonth();
+        $end = $request->filled('end')
+            ? Carbon::parse($request->string('end')->toString())->endOfDay()
+            : now()->endOfMonth();
+
+        return Inertia::render('Tasks/Index', [
+            'overdue' => $base()->open()->whereNotNull('due_at')->where('due_at', '<', now()->startOfDay())->orderBy('due_at')->get(),
+            'due_today' => $base()->open()->dueOn(now())->orderBy('due_at')->get(),
+            'upcoming' => $base()->open()->where('due_at', '>', now()->endOfDay())->orderBy('due_at')->limit(50)->get(),
+            'calendar' => $base()->between($start, $end)->get()->map(fn (Task $task): array => [
+                'id' => $task->id,
+                'title' => $task->title,
+                'start' => $task->due_at?->toIso8601String(),
+                'allDay' => $task->all_day,
+                'status' => $task->status->value,
+                'type' => $task->type->value,
+            ]),
+            'filters' => ['scope' => $scope],
+            'types' => TaskType::options(),
+            'statuses' => TaskStatus::options(),
+        ]);
+    }
 
     public function store(TaskRequest $request): RedirectResponse
     {
