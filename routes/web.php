@@ -5,13 +5,11 @@ use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\CustomerMessageController;
 use App\Http\Controllers\CustomerRoleController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,9 +28,6 @@ Route::resource('companies', CompanyController::class);
 Route::resource('customers', CustomerController::class);
 Route::resource('leads', LeadController::class);
 
-Route::get('topics/participants', [TopicController::class, 'participants'])
-    ->name('topics.participants');
-Route::resource('topics', TopicController::class)->only(['index', 'create', 'show', 'store']);
 Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
 Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
 Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');

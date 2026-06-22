@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\Note;
+use App\Models\User;
 use App\Notifications\UserMentionedInNote;
 use App\Services\NoteContentSanitizer;
 use App\Services\NoteMentionService;
@@ -85,12 +86,13 @@ class NoteController extends Controller
     protected function notifyMentions(Note $note): void
     {
         $author = auth()->user();
+        $authoring_user = $author instanceof User ? $author : null;
 
         $newly_mentioned = app(NoteMentionService::class)
-            ->syncFromContent($note, $note->content, $author?->id);
+            ->syncFromContent($note, $note->content, $authoring_user?->id);
 
-        if ($author !== null) {
-            Notification::send($newly_mentioned, new UserMentionedInNote($note, $author));
+        if ($authoring_user !== null) {
+            Notification::send($newly_mentioned, new UserMentionedInNote($note, $authoring_user));
         }
     }
 
