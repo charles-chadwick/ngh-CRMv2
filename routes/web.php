@@ -37,6 +37,7 @@ Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name
 Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
 Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
 Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+Route::patch('tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
 
 Route::prefix('settings')->name('settings.')->group(function () {
     Route::get('/', fn () => Inertia::render('Settings/Index'))->name('index');

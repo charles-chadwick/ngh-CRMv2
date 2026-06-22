@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\TaskStatus;
 use App\Http\Requests\TaskRequest;
+use App\Http\Requests\TaskStatusRequest;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\Task;
 use App\Models\User;
+use App\Services\NoteContentSanitizer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
@@ -85,6 +88,28 @@ class TaskController extends Controller
     public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
+
+        return back();
+    }
+
+    public function updateStatus(TaskStatusRequest $request, Task $task): RedirectResponse
+    {
+        $status = TaskStatus::from($request->validated('status'));
+
+        match ($status) {
+            TaskStatus::Completed => $task->markCompleted(),
+            TaskStatus::Canceled => $task->markCanceled(),
+            TaskStatus::Open => $task->reopen(),
+        };
+
+        $log_note = $request->validated('log_note');
+        if ($status === TaskStatus::Completed && filled($log_note) && $task->subject !== null) {
+            $task->subject->notes()->create([
+                'type' => 'Follow Up',
+                'title' => 'Task completed: '.$task->title,
+                'content' => app(NoteContentSanitizer::class)->clean($log_note),
+            ]);
+        }
 
         return back();
     }
