@@ -10,6 +10,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +32,9 @@ Route::resource('leads', LeadController::class);
 Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
 Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
 Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+
+// Static task paths must precede the `tasks/{task}` wildcards below.
+Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
 
 Route::prefix('settings')->name('settings.')->group(function () {
     Route::get('/', fn () => Inertia::render('Settings/Index'))->name('index');
