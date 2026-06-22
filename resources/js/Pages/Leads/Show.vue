@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import CreatedBy from '@/Components/CreatedBy.vue'
 import NotesSection from '@/Components/Notes/NotesSection.vue'
+import TasksSection from '@/Components/Tasks/TasksSection.vue'
 import AddNoteButton from '@/Components/Notes/AddNoteButton.vue'
 import { Button } from '@/Components/UI/button/index.js'
 import { Card } from '@/Components/UI/card/index.js'
@@ -17,6 +18,9 @@ const props = defineProps({
   lead: Object,
   notes: Object,
   note_types: Array,
+  tasks: Object,
+  task_types: Array,
+  task_statuses: Array,
 })
 
 const showNoteForm = ref(false)
@@ -130,6 +134,17 @@ const destroy = async () => {
           />
         </Card>
         <Pagination :paginator="notes" />
+      </div>
+      <div class="mt-4">
+        <Card class="px-6">
+          <TasksSection
+              subject_type="lead"
+              :subject_id="lead.id"
+              :tasks="tasks"
+              :types="task_types"
+              :statuses="task_statuses"
+          />
+        </Card>
       </div>
     </div>
   </AppLayout>

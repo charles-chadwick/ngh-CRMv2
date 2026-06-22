@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\TaskStatus;
+use App\Enum\TaskType;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Models\CompanyType;
@@ -46,6 +48,9 @@ class CompanyController extends Controller
             'note_types' => Note::TYPES,
             'contacts' => $company->paginatedContacts(),
             'contact_types' => Contact::TYPES,
+            'tasks' => $company->paginatedTasks(),
+            'task_types' => TaskType::options(),
+            'task_statuses' => TaskStatus::options(),
         ]);
     }
 

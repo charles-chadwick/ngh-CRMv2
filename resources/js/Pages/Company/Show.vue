@@ -6,6 +6,7 @@ import Avatar from "../../Components/Avatar.vue";
 import CreatedBy from "@/Components/CreatedBy.vue";
 import CustomerList from "../Customers/Partials/List.vue";
 import NotesSection from "@/Components/Notes/NotesSection.vue";
+import TasksSection from "@/Components/Tasks/TasksSection.vue";
 import AddNoteButton from "@/Components/Notes/AddNoteButton.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { Card } from "@/Components/UI/card/index.js";
@@ -14,7 +15,7 @@ import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
 import AddContactButton from "@/Components/Contacts/AddContactButton.vue";
 import { Pencil } from "lucide-vue-next";
 
-defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array } )
+defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array, tasks: Object, task_types: Array, task_statuses: Array } )
 
 const showNoteForm = ref(false)
 const showContactForm = ref(false)
@@ -113,6 +114,17 @@ const showContactForm = ref(false)
           <Pagination :paginator="contacts" class="mt-auto" />
         </Card>
       </div>
+    </div>
+    <div class="mb-6">
+      <Card class="px-6">
+        <TasksSection
+            subject_type="company"
+            :subject_id="company.id"
+            :tasks="tasks"
+            :types="task_types"
+            :statuses="task_statuses"
+        />
+      </Card>
     </div>
 
   </AppLayout>

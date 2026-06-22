@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\TaskStatus;
+use App\Enum\TaskType;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Contact;
 use App\Models\Customer;
@@ -69,6 +71,9 @@ class CustomerController extends Controller
             'contacts' => $customer->paginatedContacts(),
             'contact_types' => Contact::TYPES,
             'messages' => $customer->paginatedMessages(),
+            'tasks' => $customer->paginatedTasks(),
+            'task_types' => TaskType::options(),
+            'task_statuses' => TaskStatus::options(),
         ]);
     }
 }
