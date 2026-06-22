@@ -26,7 +26,7 @@ import ConfirmDialog from "@/Components/UI/ConfirmDialog.vue";
         <li><a :href="route('companies.index')" class="hover:text-primary">Companies</a></li>
         <li><a :href="route('customers.index')" class="hover:text-primary">Customers</a></li>
         <li><a :href="route('leads.index')" class="hover:text-primary">Leads</a></li>
-<li><a :href="route('settings.index')" class="hover:text-primary">Settings</a></li>
+        <li><a :href="route('settings.index')" class="hover:text-primary">Settings</a></li>
       </ul>
       <div class="ml-auto flex items-center gap-4">
         <NotificationBell />
