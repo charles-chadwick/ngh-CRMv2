@@ -16,7 +16,17 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('Home', [
+        'my_tasks' => auth()->check()
+            ? \App\Models\Task::query()
+                ->with('subject')
+                ->forAssignee(auth()->user())
+                ->overdue()
+                ->orderBy('due_at')
+                ->limit(5)
+                ->get()
+            : [],
+    ]);
 })->name('home');
 
 Route::get('act-as/options', [ActAsController::class, 'options'])->name('act-as.options');
