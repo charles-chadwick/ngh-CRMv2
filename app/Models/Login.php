@@ -13,6 +13,12 @@ class Login extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'user_id',
+        'ip_address',
+        'created_at',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
