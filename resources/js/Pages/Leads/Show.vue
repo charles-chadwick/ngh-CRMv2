@@ -14,6 +14,7 @@ import Pagination from '@/Components/Pagination.vue'
 import StatusBadge from '@/Components/StatusBadge.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
 import { useConfirm } from '@/composables/useConfirm.js'
+import { useDate } from '@/composables/useDate.js'
 
 const props = defineProps({
   lead: Object,
@@ -28,6 +29,7 @@ const showNoteForm = ref(false)
 const showTaskForm = ref(false)
 
 const confirm = useConfirm()
+const { dateTimeString } = useDate()
 
 const destroy = async () => {
   if (await confirm({
@@ -111,7 +113,7 @@ const destroy = async () => {
         </div>
         <div>
           <dt class="text-sm text-muted-foreground">Initiated at</dt>
-          <dd>{{ lead.initiated_at || '—' }}</dd>
+          <dd>{{ dateTimeString(lead.initiated_at) || '—' }}</dd>
         </div>
       </dl>
     </Card>
