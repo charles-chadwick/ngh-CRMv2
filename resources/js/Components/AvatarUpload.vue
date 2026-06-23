@@ -112,9 +112,8 @@ const removeImage = () => {
         <Button
             v-if="preview_url"
             type="button"
-            variant="ghost"
+            variant="stone-destructive"
             size="icon-sm"
-            class="text-destructive hover:text-destructive"
             :disabled="removing || uploading"
             @click="removeImage"
         >

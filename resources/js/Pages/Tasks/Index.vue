@@ -36,7 +36,7 @@ const reschedule = ({ id, due_at }) => {
 }
 
 const remove = async (task) => {
-  if (await confirm({ title: 'Delete task?', message: `Delete "${task.title}"?`, variant: 'destructive' })) {
+  if (await confirm({ title: 'Delete task?', message: `Delete "${task.title}"?`, variant: 'stone-destructive' })) {
     router.delete(route('tasks.destroy', task.id), { preserveScroll: true })
   }
 }
@@ -58,7 +58,7 @@ const startEdit = (task) => { editing.value = task; showForm.value = false; view
           <Button variant="secondary" size="sm" @click="view = view === 'list' ? 'calendar' : 'list'">
             {{ view === 'list' ? 'Calendar' : 'List' }}
           </Button>
-          <Button size="sm" @click="showForm = !showForm; editing = null">New Task</Button>
+          <Button size="sm" variant="stone" @click="showForm = !showForm; editing = null">New Task</Button>
         </div>
       </div>
 

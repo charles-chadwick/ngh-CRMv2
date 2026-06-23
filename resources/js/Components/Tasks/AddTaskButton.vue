@@ -7,7 +7,7 @@ defineEmits(['click'])
 
 <template>
   <Button
-      variant="default"
+      variant="stone"
       size="icon-sm"
       aria-label="Add Task"
       title="Add Task"

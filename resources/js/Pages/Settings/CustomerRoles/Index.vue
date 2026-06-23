@@ -18,7 +18,7 @@ const destroy = async (role) => {
     title: `Delete the "${role.name}" role?`,
     message: 'This action cannot be undone.',
     confirmLabel: 'Delete',
-    variant: 'destructive',
+    variant: 'stone-destructive',
   })) {
     router.delete(route('settings.customer-roles.destroy', role.id), {
       preserveScroll: true,
@@ -38,7 +38,7 @@ const destroy = async (role) => {
         </Link>
         <h1 class="text-2xl font-bold">Customer Roles</h1>
       </div>
-      <Button as-child>
+      <Button as-child variant="stone">
         <Link :href="route('settings.customer-roles.create')">New Role</Link>
       </Button>
     </div>
@@ -54,15 +54,14 @@ const destroy = async (role) => {
           <p class="text-sm text-muted-foreground">{{ role.customers_count }} customer(s)</p>
         </div>
         <div class="flex items-center gap-2">
-          <Button as-child variant="default" size="icon-sm" aria-label="Edit" title="Edit">
+          <Button as-child variant="stone" size="icon-sm" aria-label="Edit" title="Edit">
             <Link :href="route('settings.customer-roles.edit', role.id)"><Pencil /></Link>
           </Button>
           <Button
               aria-label="Delete"
               title="Delete"
               size="icon-sm"
-              variant="ghost"
-              class="text-destructive hover:text-destructive"
+              variant="stone-destructive"
               @click="destroy(role)"
           >
             <Trash2 />

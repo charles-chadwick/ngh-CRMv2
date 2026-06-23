@@ -10,7 +10,8 @@
 -->
 <script setup>
 import { Button } from "@/Components/UI/button/index.js";
-import { Pencil, Star, Trash2 } from "lucide-vue-next";
+import { Star } from "lucide-vue-next";
+import EditRemoveActions from "@/Components/EditRemoveActions.vue";
 import ContactCard from "@/Components/Contacts/ContactCard.vue";
 import CreatedBy from "@/Components/CreatedBy.vue";
 
@@ -47,37 +48,20 @@ defineEmits(["edit", "remove", "setPrimary"]);
           :updater="contact.update_activity?.causer"
       />
       <!-- Action buttons: bubble intent up to the parent via emits. -->
-      <div>
-        <Button
-            v-if="!contact.is_primary"
-            aria-label="Set primary"
-            size="icon-sm"
-            title="Set primary"
-            variant="ghost"
-            @click="$emit('setPrimary', contact)"
-        >
-          <Star />
-        </Button>
-        <Button
-            aria-label="Edit"
-            size="icon-sm"
-            title="Edit"
-            variant="default"
-            @click="$emit('edit', contact)"
-        >
-          <Pencil />
-        </Button>
-        <Button
-            aria-label="Remove"
-            class="text-destructive hover:text-destructive"
-            size="icon-sm"
-            title="Remove"
-            variant="ghost"
-            @click="$emit('remove', contact)"
-        >
-          <Trash2 />
-        </Button>
-      </div>
+      <EditRemoveActions @edit="$emit('edit', contact)" @remove="$emit('remove', contact)">
+        <template #prepend>
+          <Button
+              v-if="!contact.is_primary"
+              aria-label="Set primary"
+              size="icon-sm"
+              title="Set primary"
+              variant="ghost"
+              @click="$emit('setPrimary', contact)"
+          >
+            <Star />
+          </Button>
+        </template>
+      </EditRemoveActions>
     </div>
 
   </div>

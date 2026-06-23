@@ -34,7 +34,7 @@ const destroy = async () => {
     title: 'Delete this lead?',
     message: 'This action cannot be undone.',
     confirmLabel: 'Delete',
-    variant: 'destructive',
+    variant: 'stone-destructive',
   })) {
     router.delete(route('leads.destroy', props.lead.id))
   }
@@ -63,7 +63,7 @@ const destroy = async () => {
       <div class="flex items-center gap-3">
         <Button
             as-child
-            variant="default"
+            variant="stone"
             size="icon-sm"
             aria-label="Edit"
             title="Edit"
@@ -74,8 +74,7 @@ const destroy = async () => {
             aria-label="Delete"
             title="Delete"
             size="icon-sm"
-            variant="ghost"
-            class="text-destructive hover:text-destructive"
+            variant="stone-destructive"
             @click="destroy"
         >
           <Trash2 />

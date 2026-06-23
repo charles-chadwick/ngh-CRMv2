@@ -40,7 +40,7 @@ const removeMessage = async (message) => {
     title: 'Delete this message?',
     message: 'This action cannot be undone.',
     confirmLabel: 'Delete',
-    variant: 'destructive',
+    variant: 'stone-destructive',
   })) {
     router.delete(route('messages.destroy', message.id), { preserveScroll: true })
   }

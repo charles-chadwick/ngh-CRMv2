@@ -32,7 +32,7 @@ const removeNote = async (note) => {
     title: 'Delete this note?',
     message: 'This action cannot be undone.',
     confirmLabel: 'Delete',
-    variant: 'destructive',
+    variant: 'stone-destructive',
   })) {
     router.delete(route('notes.destroy', note.id), { preserveScroll: true })
   }

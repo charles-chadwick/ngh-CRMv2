@@ -35,7 +35,7 @@ function resolveConfirm(result) {
  * @property {string} [message]
  * @property {string} [confirmLabel]
  * @property {string} [cancelLabel]
- * @property {'default'|'destructive'} [variant]
+ * @property {'default'|'destructive'|'stone-destructive'} [variant]
  */
 
 /**

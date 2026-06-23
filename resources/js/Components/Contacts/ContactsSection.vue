@@ -32,7 +32,7 @@ const removeContact = async (contact) => {
     title: "Delete this contact?",
     message: "This action cannot be undone.",
     confirmLabel: "Delete",
-    variant: "destructive",
+    variant: "stone-destructive",
   })) {
     router.delete(route("contacts.destroy", contact.id), { preserveScroll: true });
   }

@@ -22,7 +22,7 @@ const onSaved = () => { showForm.value = false; editing.value = null }
 const startEdit = (task) => { editing.value = task; showForm.value = false }
 
 const remove = async (task) => {
-  if (await confirm({ title: 'Delete task?', message: `Delete "${task.title}"?`, variant: 'destructive' })) {
+  if (await confirm({ title: 'Delete task?', message: `Delete "${task.title}"?`, variant: 'stone-destructive' })) {
     router.delete(route('tasks.destroy', task.id), { preserveScroll: true })
   }
 }

@@ -33,7 +33,7 @@ const complete = () => {
           placeholder="Log a note (optional)"
           class="rounded-md border border-border bg-background px-2 py-1 text-sm"
       >
-      <Button size="icon-sm" title="Complete" aria-label="Complete" @click="complete"><Check /></Button>
+      <Button size="icon-sm" variant="stone" title="Complete" aria-label="Complete" @click="complete"><Check /></Button>
       <Button size="icon-sm" variant="ghost" title="Cancel task" aria-label="Cancel task" @click="setStatus('Canceled')"><X /></Button>
     </template>
     <Button v-else size="icon-sm" variant="ghost" title="Reopen" aria-label="Reopen" @click="setStatus('Open')"><RotateCcw /></Button>

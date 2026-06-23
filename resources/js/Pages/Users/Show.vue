@@ -33,7 +33,7 @@ defineProps ( {
 
       <Button
           as-child
-          variant="default"
+          variant="stone"
           size="icon-sm"
           aria-label="Edit"
           title="Edit"

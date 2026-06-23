@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { Button } from '@/Components/UI/button/index.js'
-import { Pencil, Trash2 } from 'lucide-vue-next'
+import EditRemoveActions from '@/Components/EditRemoveActions.vue'
 import StatusBadge from '@/Components/StatusBadge.vue'
 import Avatar from '@/Components/Avatar.vue'
 import TaskStatusToggle from '@/Components/Tasks/TaskStatusToggle.vue'
@@ -34,9 +33,8 @@ const due_label = computed(() => {
       </span>
       <TaskStatusToggle :task="task" />
     </div>
-    <div class="mt-2 flex justify-end gap-2">
-      <Button size="icon-sm" title="Edit" aria-label="Edit" @click="$emit('edit', task)"><Pencil /></Button>
-      <Button size="icon-sm" variant="ghost" class="text-destructive hover:text-destructive" title="Remove" aria-label="Remove" @click="$emit('remove', task)"><Trash2 /></Button>
+    <div class="mt-2 flex justify-end">
+      <EditRemoveActions @edit="$emit('edit', task)" @remove="$emit('remove', task)" />
     </div>
   </div>
 </template>

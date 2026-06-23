@@ -8,8 +8,7 @@
   and lets the parent list handle the actual mutations.
 -->
 <script setup>
-import { Button } from "@/Components/UI/button/index.js";
-import { Pencil, Trash2 } from "lucide-vue-next"
+import EditRemoveActions from "@/Components/EditRemoveActions.vue";
 import CreatedBy from "@/Components/CreatedBy.vue";
 import StatusBadge from "@/Components/StatusBadge.vue";
 
@@ -45,27 +44,7 @@ defineEmits ( [ 'edit', 'remove' ] )
           :updater="note.update_activity?.causer"
       />
       <!-- Action buttons: bubble intent up to the parent via emits. -->
-      <div>
-        <Button
-            aria-label="Edit"
-            size="icon-sm"
-            title="Edit"
-            variant="default"
-            @click="$emit('edit', note)"
-        >
-          <Pencil />
-        </Button>
-        <Button
-            aria-label="Remove"
-            class="text-destructive hover:text-destructive"
-            size="icon-sm"
-            title="Remove"
-            variant="ghost"
-            @click="$emit('remove', note)"
-        >
-          <Trash2 />
-        </Button>
-      </div>
+      <EditRemoveActions @edit="$emit('edit', note)" @remove="$emit('remove', note)" />
     </div>
 
   </div>

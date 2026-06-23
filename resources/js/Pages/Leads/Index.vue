@@ -17,7 +17,7 @@ defineProps({
   <AppLayout>
     <div class="flex items-center justify-between my-6">
       <h1 class="text-2xl font-bold">Leads</h1>
-      <Button as-child>
+      <Button as-child variant="stone">
         <Link :href="route('leads.create')">New Lead</Link>
       </Button>
     </div>

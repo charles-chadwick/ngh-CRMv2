@@ -13,8 +13,7 @@
 import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import Avatar from "@/Components/Avatar.vue";
-import { Button } from "@/Components/UI/button/index.js";
-import { Pencil, Trash2 } from "lucide-vue-next"
+import EditRemoveActions from "@/Components/EditRemoveActions.vue";
 import { useDate } from "@/composables/useDate.js";
 
 const props = defineProps({
@@ -66,27 +65,11 @@ const is_own = computed(() => {
         </span>
       </span>
       <!-- Action buttons: only the author may edit/remove their own message. -->
-      <div v-if="editable && is_own">
-        <Button
-            aria-label="Edit"
-            size="icon-sm"
-            title="Edit"
-            variant="default"
-            @click="$emit('edit', message)"
-        >
-          <Pencil />
-        </Button>
-        <Button
-            aria-label="Remove"
-            class="text-destructive hover:text-destructive"
-            size="icon-sm"
-            title="Remove"
-            variant="ghost"
-            @click="$emit('remove', message)"
-        >
-          <Trash2 />
-        </Button>
-      </div>
+      <EditRemoveActions
+          v-if="editable && is_own"
+          @edit="$emit('edit', message)"
+          @remove="$emit('remove', message)"
+      />
     </div>
   </div>
 </template>
