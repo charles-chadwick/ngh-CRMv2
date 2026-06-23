@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Button } from '@/Components/UI/button/index.js'
-import { Card } from '@/Components/UI/card/index.js'
+import { Card, CardHeader, CardTitle, CardContent } from '@/Components/UI/card/index.js'
 import TaskItem from '@/Components/Tasks/TaskItem.vue'
 import TaskForm from '@/Components/Tasks/TaskForm.vue'
 import TaskCalendar from '@/Components/Tasks/TaskCalendar.vue'
@@ -25,6 +25,7 @@ const editing = ref(null)
 const confirm = useConfirm()
 
 const allTasks = () => [...props.overdue, ...props.due_today, ...props.upcoming]
+const totalOpen = computed(() => allTasks().length)
 
 const reschedule = ({ id, due_at }) => {
   const task = allTasks().find((t) => String(t.id) === String(id))
@@ -47,59 +48,101 @@ const onRangeChange = ({ start, end }) => {
 
 const onSaved = () => { showForm.value = false; editing.value = null }
 const startEdit = (task) => { editing.value = task; showForm.value = false; view.value = 'list' }
+const toggleForm = () => { showForm.value = !showForm.value; editing.value = null; view.value = 'list' }
 </script>
 
 <template>
   <AppLayout>
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h1 class="heading">My Activities</h1>
-        <div class="flex gap-2">
-          <Button variant="secondary" size="sm" @click="view = view === 'list' ? 'calendar' : 'list'">
-            {{ view === 'list' ? 'Calendar' : 'List' }}
-          </Button>
-          <Button size="sm" variant="stone" @click="showForm = !showForm; editing = null">New Task</Button>
+    <div class="space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 my-6">
+        <div>
+          <h1 class="text-2xl font-bold">My Activities</h1>
+          <p class="text-sm text-muted-foreground">
+            {{ totalOpen }} open {{ totalOpen === 1 ? 'task' : 'tasks' }}
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="inline-flex rounded-md border border-border p-0.5">
+            <button
+                type="button"
+                class="cursor-pointer rounded-sm px-3 py-1 text-sm font-semibold transition-colors"
+                :class="view === 'list' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'"
+                @click="view = 'list'"
+            >
+              List
+            </button>
+            <button
+                type="button"
+                class="cursor-pointer rounded-sm px-3 py-1 text-sm font-semibold transition-colors"
+                :class="view === 'calendar' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'"
+                @click="view = 'calendar'"
+            >
+              Calendar
+            </button>
+          </div>
+          <Button size="sm" variant="stone" @click="toggleForm">New Task</Button>
         </div>
       </div>
 
-      <TaskForm v-if="showForm" :types="types" @saved="onSaved" @cancel="showForm = false" />
+      <Card v-if="showForm">
+        <CardContent>
+          <TaskForm :types="types" @saved="onSaved" @cancel="showForm = false" />
+        </CardContent>
+      </Card>
 
-      <div v-if="view === 'list'" class="space-y-6">
-        <section v-if="overdue.length">
-          <h2 class="mb-2 font-bold text-destructive">Overdue</h2>
-          <div class="space-y-2">
+      <div v-if="view === 'list'" class="grid gap-6 lg:grid-cols-2">
+        <Card v-if="overdue.length" class="lg:col-span-2">
+          <CardHeader class="border-b border-b-destructive [.border-b]:mx-4">
+            <CardTitle class="flex items-center gap-2 text-destructive">
+              Overdue
+              <span class="rounded-full bg-destructive px-2 py-0.5 text-xs font-bold text-white">{{ overdue.length }}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent class="space-y-2">
             <template v-for="t in overdue" :key="t.id">
               <TaskForm v-if="editing && editing.id === t.id" :task="t" :types="types" @saved="onSaved" @cancel="editing = null" />
               <TaskItem v-else :task="t" @remove="remove" @edit="startEdit" />
             </template>
-          </div>
-        </section>
+          </CardContent>
+        </Card>
 
-        <section>
-          <h2 class="mb-2 font-bold">Due Today</h2>
-          <div class="space-y-2">
+        <Card>
+          <CardHeader class="border-b border-b-primary [.border-b]:mx-4">
+            <CardTitle class="flex items-center gap-2">
+              Due Today
+              <span class="rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">{{ due_today.length }}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent class="space-y-2">
             <template v-for="t in due_today" :key="t.id">
               <TaskForm v-if="editing && editing.id === t.id" :task="t" :types="types" @saved="onSaved" @cancel="editing = null" />
               <TaskItem v-else :task="t" @remove="remove" @edit="startEdit" />
             </template>
-          </div>
-          <p v-if="!due_today.length" class="text-sm text-muted-foreground">Nothing due today.</p>
-        </section>
+            <p v-if="!due_today.length" class="text-sm text-muted-foreground">Nothing due today.</p>
+          </CardContent>
+        </Card>
 
-        <section>
-          <h2 class="mb-2 font-bold">Upcoming</h2>
-          <div class="space-y-2">
+        <Card>
+          <CardHeader class="border-b border-b-primary [.border-b]:mx-4">
+            <CardTitle class="flex items-center gap-2">
+              Upcoming
+              <span class="rounded-full bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">{{ upcoming.length }}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent class="space-y-2">
             <template v-for="t in upcoming" :key="t.id">
               <TaskForm v-if="editing && editing.id === t.id" :task="t" :types="types" @saved="onSaved" @cancel="editing = null" />
               <TaskItem v-else :task="t" @remove="remove" @edit="startEdit" />
             </template>
-          </div>
-          <p v-if="!upcoming.length" class="text-sm text-muted-foreground">Nothing upcoming.</p>
-        </section>
+            <p v-if="!upcoming.length" class="text-sm text-muted-foreground">Nothing upcoming.</p>
+          </CardContent>
+        </Card>
       </div>
 
-      <Card v-else class="p-4">
-        <TaskCalendar :events="calendar" @reschedule="reschedule" @range-change="onRangeChange" />
+      <Card v-else>
+        <CardContent>
+          <TaskCalendar :events="calendar" @reschedule="reschedule" @range-change="onRangeChange" />
+        </CardContent>
       </Card>
     </div>
   </AppLayout>
