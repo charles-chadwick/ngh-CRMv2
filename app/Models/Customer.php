@@ -30,6 +30,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
     'first_name',
     'last_name',
     'suffix',
+    'date_of_birth',
     'email',
     'password',
     'company_id',
@@ -51,6 +52,7 @@ class Customer extends Authenticatable implements HasMedia
     protected function casts(): array
     {
         return [
+            'date_of_birth' => 'date',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

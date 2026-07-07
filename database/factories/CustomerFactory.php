@@ -31,6 +31,7 @@ class CustomerFactory extends Factory
         return [
             'first_name' => $first_name,
             'last_name' => $last_name,
+            'date_of_birth' => fake()->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d'),
             'email' => $email,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
