@@ -1,58 +1,209 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# NGH CRM v2
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A customer relationship management (CRM) application built with Laravel and Inertia.js + Vue 3. It manages companies, customers, contacts, leads, tasks, notes, and messages, with real-time updates powered by Laravel Reverb.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+NGH CRM v2 is a server-driven single-page application. The backend is a Laravel 13 API rendered through Inertia, and the frontend is a Vue 3 SPA styled with Tailwind CSS v4. Core domain entities include:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Companies & Company Types** — organizations you do business with
+- **Customers & Customer Roles** — people associated with companies
+- **Contacts** — points of contact
+- **Leads** — sales opportunities in the pipeline
+- **Tasks** — scheduled work, surfaced on a FullCalendar view
+- **Notes & Messages** — activity and communication history
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Tech Stack
 
-## Learning Laravel
+| Layer | Technology |
+|-------|------------|
+| Backend | PHP 8.4, Laravel 13 |
+| Frontend | Inertia.js v3, Vue 3, Tailwind CSS v4, Vite |
+| Real-time | Laravel Reverb (WebSockets) via Laravel Echo |
+| Database | MariaDB / MySQL |
+| Architecture | [lorisleiva/laravel-actions](https://laravelactions.com/) (thin controllers, logic in Actions) |
+| Key packages | Spatie Permission, Spatie Activitylog, Spatie Medialibrary, Ziggy |
+| Testing | Pest v4 |
+| Formatting | Laravel Pint |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requirements
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Before you begin, make sure you have the following installed:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- **PHP 8.3+** (8.4 recommended) with common extensions: `mbstring`, `xml`, `curl`, `pdo_mysql`, `bcmath`, `gd`, `zip`
+- **Composer 2**
+- **Node.js 20+** (24 recommended) and **npm**
+- **MariaDB 10.6+** or **MySQL 8+**
+- **Git**
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Local Setup
+
+Clone the repository first, then follow the platform-specific instructions below.
+
+### 1. Clone the project
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone git@github.com:charles-chadwick/ngh-CRMv2.git ngh-CRMv2
+cd ngh-CRMv2
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install prerequisites
 
-## Contributing
+<details>
+<summary><strong>Linux (Ubuntu / Debian)</strong></summary>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# PHP 8.4 + extensions (via ondrej/php PPA)
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install -y php8.4 php8.4-cli php8.4-mbstring php8.4-xml \
+  php8.4-curl php8.4-mysql php8.4-bcmath php8.4-gd php8.4-zip unzip
 
-## Code of Conduct
+# Composer
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Node.js 24 (via nvm)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+nvm install 24
 
-## Security Vulnerabilities
+# MariaDB
+sudo apt install -y mariadb-server
+sudo systemctl start mariadb
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+</details>
+
+<details>
+<summary><strong>macOS (Homebrew)</strong></summary>
+
+```bash
+# Install Homebrew if you don't have it
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# PHP, Composer, Node, MariaDB
+brew install php@8.4 composer node mariadb
+
+# Start the database
+brew services start mariadb
+```
+
+</details>
+
+<details>
+<summary><strong>Windows</strong></summary>
+
+The smoothest path on Windows is **WSL2** (Windows Subsystem for Linux) — install Ubuntu from the Microsoft Store and follow the Linux instructions above.
+
+To run natively on Windows instead, install [Laravel Herd](https://herd.laravel.com/windows) (bundles PHP, Composer, and Node), plus a MariaDB/MySQL server such as [MariaDB for Windows](https://mariadb.org/download/) or [XAMPP](https://www.apachefriends.org/). Run the commands below in **PowerShell** or the Herd terminal.
+
+```powershell
+# With Herd installed, PHP, Composer and Node are already available.
+# Install Node separately if needed: https://nodejs.org (LTS)
+```
+
+</details>
+
+### 3. Create the database
+
+Create an empty database named `ngh_crmv2` (the default in `.env.example`):
+
+```bash
+# Linux / macOS
+sudo mysql -e "CREATE DATABASE ngh_crmv2 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+```powershell
+# Windows (adjust path to mysql.exe as needed)
+mysql -u root -e "CREATE DATABASE ngh_crmv2 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+Update `DB_USERNAME` / `DB_PASSWORD` in your `.env` (created in the next step) if your database credentials differ from the defaults.
+
+### 4. Install dependencies and configure
+
+Install PHP and JavaScript dependencies, copy the environment file, generate the app key, migrate, and build the frontend:
+
+```bash
+composer install
+cp .env.example .env      # Windows PowerShell: copy .env.example .env
+php artisan key:generate
+php artisan migrate
+npm install
+npm run build
+```
+
+Or run the bundled shortcut, which does all of the above in one step:
+
+```bash
+composer setup
+```
+
+### 5. Seed sample data (optional)
+
+Populate the database with sample companies, customers, leads, tasks, and users:
+
+```bash
+php artisan db:seed
+```
+
+> **Note:** Activity-log causers on seeded records only populate when seeders are run individually rather than through the full `db:seed`.
+
+---
+
+## Running the App
+
+Start the full development environment (app server, queue worker, log viewer, and Vite) with a single command:
+
+```bash
+composer dev
+```
+
+This runs, concurrently:
+
+- `php artisan serve` — the application at http://localhost:8000
+- `php artisan queue:listen` — background job processing
+- `php artisan pail` — live log tailing
+- `npm run dev` — the Vite dev server with hot module replacement
+
+### Real-time broadcasting (Reverb)
+
+If you're working with real-time features, start the WebSocket server in a separate terminal:
+
+```bash
+php artisan reverb:start
+```
+
+Set the `REVERB_APP_ID`, `REVERB_APP_KEY`, and `REVERB_APP_SECRET` values in your `.env` first.
+
+---
+
+## Testing & Code Style
+
+```bash
+# Run the test suite (Pest)
+php artisan test --compact
+
+# Run a single test file or filter
+php artisan test --compact --filter=CustomerTest
+
+# Format PHP to the project standard (run before committing)
+vendor/bin/pint
+```
+
+---
+
+## Useful Commands
+
+| Command | Description |
+|---------|-------------|
+| `php artisan migrate:fresh --seed` | Rebuild the database from scratch with sample data |
+| `php artisan route:list --except-vendor` | List application routes |
+| `npm run build` | Build production frontend assets |
+| `php artisan tinker` | Interactive REPL in application context |
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is proprietary. All rights reserved.

@@ -10,6 +10,7 @@ use App\Models\Concerns\WithNotes;
 use App\Models\Concerns\WithSearch;
 use App\Models\Concerns\WithSort;
 use App\Models\Concerns\WithTasks;
+use Carbon\Carbon;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -117,5 +118,14 @@ class Customer extends Authenticatable implements HasMedia
     public function getInitialsAttribute(): string
     {
         return $this->first_name[0].$this->last_name[0];
+    }
+
+    public function scopeWhereBirthdayThisWeek($query) : void
+    {
+
+        $dates = Carbon::now()->startofWeek()->daysUntil(Carbon::now()->endofweek())
+            ->map(fn ($day) => Carbon::parse($day)->format('m-d'));
+
+        $query->whereRaw('date_format(date_of_birth, "%m-%d") in (?, ?, ?, ?, ?, ?, ?)', iterator_to_array($dates));
     }
 }

@@ -9,12 +9,14 @@ import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/composables/useViewMode.js";
+import { useDate } from "@/composables/useDate.js";
 
 defineProps ( {
   customers: Object
 } )
 
 const { view, grid_class } = useViewMode('customers_view')
+const { dateString } = useDate()
 </script>
 
 <template>
@@ -47,7 +49,7 @@ const { view, grid_class } = useViewMode('customers_view')
       >
         <CardHeader class="border-b border-b-primary [.border-b]:mx-4">
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
+            <div class="flex items-start gap-2">
               <Avatar
                   :name="customer.full_name"
                   :src="customer.avatar_url"
@@ -58,22 +60,21 @@ const { view, grid_class } = useViewMode('customers_view')
                   class="hover:text-primary"
               >
                 <div class="font-bold">{{ customer.full_name }}</div>
-                <div class="text-sm text-muted-foreground">{{ customer.role?.name }}</div>
+                <p>{{ dateString(customer.date_of_birth) }}</p>
               </Link>
             </div>
-            <div class="text-sm text-muted-foreground text-right">
-              <Link
-                  v-if="customer.company"
-                  :href="route('companies.show', customer.company.id)"
-                  class="text-sm text-muted-foreground hover:text-primary"
-              >
-                {{ customer.company.title }}
-              </Link>
-            </div>
+
           </div>
         </CardHeader>
         <CardContent>
-          <p>{{ customer.title || '—' }}</p>
+          <div class="text-sm text-muted-foreground">{{ customer.role?.name }}</div>
+          <Link
+              v-if="customer.company"
+              :href="route('companies.show', customer.company.id)"
+              class="text-sm text-muted-foreground hover:text-primary"
+          >
+            {{ customer.company.title }}
+          </Link>
         </CardContent>
       </Card>
     </div>
