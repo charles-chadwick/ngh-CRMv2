@@ -63,20 +63,16 @@ const showTaskForm = ref(false)
         <Link :href="route('companies.edit', company.id)"><Pencil /></Link>
       </Button>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <div class="w-full">
         <h2 class="heading">Customers</h2>
         <Card class="px-6">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <CustomerList :customers="customers.data" />
-          </div>
         </Card>
         <Pagination :paginator="customers" />
-
       </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-
       <div class="flex flex-col">
         <div class="flex items-center justify-between">
           <h2 class="heading">Notes</h2>
@@ -86,7 +82,6 @@ const showTaskForm = ref(false)
           />
         </div>
         <Card class="px-6 flex-1 flex flex-col">
-
           <NotesSection
               v-model:show-form="showNoteForm"
               notable_type="company"

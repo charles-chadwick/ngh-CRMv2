@@ -9,6 +9,7 @@ use App\Models\Contact;
 use App\Models\Customer;
 use App\Models\CustomerRole;
 use App\Models\Note;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -52,6 +53,13 @@ class CustomerController extends Controller
         $customer->update($validated);
 
         return redirect()->route('customers.show', $customer);
+    }
+
+    public function destroy(Customer $customer): RedirectResponse
+    {
+        $customer->delete();
+
+        return back();
     }
 
     public function show(Customer $customer)
