@@ -2,12 +2,14 @@
   UserMenu
   --------
   Navbar control for the authenticated user. Shows the current user's avatar and
-  name; opening it reveals a Log out action that POSTs to the logout route.
+  name; opening it reveals the theme picker and a Log out action that POSTs to
+  the logout route.
 -->
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import Avatar from "@/Components/Avatar.vue";
+import ThemeToggle from "@/Components/ThemeToggle.vue";
 import { ChevronDown, LogOut } from "lucide-vue-next"
 
 const page = usePage()
@@ -53,8 +55,11 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocumentClick))
 
     <div
         v-if="open"
-        class="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-border bg-popover p-2 text-popover-foreground shadow-lg"
+        class="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-border bg-popover p-2 text-popover-foreground shadow-lg"
     >
+      <div class="px-2 py-1 text-xs font-bold text-muted-foreground">Theme</div>
+      <ThemeToggle class="mb-2" />
+
       <button
           type="button"
           class="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm hover:bg-muted"

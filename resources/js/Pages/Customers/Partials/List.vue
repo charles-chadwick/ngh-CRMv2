@@ -24,7 +24,7 @@ defineProps ( { customers: Object } )
               size="sm"
           />
         </Link>
-        <div class="ml-6  text-stone-800">
+        <div class="ml-6  text-foreground">
           <p class="font-bold">
             <Link
                 :href="route('customers.show', customer.id)"

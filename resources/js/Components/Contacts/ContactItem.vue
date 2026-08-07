@@ -40,7 +40,7 @@ defineEmits(["edit", "remove", "setPrimary"]);
     <ContactCard :contact="contact" />
     <hr class="my-2" />
     <!-- Footer: attribution on the left, action buttons on the right. -->
-    <div class="flex flex-col sm:flex-row p-4 justify-between items-center bg-stone-100">
+    <div class="flex flex-col sm:flex-row p-4 justify-between items-center bg-muted">
       <CreatedBy
           :date="contact.created_at"
           :user="contact.creation_activity?.causer"

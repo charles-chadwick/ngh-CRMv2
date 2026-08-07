@@ -16,6 +16,7 @@
 }
 
 :root {
+    color-scheme: light;
     --radius: 0.45rem;
     --background: oklch(0.949 0 0);
     --foreground: oklch(0.147 0.004 49.25);
@@ -51,6 +52,7 @@
 }
 
 .dark {
+    color-scheme: dark;
     --background: oklch(0.147 0.004 49.25);
     --foreground: oklch(0.985 0.001 106.423);
     --card: oklch(0.216 0.006 56.043);
@@ -145,15 +147,15 @@
 }
 
 .form-input {
-    @apply rounded border px-4 py-2 border-stone-300 bg-stone-50 text-stone-900;
+    @apply rounded border px-4 py-2 border-border bg-card text-card-foreground;
 }
 
 .form-input:focus {
-    @apply bg-yellow-50;
+    @apply bg-accent;
 }
 
 .form-label {
-    @apply font-bold text-stone-800 my-2 block;
+    @apply font-bold text-foreground my-2 block;
 }
 
 .note-content :where(ul) { list-style: disc; padding-left: 1.25rem; }

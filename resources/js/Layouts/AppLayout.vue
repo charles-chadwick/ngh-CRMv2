@@ -8,7 +8,7 @@ import ConfirmDialog from "@/Components/UI/ConfirmDialog.vue";
 
 <template>
   <Head>nghCRM-v2</Head>
-  <nav class="navbar navbar-expand-lg bg-stone-800 text-primary-foreground py-6 border-b-2 border-b-primary-foreground/30  mb-4">
+  <nav class="navbar navbar-expand-lg bg-stone-800 dark:bg-card text-primary-foreground dark:text-card-foreground py-6 border-b-2 border-b-primary-foreground/30 dark:border-b-border  mb-4">
     <div class="flex px-32 mx-auto ">
       <div class="flex flex-row items-center">
         <svg

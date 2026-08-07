@@ -20,7 +20,7 @@ const submit = () => {
 
 <template>
   <Head>Log in · nghCRM-v2</Head>
-  <div class="flex min-h-screen items-center justify-center bg-stone-800 px-4">
+  <div class="flex min-h-screen items-center justify-center bg-stone-800 dark:bg-background px-4">
     <Card class="w-full max-w-sm p-8">
       <div class="mb-8 flex flex-col items-center gap-3">
         <svg class="h-8 w-auto fill-current text-primary" viewBox="0 0 20 20">

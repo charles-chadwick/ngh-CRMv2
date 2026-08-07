@@ -49,7 +49,7 @@ const is_own = computed(() => {
     />
     <hr class="my-2" />
     <!-- Footer: author attribution, matching the note card footer styling. -->
-    <div class="flex flex-col sm:flex-row p-4 justify-between items-center bg-stone-100">
+    <div class="flex flex-col sm:flex-row p-4 justify-between items-center bg-muted">
       <span class="flex items-center gap-1.5 text-sm text-muted-foreground">
         <Avatar
             :name="author_name"
