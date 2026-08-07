@@ -50,12 +50,12 @@ class Customer extends Authenticatable implements HasMedia
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts() : array
     {
         return [
-            'date_of_birth' => 'date',
+            'date_of_birth'     => 'date',
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
@@ -64,17 +64,21 @@ class Customer extends Authenticatable implements HasMedia
         'initials',
     ];
 
-    public function company(): BelongsTo
+    public function company() : BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function role(): BelongsTo
+    public function role() : BelongsTo
     {
         return $this->belongsTo(CustomerRole::class, 'customer_role_id');
     }
 
-    public function scopeWithSearch($query, $search): void
+    public function titles() {
+        return $this->belongsToMany(Title::class);
+    }
+
+    public function scopeWithSearch($query, $search) : void
     {
         $this->search($query, $search, [
             'first_name_normalized',
@@ -83,7 +87,7 @@ class Customer extends Authenticatable implements HasMedia
         ]);
     }
 
-    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction): void
+    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction) : void
     {
         $this->sort($query, $sort_by, $sort_direction, [
             'first_name',
@@ -92,7 +96,7 @@ class Customer extends Authenticatable implements HasMedia
         ], 'last_name');
     }
 
-    public function registerMediaCollections(): void
+    public function registerMediaCollections() : void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
@@ -103,19 +107,19 @@ class Customer extends Authenticatable implements HasMedia
             ]);
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function registerMediaConversions(?Media $media = null) : void
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 192, 192)
             ->nonQueued();
     }
 
-    public function getFullNameAttribute(): string
+    public function getFullNameAttribute() : string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function getInitialsAttribute(): string
+    public function getInitialsAttribute() : string
     {
         return $this->first_name[0].$this->last_name[0];
     }
@@ -123,8 +127,12 @@ class Customer extends Authenticatable implements HasMedia
     public function scopeWhereBirthdayThisWeek($query) : void
     {
 
-        $dates = Carbon::now()->startofWeek()->daysUntil(Carbon::now()->endofweek())
-            ->map(fn ($day) => Carbon::parse($day)->format('m-d'));
+        $dates = Carbon::now()
+            ->startofWeek()
+            ->daysUntil(Carbon::now()
+                ->endofweek())
+            ->map(fn($day) => Carbon::parse($day)
+                ->format('m-d'));
 
         $query->whereRaw('date_format(date_of_birth, "%m-%d") in (?, ?, ?, ?, ?, ?, ?)', iterator_to_array($dates));
     }
