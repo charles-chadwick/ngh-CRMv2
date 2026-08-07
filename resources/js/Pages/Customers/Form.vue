@@ -5,19 +5,22 @@ import { Button } from "@/Components/UI/button/index.js";
 import { Label } from "@/Components/UI/label/index.js";
 import AvatarUpload from "@/Components/AvatarUpload.vue";
 import { useForm } from '@inertiajs/vue3'
+import { computed, nextTick, ref } from 'vue'
+import { X } from "lucide-vue-next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/UI/select/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 
 const props = defineProps ( {
   customer: Object,
   roles: { type: Array, default: () => [] },
+  titles: { type: Array, default: () => [] },
 } );
 
 const form = useForm ( {
   customer_role_id: props.customer?.customer_role_id || null,
   prefix: props.customer?.prefix || '',
   suffix: props.customer?.suffix || '',
-  title: props.customer?.title || '',
+  titles: props.customer?.titles?.map ( title => title.id ) || [],
   first_name: props.customer?.first_name || '',
   last_name: props.customer?.last_name || '',
   email: props.customer?.email || '',
@@ -25,19 +28,54 @@ const form = useForm ( {
   password_confirmation: '',
 } );
 
+// Drives the dropdown itself. Each pick is moved into form.titles as a badge,
+// then this resets so the trigger is ready for the next one.
+const picked_title = ref ( null );
+
+/** The picked titles, in the order they were added, for the badge list. */
+const selected_titles = computed ( () => form.titles
+    .map ( id => props.titles.find ( title => title.id === id ) )
+    .filter ( Boolean ) );
+
+/** Only offer titles the customer doesn't already have. */
+const available_titles = computed ( () => props.titles
+    .filter ( title => !form.titles.includes ( title.id ) ) );
+
+const addTitle = ( id ) => {
+  if ( id && !form.titles.includes ( id ) ) {
+    form.titles.push ( id );
+  }
+
+  nextTick ( () => picked_title.value = null );
+};
+
+const removeTitle = ( id ) => {
+  form.titles = form.titles.filter ( title_id => title_id !== id );
+};
+
 const submit = () => {
-  form.put ( route ( 'customers.update', props.customer.id ) );
+  if ( props.customer ) {
+    form.put ( route ( 'customers.update', props.customer.id ) );
+
+    return;
+  }
+
+  form.post ( route ( 'customers.store' ) );
 };
 </script>
 
 <template>
   <AppLayout>
     <div class="flex items-center justify-between mb-6">
-      <div>
+      <div v-if="props.customer">
         <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
         <p class="text-muted-foreground">{{ customer.email }}</p>
         <p class="text-muted-foreground">{{ customer.role?.name }}</p>
       </div>
+      <h1
+          v-else
+          class="text-2xl font-bold"
+      >New Customer</h1>
 
     </div>
     <Card class="px-6">
@@ -162,22 +200,59 @@ const submit = () => {
                   </p>
                 </div>
 
-                <!-- Title -->
+                <!-- Titles -->
                 <div class="space-y-2">
-                  <Label for="title">Title</Label>
-                  <Input
-                      id="title"
-                      type="text"
-                      placeholder="Title"
-                      v-model="form.title"
+                  <Label for="titles">Titles</Label>
+                  <Select
+                      v-model="picked_title"
+                      :disabled="available_titles.length === 0"
+                      @update:model-value="addTitle"
                   >
-
-                  </Input>
+                    <SelectTrigger
+                        id="titles"
+                        class="w-full"
+                    >
+                      <span class="text-muted-foreground">
+                        {{ available_titles.length ? 'Add a title' : 'All titles added' }}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem
+                          v-for="title in available_titles"
+                          :key="title.id"
+                          :value="title.id"
+                      >
+                        {{ title.title }}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <!-- One dismissable badge per picked title. -->
+                  <div
+                      v-if="selected_titles.length"
+                      class="flex flex-wrap gap-2"
+                  >
+                    <span
+                        v-for="title in selected_titles"
+                        :key="title.id"
+                        class="inline-flex items-center gap-1 rounded-full bg-secondary py-0.5 pr-1 pl-2.5 text-xs font-bold text-secondary-foreground"
+                    >
+                      {{ title.title }}
+                      <button
+                          type="button"
+                          class="cursor-pointer rounded-full p-0.5 hover:bg-red-800 hover:text-white"
+                          :aria-label="`Remove ${title.title}`"
+                          :title="`Remove ${title.title}`"
+                          @click="removeTitle(title.id)"
+                      >
+                        <X class="size-3" />
+                      </button>
+                    </span>
+                  </div>
                   <p
-                      v-if="form.errors.title"
+                      v-if="form.errors.titles"
                       class="text-sm text-destructive"
                   >
-                    {{ form.errors.title }}
+                    {{ form.errors.titles }}
                   </p>
                 </div>
               </div>
@@ -212,7 +287,10 @@ const submit = () => {
                 />
               </div>
             </div>
-            <p class="text-sm text-muted-foreground">
+            <p
+                v-if="props.customer"
+                class="text-sm text-muted-foreground"
+            >
               Leave the password fields blank to keep the current password.
             </p>
           </div>
@@ -230,7 +308,7 @@ const submit = () => {
           <Button
               type="submit"
               :disabled="form.processing"
-          >Save Customer
+          >{{ props.customer ? 'Save Customer' : 'Create Customer' }}
           </Button>
         </div>
       </form>

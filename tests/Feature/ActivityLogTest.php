@@ -53,10 +53,10 @@ it('exposes the most recent updater as the update activity causer', function () 
     $customer = Customer::factory()->create();
 
     $this->actingAs($creator);
-    $customer->update(['title' => 'First edit']);
+    $customer->update(['suffix' => 'First edit']);
 
     $this->actingAs($editor);
-    $customer->update(['title' => 'Latest edit']);
+    $customer->update(['suffix' => 'Latest edit']);
 
     expect($customer->updateActivity->event)->toBe('updated')
         ->and($customer->updateActivity->causer->is($editor))->toBeTrue();
@@ -67,7 +67,7 @@ it('exposes the update activity and causer on the customer show page', function 
     $this->actingAs($user);
 
     $customer = Customer::factory()->create();
-    $customer->update(['title' => 'Edited title']);
+    $customer->update(['suffix' => 'Edited']);
 
     $this->get(route('customers.show', $customer))
         ->assertOk()

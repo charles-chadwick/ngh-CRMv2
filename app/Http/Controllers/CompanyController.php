@@ -37,7 +37,7 @@ class CompanyController extends Controller
 
         $customers = $company->customers()
             ->withAvatar()
-            ->with('role:id,name')
+            ->with('role:id,name', 'titles:id,title')
             ->paginate(5, ['*'], 'customers_page')
             ->withQueryString();
 

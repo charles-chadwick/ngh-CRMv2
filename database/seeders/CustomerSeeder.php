@@ -6,6 +6,7 @@ use App\Enum\UserRole;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\CustomerRole;
+use App\Models\Title;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Activitylog\Support\CauserResolver;
@@ -17,44 +18,6 @@ use function fake;
 class CustomerSeeder extends Seeder
 {
     /**
-     * Job titles randomly assigned to seeded customers.
-     *
-     * @var list<string>
-     */
-    private array $jobTitles = [
-        'Chief Executive Officer',
-        'Chief Operating Officer',
-        'Chief Financial Officer',
-        'Chief Technology Officer',
-        'Chief Marketing Officer',
-        'VP of Sales',
-        'VP of Engineering',
-        'Director of Operations',
-        'Director of Marketing',
-        'Product Manager',
-        'Project Manager',
-        'Account Manager',
-        'Sales Representative',
-        'Marketing Specialist',
-        'Software Engineer',
-        'Senior Software Engineer',
-        'Lead Developer',
-        'Data Analyst',
-        'Business Analyst',
-        'UX Designer',
-        'Customer Success Manager',
-        'Support Specialist',
-        'Operations Coordinator',
-        'Human Resources Manager',
-        'Office Administrator',
-        'Consultant',
-        'Procurement Officer',
-        'Logistics Coordinator',
-        'Quality Assurance Engineer',
-        'Founder',
-    ];
-
-    /**
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
@@ -62,6 +25,7 @@ class CustomerSeeder extends Seeder
     {
         $companies = Company::all();
         $roles = CustomerRole::all();
+        $titles = Title::all();
 
         echo "\nAdding Customers\n";
 
@@ -104,7 +68,6 @@ class CustomerSeeder extends Seeder
 
             $customer = Customer::factory()
                 ->create([
-                    'title' => fake()->randomElement($this->jobTitles),
                     'first_name' => $first_name,
                     'last_name' => $last_name,
                     'email' => str($first_name.'.'.$last_name.rand(1, 9999).'@example.com')
@@ -115,6 +78,8 @@ class CustomerSeeder extends Seeder
                     'created_at' => $created_at,
                     'updated_at' => $created_at,
                 ]);
+
+            $customer->titles()->attach($titles->random(rand(1, 3))->pluck('id'));
 
             $customer->addMedia(RickAndMortyCharacters::avatarPath($character['id']))
                 ->preservingOriginal()

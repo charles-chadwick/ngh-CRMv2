@@ -32,10 +32,13 @@ class CustomerRequest extends FormRequest
                 'integer',
                 'exists:companies,id',
             ],
-            'title' => [
+            'titles' => [
                 'nullable',
-                'string',
-                'max:255',
+                'array',
+            ],
+            'titles.*' => [
+                'integer',
+                'exists:titles,id',
             ],
             'customer_role_id' => [
                 'nullable',

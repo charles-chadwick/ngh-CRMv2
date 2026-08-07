@@ -9,6 +9,7 @@ use App\Models\Contact;
 use App\Models\Customer;
 use App\Models\CustomerRole;
 use App\Models\Note;
+use App\Models\Title;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
@@ -20,6 +21,7 @@ class CustomerController extends Controller
             ->with([
                 'company' => fn ($query) => $query->select('id', 'title')->withAvatar(),
                 'role:id,name',
+                'titles:id,title',
             ])
             ->withAvatar()
             ->withSearch(request('search'))
@@ -32,17 +34,36 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('Customers/Form', [
+            'roles' => CustomerRole::orderBy('name')->get(['id', 'name']),
+            'titles' => Title::orderBy('title')->get(['id', 'title']),
+        ]);
+    }
+
+    public function store(CustomerRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $customer = Customer::create($validated);
+        $customer->titles()->sync($validated['titles'] ?? []);
+
+        return redirect()->route('customers.show', $customer);
+    }
+
     public function edit(Customer $customer)
     {
-        $customer->load('company:id,title', 'role:id,name');
+        $customer->load('company:id,title', 'role:id,name', 'titles:id,title');
 
         return Inertia::render('Customers/Form', [
             'customer' => $customer,
             'roles' => CustomerRole::orderBy('name')->get(['id', 'name']),
+            'titles' => Title::orderBy('title')->get(['id', 'title']),
         ]);
     }
 
-    public function update(CustomerRequest $request, Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -51,6 +72,7 @@ class CustomerController extends Controller
         }
 
         $customer->update($validated);
+        $customer->titles()->sync($validated['titles'] ?? []);
 
         return redirect()->route('customers.show', $customer);
     }
@@ -67,6 +89,7 @@ class CustomerController extends Controller
         $customer->load([
             'company:id,title',
             'role:id,name',
+            'titles:id,title',
             'media' => $customer->avatarMediaConstraint(),
             'creationActivity.causer',
             'updateActivity.causer',

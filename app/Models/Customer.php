@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,7 +27,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Fillable([
     'customer_role_id',
-    'title',
     'prefix',
     'first_name',
     'last_name',
@@ -50,35 +50,48 @@ class Customer extends Authenticatable implements HasMedia
      *
      * @return array<string, string>
      */
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
-            'date_of_birth'     => 'date',
+            'date_of_birth' => 'date',
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
     protected $appends = [
         'full_name',
         'initials',
+        'title',
     ];
 
-    public function company() : BelongsTo
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function role() : BelongsTo
+    public function role(): BelongsTo
     {
         return $this->belongsTo(CustomerRole::class, 'customer_role_id');
     }
 
-    public function titles() {
-        return $this->belongsToMany(Title::class);
+    public function titles(): BelongsToMany
+    {
+        return $this->belongsToMany(Title::class, 'customer_titles')
+            ->withTimestamps();
     }
 
-    public function scopeWithSearch($query, $search) : void
+    /**
+     * The customer's titles as a single display string, e.g. "Title 1 / Title 2".
+     */
+    public function getTitleAttribute(): string
+    {
+        return $this->titles
+            ->pluck('title')
+            ->implode(' / ');
+    }
+
+    public function scopeWithSearch($query, $search): void
     {
         $this->search($query, $search, [
             'first_name_normalized',
@@ -87,7 +100,7 @@ class Customer extends Authenticatable implements HasMedia
         ]);
     }
 
-    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction) : void
+    public function scopeWithSort($query, ?string $sort_by, ?string $sort_direction): void
     {
         $this->sort($query, $sort_by, $sort_direction, [
             'first_name',
@@ -96,7 +109,7 @@ class Customer extends Authenticatable implements HasMedia
         ], 'last_name');
     }
 
-    public function registerMediaCollections() : void
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
@@ -107,31 +120,31 @@ class Customer extends Authenticatable implements HasMedia
             ]);
     }
 
-    public function registerMediaConversions(?Media $media = null) : void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 192, 192)
             ->nonQueued();
     }
 
-    public function getFullNameAttribute() : string
+    public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function getInitialsAttribute() : string
+    public function getInitialsAttribute(): string
     {
         return $this->first_name[0].$this->last_name[0];
     }
 
-    public function scopeWhereBirthdayThisWeek($query) : void
+    public function scopeWhereBirthdayThisWeek($query): void
     {
 
         $dates = Carbon::now()
             ->startofWeek()
             ->daysUntil(Carbon::now()
                 ->endofweek())
-            ->map(fn($day) => Carbon::parse($day)
+            ->map(fn ($day) => Carbon::parse($day)
                 ->format('m-d'));
 
         $query->whereRaw('date_format(date_of_birth, "%m-%d") in (?, ?, ?, ?, ?, ?, ?)', iterator_to_array($dates));

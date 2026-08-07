@@ -71,7 +71,7 @@ const showTaskForm = ref(false)
           <dd>{{ customer.role?.name || '—' }}</dd>
         </div>
         <div>
-          <dt class="text-sm text-muted-foreground">Title</dt>
+          <dt class="text-sm text-muted-foreground">Titles</dt>
           <dd>{{ customer.title || '—' }}</dd>
         </div>
         <div>

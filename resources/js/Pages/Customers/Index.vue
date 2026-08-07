@@ -6,6 +6,7 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Pagination from "../../Components/Pagination.vue";
 import Search from "../../Components/Search.vue";
 import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
+import { Button } from "@/Components/UI/button/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/composables/useViewMode.js";
@@ -21,7 +22,12 @@ const { dateString } = useDate()
 
 <template>
   <AppLayout>
-    <h1 class="text-2xl font-bold my-6">Customers</h1>
+    <div class="flex items-center justify-between my-6">
+      <h1 class="text-2xl font-bold">Customers</h1>
+      <Button as-child variant="stone">
+        <Link :href="route('customers.create')">New Customer</Link>
+      </Button>
+    </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
       <Search
           :route="route('customers.index')"
