@@ -1,0 +1,35 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+  # Allows a re-deploy of the current main from the Actions tab without a new commit.
+  workflow_dispatch:
+
+# If two pushes land close together, let the first finish rather than running two
+# deploys against the same directory at once.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          # Host key pinned rather than auto-accepted, so a hijacked DNS/IP
+          # answer cannot silently receive the deploy key.
+          echo "${{ secrets.SSH_HOST }} ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINDPhCWmD/V9eDz1qcjMQ1FDo2AzUffn1s6dO6/gQruj" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Run deploy script on server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+              -o IdentitiesOnly=yes \
+              -o BatchMode=yes \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+              'bash /var/www/nghcrm.net/deploy.sh'
