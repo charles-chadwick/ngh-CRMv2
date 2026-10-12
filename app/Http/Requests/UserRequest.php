@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enum\UserRole;
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,7 +15,11 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $user = $this->route('user');
+
+        return $user === null
+            ? $this->user()->can('create', User::class)
+            : $this->user()->can('update', $user);
     }
 
     /**
@@ -30,7 +35,8 @@ class UserRequest extends FormRequest
         return [
             'role' => [
                 'required',
-                Rule::enum(UserRole::class),
+                Rule::enum(UserRole::class)
+                    ->only(UserRole::assignableBy($this->user()->role)),
             ],
             'first_name' => [
                 'required',

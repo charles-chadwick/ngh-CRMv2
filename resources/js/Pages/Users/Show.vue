@@ -9,6 +9,7 @@ import { Pencil } from "lucide-vue-next";
 
 defineProps ( {
   user: Object,
+  can_update_user: Boolean,
 } )
 </script>
 
@@ -32,6 +33,7 @@ defineProps ( {
       </div>
 
       <Button
+          v-if="can_update_user"
           as-child
           variant="stone"
           size="icon-sm"

@@ -9,11 +9,14 @@ import { Card, CardContent, CardHeader } from "@/Components/UI/card/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/composables/useViewMode.js";
+import { Button } from "@/Components/UI/button/index.js";
+import { Link } from "@inertiajs/vue3";
 
 const { diffForHumans, dateTimeString } = useDate ()
 
 defineProps ( {
-  users: Object
+  users: Object,
+  can_create_user: Boolean,
 } )
 
 const { view, grid_class } = useViewMode ( 'users_view' )
@@ -21,7 +24,16 @@ const { view, grid_class } = useViewMode ( 'users_view' )
 
 <template>
   <AppLayout>
-    <h1 class="text-2xl font-bold my-6">Users</h1>
+    <div class="flex items-center justify-between my-6">
+      <h1 class="text-2xl font-bold">Users</h1>
+      <Button
+          v-if="can_create_user"
+          as-child
+          variant="stone"
+      >
+        <Link :href="route('users.create')">New User</Link>
+      </Button>
+    </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
       <Search
           :route="route('users.index')"

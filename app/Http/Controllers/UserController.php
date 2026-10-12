@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Users\CreateUser;
 use App\Enum\UserRole;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -49,7 +51,25 @@ class UserController extends Controller
 
         return Inertia::render('Users/Index', [
             'users' => $users,
+            'can_create_user' => request()->user()->can('create', User::class),
         ]);
+    }
+
+    public function create(Request $request)
+    {
+        Gate::authorize('create', User::class);
+
+        return Inertia::render('Users/Form', [
+            'user' => null,
+            'roles' => UserRole::optionsAssignableBy($request->user()->role),
+        ]);
+    }
+
+    public function store(UserRequest $request)
+    {
+        $user = CreateUser::run($request->validated());
+
+        return redirect()->route('users.show', $user);
     }
 
     public function show(User $user)
@@ -57,16 +77,19 @@ class UserController extends Controller
 
         return Inertia::render('Users/Show', [
             'user' => $user,
+            'can_update_user' => request()->user()->can('update', $user),
         ]);
     }
 
-    public function edit(User $user)
+    public function edit(Request $request, User $user)
     {
+        Gate::authorize('update', $user);
+
         $user->load(['media' => $user->avatarMediaConstraint()]);
 
         return Inertia::render('Users/Form', [
             'user' => $user,
-            'roles' => UserRole::options(),
+            'roles' => UserRole::optionsAssignableBy($request->user()->role),
         ]);
     }
 

@@ -23,18 +23,26 @@ const form = useForm ( {
 } );
 
 const submit = () => {
-  form.put ( route ( 'users.update', props.user.id ) );
+  if ( props.user ) {
+    form.put ( route ( 'users.update', props.user.id ) );
+  } else {
+    form.post ( route ( 'users.store' ) );
+  }
 };
 </script>
 
 <template>
   <AppLayout>
     <div class="flex items-center justify-between mb-6">
-      <div>
+      <div v-if="user">
         <h1 class="text-2xl font-bold">{{ user.full_name }}</h1>
         <p class="text-muted-foreground">{{ user.email }}</p>
         <p class="text-muted-foreground">{{ user.role }}</p>
       </div>
+      <h1
+          v-else
+          class="text-2xl font-bold"
+      >New User</h1>
 
     </div>
     <Card class="px-6">
@@ -159,7 +167,10 @@ const submit = () => {
                 />
               </div>
             </div>
-            <p class="text-sm text-muted-foreground">
+            <p
+                v-if="user"
+                class="text-sm text-muted-foreground"
+            >
               Leave the password fields blank to keep the current password.
             </p>
           </div>
