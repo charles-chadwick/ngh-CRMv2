@@ -14,7 +14,7 @@ import { Card } from "@/Components/UI/card/index.js";
 import { Button } from "@/Components/UI/button/index.js";
 import ContactsSection from "@/Components/Contacts/ContactsSection.vue";
 import AddContactButton from "@/Components/Contacts/AddContactButton.vue";
-import { Pencil } from "lucide-vue-next";
+import { Pencil, Plus } from "lucide-vue-next";
 
 defineProps ( { company: Object, customers: Object, notes: Object, note_types: Array, contacts: Object, contact_types: Array, tasks: Object, task_types: Array, task_statuses: Array } )
 
@@ -65,7 +65,12 @@ const showTaskForm = ref(false)
     </div>
     <div class="flex flex-col sm:flex-row gap-4">
       <div class="w-full">
-        <h2 class="heading">Customers</h2>
+        <div class="flex items-center justify-between">
+          <h2 class="heading">Customers</h2>
+          <Button as-child variant="stone" size="icon-sm" aria-label="New Customer" title="New Customer">
+            <Link :href="route('customers.create', { company_id: company.id })"><Plus /></Link>
+          </Button>
+        </div>
         <Card class="px-6">
             <CustomerList :customers="customers.data" />
         </Card>

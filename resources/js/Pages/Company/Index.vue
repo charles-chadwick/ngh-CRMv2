@@ -8,6 +8,9 @@ import { Card, CardHeader, CardContent } from "@/Components/UI/card/index.js";
 import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/composables/useViewMode.js";
+import { Button } from "@/Components/UI/button/index.js";
+import { Link } from "@inertiajs/vue3";
+import { Plus } from "lucide-vue-next";
 
 defineProps ( { companies: Object } )
 
@@ -16,7 +19,12 @@ const { view, grid_class } = useViewMode('companies_view')
 
 <template>
   <AppLayout>
-    <h1 class="heading">Companies</h1>
+    <div class="flex items-center justify-between">
+      <h1 class="heading">Companies</h1>
+      <Button as-child variant="stone" size="icon-sm" aria-label="New Company" title="New Company">
+        <Link :href="route('companies.create')"><Plus /></Link>
+      </Button>
+    </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
       <Search
           :route="route('companies.index')"

@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Customers\CreateCustomer;
 use App\Enum\TaskStatus;
 use App\Enum\TaskType;
 use App\Http\Requests\CustomerRequest;
+use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Customer;
 use App\Models\CustomerRole;
 use App\Models\Note;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -32,12 +35,30 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function create(Request $request)
+    {
+        return Inertia::render('Customers/Form', [
+            'customer' => null,
+            'company_id' => $request->integer('company_id') ?: null,
+            'companies' => Company::orderBy('title')->get(['id', 'title']),
+            'roles' => CustomerRole::orderBy('name')->get(['id', 'name']),
+        ]);
+    }
+
+    public function store(CustomerRequest $request)
+    {
+        $customer = CreateCustomer::run($request->validated());
+
+        return redirect()->route('customers.show', $customer);
+    }
+
     public function edit(Customer $customer)
     {
         $customer->load('company:id,title', 'role:id,name');
 
         return Inertia::render('Customers/Form', [
             'customer' => $customer,
+            'companies' => Company::orderBy('title')->get(['id', 'title']),
             'roles' => CustomerRole::orderBy('name')->get(['id', 'name']),
         ]);
     }

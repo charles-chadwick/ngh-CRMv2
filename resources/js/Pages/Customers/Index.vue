@@ -10,6 +10,8 @@ import SortDropdown from "@/Components/SortDropdown.vue";
 import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/composables/useViewMode.js";
 import { useDate } from "@/composables/useDate.js";
+import { Button } from "@/Components/UI/button/index.js";
+import { Plus } from "lucide-vue-next";
 
 defineProps ( {
   customers: Object
@@ -21,7 +23,12 @@ const { dateString } = useDate()
 
 <template>
   <AppLayout>
-    <h1 class="text-2xl font-bold my-6">Customers</h1>
+    <div class="flex items-center justify-between my-6">
+      <h1 class="text-2xl font-bold">Customers</h1>
+      <Button as-child variant="stone" size="icon-sm" aria-label="New Customer" title="New Customer">
+        <Link :href="route('customers.create')"><Plus /></Link>
+      </Button>
+    </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">
       <Search
           :route="route('customers.index')"

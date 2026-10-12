@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Companies\CreateCompany;
 use App\Enum\TaskStatus;
 use App\Enum\TaskType;
 use App\Http\Requests\CompanyRequest;
@@ -25,6 +26,21 @@ class CompanyController extends Controller
             ->withQueryString();
 
         return Inertia::render('Company/Index', ['companies' => $companies]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Company/Form', [
+            'company' => null,
+            'types' => CompanyType::orderBy('name')->get(['id', 'name']),
+        ]);
+    }
+
+    public function store(CompanyRequest $request)
+    {
+        $company = CreateCompany::run($request->validated());
+
+        return redirect()->route('companies.show', $company);
     }
 
     public function show(Company $company)

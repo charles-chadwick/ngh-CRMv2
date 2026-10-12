@@ -10,10 +10,13 @@ import { Card } from "@/Components/UI/card/index.js";
 
 const props = defineProps ( {
   customer: Object,
+  company_id: { type: Number, default: null },
+  companies: { type: Array, default: () => [] },
   roles: { type: Array, default: () => [] },
 } );
 
 const form = useForm ( {
+  company_id: props.customer?.company_id || props.company_id || null,
   customer_role_id: props.customer?.customer_role_id || null,
   prefix: props.customer?.prefix || '',
   suffix: props.customer?.suffix || '',
@@ -26,18 +29,26 @@ const form = useForm ( {
 } );
 
 const submit = () => {
-  form.put ( route ( 'customers.update', props.customer.id ) );
+  if ( props.customer ) {
+    form.put ( route ( 'customers.update', props.customer.id ) );
+  } else {
+    form.post ( route ( 'customers.store' ) );
+  }
 };
 </script>
 
 <template>
   <AppLayout>
     <div class="flex items-center justify-between mb-6">
-      <div>
+      <div v-if="customer">
         <h1 class="text-2xl font-bold">{{ customer.full_name }}</h1>
         <p class="text-muted-foreground">{{ customer.email }}</p>
         <p class="text-muted-foreground">{{ customer.role?.name }}</p>
       </div>
+      <h1
+          v-else
+          class="text-2xl font-bold"
+      >New Customer</h1>
 
     </div>
     <Card class="px-6">
@@ -113,6 +124,34 @@ const submit = () => {
                   {{ form.errors.suffix }}
                 </p>
               </div>
+            </div>
+
+            <!-- Company -->
+            <div class="space-y-2">
+              <Label for="company_id">Company</Label>
+              <Select v-model="form.company_id">
+                <SelectTrigger
+                    id="company_id"
+                    class="w-full"
+                >
+                  <SelectValue placeholder="Select a company" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem
+                      v-for="company in props.companies"
+                      :key="company.id"
+                      :value="company.id"
+                  >
+                    {{ company.title }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <p
+                  v-if="form.errors.company_id"
+                  class="text-sm text-destructive"
+              >
+                {{ form.errors.company_id }}
+              </p>
             </div>
 
             <!-- Email -->
@@ -212,7 +251,10 @@ const submit = () => {
                 />
               </div>
             </div>
-            <p class="text-sm text-muted-foreground">
+            <p
+                v-if="customer"
+                class="text-sm text-muted-foreground"
+            >
               Leave the password fields blank to keep the current password.
             </p>
           </div>

@@ -11,6 +11,7 @@ import ViewToggle from "@/Components/ViewToggle.vue";
 import { useViewMode } from "@/composables/useViewMode.js";
 import { Button } from "@/Components/UI/button/index.js";
 import { Link } from "@inertiajs/vue3";
+import { Plus } from "lucide-vue-next";
 
 const { diffForHumans, dateTimeString } = useDate ()
 
@@ -30,8 +31,15 @@ const { view, grid_class } = useViewMode ( 'users_view' )
           v-if="can_create_user"
           as-child
           variant="stone"
+          size="icon-sm"
       >
-        <Link :href="route('users.create')">New User</Link>
+        <Link
+            :href="route('users.create')"
+            aria-label="New User"
+            title="New User"
+        >
+          <Plus />
+        </Link>
       </Button>
     </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">

@@ -20,17 +20,25 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.put(route('companies.update', props.company.id));
+  if (props.company) {
+    form.put(route('companies.update', props.company.id));
+  } else {
+    form.post(route('companies.store'));
+  }
 };
 </script>
 
 <template>
   <AppLayout>
     <div class="flex items-center justify-between mb-6">
-      <div>
+      <div v-if="company">
         <h1 class="text-2xl font-bold">{{ company.title }}</h1>
         <p class="text-muted-foreground">{{ company.type?.name }}</p>
       </div>
+      <h1
+          v-else
+          class="text-2xl font-bold"
+      >New Company</h1>
     </div>
     <Card class="px-6">
       <form @submit.prevent="submit">

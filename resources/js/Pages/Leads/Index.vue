@@ -5,6 +5,7 @@ import Pagination from '@/Components/Pagination.vue'
 import Search from '@/Components/Search.vue'
 import SortDropdown from '@/Components/SortDropdown.vue'
 import { Button } from '@/Components/UI/button/index.js'
+import { Plus } from 'lucide-vue-next'
 import { Card, CardHeader, CardContent } from '@/Components/UI/card/index.js'
 import StatusBadge from '@/Components/StatusBadge.vue'
 
@@ -17,8 +18,8 @@ defineProps({
   <AppLayout>
     <div class="flex items-center justify-between my-6">
       <h1 class="text-2xl font-bold">Leads</h1>
-      <Button as-child variant="stone">
-        <Link :href="route('leads.create')">New Lead</Link>
+      <Button as-child variant="stone" size="icon-sm" aria-label="New Lead" title="New Lead">
+        <Link :href="route('leads.create')"><Plus /></Link>
       </Button>
     </div>
     <div class="mb-4 flex flex-col gap-4 px-4 sm:flex-row sm:items-center">

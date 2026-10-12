@@ -4,7 +4,7 @@ import { Head, Link, router } from '@inertiajs/vue3'
 import { Button } from "@/Components/UI/button/index.js";
 import { Card } from "@/Components/UI/card/index.js";
 import Pagination from "@/Components/Pagination.vue";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Plus, Trash2 } from "lucide-vue-next";
 import { useConfirm } from '@/composables/useConfirm.js'
 
 defineProps({
@@ -38,8 +38,8 @@ const destroy = async (role) => {
         </Link>
         <h1 class="text-2xl font-bold">Customer Roles</h1>
       </div>
-      <Button as-child variant="stone">
-        <Link :href="route('settings.customer-roles.create')">New Role</Link>
+      <Button as-child variant="stone" size="icon-sm" aria-label="New Role" title="New Role">
+        <Link :href="route('settings.customer-roles.create')"><Plus /></Link>
       </Button>
     </div>
 
